@@ -1,0 +1,133 @@
+{
+  "model": {
+    "sha": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+    "siblings": [
+      {
+        "rfilename": ".gitattributes",
+        "size": 1519
+      },
+      {
+        "rfilename": "LICENSE",
+        "size": 7387
+      },
+      {
+        "rfilename": "README.md",
+        "size": 18276
+      },
+      {
+        "rfilename": "chat_template.json",
+        "size": 1050
+      },
+      {
+        "rfilename": "config.json",
+        "size": 1373
+      },
+      {
+        "rfilename": "generation_config.json",
+        "size": 216
+      },
+      {
+        "rfilename": "merges.txt",
+        "size": 1671839
+      },
+      {
+        "rfilename": "model-00001-of-00002.safetensors",
+        "size": 3982649232
+      },
+      {
+        "rfilename": "model-00002-of-00002.safetensors",
+        "size": 3526688744
+      },
+      {
+        "rfilename": "model.safetensors.index.json",
+        "size": 65448
+      },
+      {
+        "rfilename": "preprocessor_config.json",
+        "size": 350
+      },
+      {
+        "rfilename": "tokenizer.json",
+        "size": 7031645
+      },
+      {
+        "rfilename": "tokenizer_config.json",
+        "size": 5702
+      },
+      {
+        "rfilename": "vocab.json",
+        "size": 2776833
+      }
+    ]
+  },
+  "slake": {
+    "sha": "a9083ce6c34ac3ffb17671a605962924d8a8f9e9",
+    "siblings": [
+      {
+        "rfilename": ".gitattributes",
+        "size": 2307
+      },
+      {
+        "rfilename": "KG.zip",
+        "size": 81671
+      },
+      {
+        "rfilename": "README.md",
+        "size": 568
+      },
+      {
+        "rfilename": "imgs.zip",
+        "size": 212343373
+      },
+      {
+        "rfilename": "mask.txt",
+        "size": 617
+      },
+      {
+        "rfilename": "test.json",
+        "size": 635829
+      },
+      {
+        "rfilename": "train.json",
+        "size": 2964571
+      },
+      {
+        "rfilename": "validation.json",
+        "size": 639139
+      }
+    ]
+  },
+  "medxpert": {
+    "sha": "7e7c465a68eb2b866926bfa59c8c9d17a8daba65",
+    "siblings": [
+      {
+        "rfilename": ".gitattributes",
+        "size": 2461
+      },
+      {
+        "rfilename": "MM/dev.jsonl",
+        "size": 8254
+      },
+      {
+        "rfilename": "MM/test.jsonl",
+        "size": 2017059
+      },
+      {
+        "rfilename": "README.md",
+        "size": 4058
+      },
+      {
+        "rfilename": "Text/dev.jsonl",
+        "size": 13465
+      },
+      {
+        "rfilename": "Text/test.jsonl",
+        "size": 4163223
+      },
+      {
+        "rfilename": "images.zip",
+        "size": 517130457
+      }
+    ]
+  }
+}

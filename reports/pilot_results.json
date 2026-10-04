@@ -1,0 +1,152 @@
+{
+  "scope": "independent one-update diagnostic; no formal benchmark evaluation",
+  "date": "2026-10-04",
+  "initial_run": {
+    "run_id": "p1-20261004T134316Z",
+    "status": "mechanical_update_passed_reward_validation_failed",
+    "method": "SPINE",
+    "official_reproduction": false,
+    "formal_evaluation": false,
+    "dataset": "MedXpertQA-MM",
+    "sample_id": "MM-7",
+    "image_count": 6,
+    "input_tokens": 2180,
+    "rollout_count": 8,
+    "response_lengths": [
+      10,
+      367,
+      377,
+      45,
+      93,
+      265,
+      181,
+      6
+    ],
+    "valid_answers": 1,
+    "nonzero_advantages": 8,
+    "selected_tokens": 453,
+    "response_tokens": 1344,
+    "loss_components": {
+      "policy": -0.13133101054700091,
+      "band": 0.0014902700963830284,
+      "kl": 0.0
+    },
+    "gradient_norms": {
+      "vision": 26.211014992840312,
+      "language": 5.836653605533425
+    },
+    "tracked_updates": {
+      "vision": {
+        "parameter": "visual.patch_embed.proj.weight",
+        "changed_elements": 49492,
+        "delta_l2": 0.0003355051449034363
+      },
+      "language": {
+        "parameter": "model.layers.0.self_attn.q_proj.weight",
+        "changed_elements": 40145,
+        "delta_l2": 0.00028005093918181956
+      }
+    },
+    "optimizer_steps": 1,
+    "peak_allocated_bytes": 18629635584,
+    "peak_reserved_bytes": 19220398080,
+    "elapsed_seconds": 103.11117672920227,
+    "max_recompute_logp_error": 0.0,
+    "evaluation_labels_read": false,
+    "reference_policy": "immutable full-vocabulary base-model logits cached before the only optimizer step",
+    "checkpoint_contains_optimizer": false,
+    "sampled_device_memory": {
+      "peak_used_bytes": 19697762304,
+      "samples": 394
+    },
+    "device_memory_note": "250ms whole-device samples, including driver/other-process memory; transient peaks can be missed",
+    "cpu_peak_rss_kib": 64001704,
+    "reward_counts": {
+      "0.0": 7,
+      "1.0": 1
+    },
+    "checkpoint_saved_privately": true,
+    "assessment": {
+      "mechanical_update_passed": true,
+      "reward_validation_passed": false,
+      "reason": "initial parser accepted only one of eight explicit answers; first run is superseded by a corrected same-input run",
+      "original_valid_answers": 1,
+      "corrected_cache_replay_valid_answers": 7,
+      "corrected_cache_replay_count_distribution": [
+        1,
+        2,
+        4
+      ],
+      "replay_used_reference_labels": false
+    }
+  },
+  "corrected_run": {
+    "run_id": "p1-20261004T135128Z",
+    "status": "passed_single_update_diagnostic",
+    "method": "SPINE",
+    "official_reproduction": false,
+    "formal_evaluation": false,
+    "dataset": "MedXpertQA-MM",
+    "sample_id": "MM-7",
+    "image_count": 6,
+    "input_tokens": 2180,
+    "rollout_count": 8,
+    "response_lengths": [
+      10,
+      367,
+      377,
+      45,
+      93,
+      265,
+      181,
+      6
+    ],
+    "valid_answers": 7,
+    "nonzero_advantages": 8,
+    "selected_tokens": 453,
+    "response_tokens": 1344,
+    "loss_components": {
+      "policy": 0.06324391951784492,
+      "band": 0.0014902700963830284,
+      "kl": 0.0
+    },
+    "gradient_norms": {
+      "vision": 9.586486055313163,
+      "language": 4.063597139330724
+    },
+    "tracked_updates": {
+      "vision": {
+        "parameter": "visual.patch_embed.proj.weight",
+        "changed_elements": 49478,
+        "delta_l2": 0.0003354076761752367
+      },
+      "language": {
+        "parameter": "model.layers.0.self_attn.q_proj.weight",
+        "changed_elements": 44130,
+        "delta_l2": 0.00030467897886410356
+      }
+    },
+    "optimizer_steps": 1,
+    "peak_allocated_bytes": 18629635584,
+    "peak_reserved_bytes": 19220398080,
+    "elapsed_seconds": 101.50173783302307,
+    "max_recompute_logp_error": 0.0,
+    "evaluation_labels_read": false,
+    "reference_policy": "immutable full-vocabulary base-model logits cached before the only optimizer step",
+    "checkpoint_contains_optimizer": false,
+    "sampled_device_memory": {
+      "peak_used_bytes": 19697762304,
+      "samples": 389
+    },
+    "device_memory_note": "250ms whole-device samples, including driver/other-process memory; transient peaks can be missed",
+    "cpu_peak_rss_kib": 63943568,
+    "reward_counts": {
+      "0.0": 4,
+      "1.0": 4
+    },
+    "checkpoint_saved_privately": true
+  },
+  "complete_job_wall_seconds": 204.61291456222534,
+  "official_reproduction": false,
+  "clinical_outputs_included": false
+}
