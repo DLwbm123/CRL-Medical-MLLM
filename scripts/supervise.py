@@ -94,11 +94,12 @@ def stop_owned(pid):
 
 
 def gpu_ready():
-    text = subprocess.check_output(["nvidia-smi", "-i", "7", "--query-gpu=uuid,memory.free,memory.total", "--format=csv,noheader,nounits"], text=True).strip()
+    index = int(os.environ["P2_GPU_INDEX"])
+    text = subprocess.check_output(["nvidia-smi", "-i", str(index), "--query-gpu=uuid,memory.free,memory.total", "--format=csv,noheader,nounits"], text=True).strip()
     uuid, free, total = [part.strip() for part in text.split(",")]
     if uuid != os.environ["P2_GPU_UUID"] or int(free) < PLAN.get("minimum_free_mib", 48000):
         raise RuntimeError("Authorized GPU mapping or available memory changed")
-    event("gpu_preflight", gpu_index=7, free_mib=int(free), total_mib=int(total))
+    event("gpu_preflight", gpu_index=index, free_mib=int(free), total_mib=int(total))
 
 
 def main():

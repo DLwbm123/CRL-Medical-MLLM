@@ -2,7 +2,7 @@
   "identity": "independent_continual_development_protocol",
   "method": "Frozen greedy",
   "framework": "native PyTorch/Transformers; explicit deviation from authors' EasyR1 implementation",
-  "gpu_index": 7,
+  "gpu_index": 4,
   "gpu_uuid": null,
   "model_path": "models/Qwen2.5-VL-3B-Instruct",
   "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",

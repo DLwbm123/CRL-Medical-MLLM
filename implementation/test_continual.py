@@ -213,6 +213,7 @@ def test_invalid_and_label_boundaries(folder):
     engine.cfg = {"rollouts": 8, "max_new_tokens": 2048}
     engine.method, engine.training, engine.out = "SPINE", True, folder
     engine.state, engine.timings = SimpleNamespace(updates=4), {}
+    engine.event = lambda *args, **kwargs: None
     engine.phase = lambda _: contextlib.nullcontext()
     engine.encode = lambda _: {"input_ids": torch.tensor([[1, 2]])}
     engine.generate = lambda _, sample: (torch.tensor([3]), "unparseable" if sample else "Final answer: A")
