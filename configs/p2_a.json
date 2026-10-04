@@ -79,7 +79,7 @@
   "formal_evaluation": false,
   "continuous_monitoring": false,
   "max_updates_per_case": 1,
-  "cpu_threads": 16,
+  "cpu_threads": 1,
   "deterministic_algorithms": true,
   "behavior_recompute_atol": 1e-05,
   "probability_check_bf16_atol": 0.1,

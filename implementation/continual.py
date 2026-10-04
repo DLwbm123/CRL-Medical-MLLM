@@ -377,6 +377,8 @@ def main():
         acceptance = json.loads((folder / "acceptance.json").read_text())
         if not acceptance["passed"]:
             raise RuntimeError("Engineering acceptance has not passed")
+        if {name: value for name, value in cfg.items() if name != "method"} != acceptance["validated_configuration_without_method"]:
+            raise RuntimeError("Configuration differs from engineering acceptance")
     visible = os.environ.get("CUDA_VISIBLE_DEVICES")
     if visible not in {str(cfg["gpu_index"]), os.environ.get("P2_GPU_UUID")} or torch.cuda.device_count() != 1:
         raise RuntimeError("Only the configured authorized GPU may be visible")

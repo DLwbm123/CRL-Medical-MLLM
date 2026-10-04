@@ -141,9 +141,20 @@ def resource_summary(run, rows, result):
     for segment in segments:
         phases.update(segment["phase_seconds"])
     probes = [json.loads(path.read_text()) for path in sorted((run / "probe").glob("c*.json"))]
+    jobs = []
+    campaign = run.parent.parent
+    for path in (campaign / "controllers").glob("*.json"):
+        controller = json.loads(path.read_text())
+        plan = json.loads((campaign / controller["plan"]).read_text())
+        owners = {job["label"]: job["environment"].get("P2_RUN") for job in plan["jobs"]}
+        jobs.extend(job for job in controller["jobs"] if owners[job["label"]] == run.name)
     return {
         "actual_completed_cursor": result["cursor"], "actual_optimizer_updates": result["optimizer_updates"],
         "segment_wall_seconds": sum(segment["elapsed_seconds"] for segment in segments),
+        "process_wall_seconds": sum(job["wall_seconds"] for job in jobs) if jobs and all("wall_seconds" in job for job in jobs) else None,
+        "process_jobs": len(jobs),
+        "process_failures": sum(job.get("return_code", 0) != 0 for job in jobs),
+        "process_jobs_missing_final_metadata": sum("return_code" not in job or "wall_seconds" not in job for job in jobs),
         "phase_seconds": dict(phases),
         "peak_allocated_bytes": max(segment["peak_allocated_bytes"] for segment in segments),
         "peak_reserved_bytes": max(segment["peak_reserved_bytes"] for segment in segments),

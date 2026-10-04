@@ -28,6 +28,7 @@ def main():
                       [point[metric + "_cumulative"]["percent"] for point in blocks],
                       marker="o", markersize=3.5, color=colors[key], label=method["name"])
         axis.set(title=title, xlabel="Completed stream cases")
+        axis.set_ylim(0, 100)
         axis.grid(axis="y", alpha=0.2)
     axes[0].set_ylabel("Cumulative accuracy (%)")
     axes[1].legend(frameon=False, fontsize=9)
@@ -42,6 +43,7 @@ def main():
             axis.plot([point["cursor"] for point in points], [point[metric] for point in points],
                       marker="o", color=colors[key], linestyle="--" if key == "b" else "-", label=method["name"])
     axes[0].set(title="Greedy probe accuracy", ylabel="Accuracy (%)")
+    axes[0].set_ylim(0, 100)
     axes[1].set(title="Change from initialization", ylabel="Change (percentage points)")
     axes[1].axhline(0, color="#999999", linewidth=0.6)
     for axis in axes:
