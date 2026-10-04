@@ -1,0 +1,5 @@
+method,n,before_correct,after_correct,consensus_correct,historical_gain_pp,current_gain_pp,wrong_to_correct,correct_to_wrong
+Frozen greedy,16,2,,,0.0,,,
+Frozen SC-8,16,,,1,,,,
+TTRL,16,5,5,2,18.75,0.0,1,1
+SPINE,16,3,3,1,6.25,0.0,0,0

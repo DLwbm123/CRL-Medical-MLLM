@@ -464,5 +464,17 @@
         "return_code": 0
       }
     ]
+  },
+  "post_prediction_evaluator_audit": {
+    "label": "post_prediction_parse_audit",
+    "started_utc": "2026-10-04T20:34:08.038319+00:00",
+    "ended_utc": "2026-10-04T20:34:09.755407+00:00",
+    "max_seconds": 120,
+    "evaluator_code_commit": "6064999c7d3279d0f25bf870e7a3802eed00d287",
+    "return_code": 0,
+    "wall_seconds": 2.056435205042362,
+    "primary_scores_unchanged": true,
+    "synthetic_transition_tests_passed": true,
+    "scope": "offline parse transition diagnostics; no trainer, configuration, checkpoint or sample change"
   }
 }

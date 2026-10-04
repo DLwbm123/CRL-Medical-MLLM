@@ -1,0 +1,83 @@
+{
+  "checked_at_utc": "2026-10-04T20:28:36.827044+00:00",
+  "main_status": "all_planned_jobs_completed",
+  "controller_phases": [
+    {
+      "phase": "plan_acceptance",
+      "status": "stopped_after_job_failure",
+      "controller_wall_seconds": 128.22986037598457,
+      "gpu_job_count": 1,
+      "cpu_job_count": 0,
+      "gpu_job_wall_seconds": 128.04739258997142,
+      "cpu_job_wall_seconds": 0.0,
+      "failed_jobs": 1
+    },
+    {
+      "phase": "plan_acceptance2",
+      "status": "stopped_after_job_failure",
+      "controller_wall_seconds": 3091.3961184619693,
+      "gpu_job_count": 6,
+      "cpu_job_count": 1,
+      "gpu_job_wall_seconds": 3056.99146834109,
+      "cpu_job_wall_seconds": 33.44564965099562,
+      "failed_jobs": 1
+    },
+    {
+      "phase": "plan_acceptance3",
+      "status": "all_planned_jobs_completed",
+      "controller_wall_seconds": 3655.586710355943,
+      "gpu_job_count": 6,
+      "cpu_job_count": 1,
+      "gpu_job_wall_seconds": 3647.0957157569937,
+      "cpu_job_wall_seconds": 7.568639745935798,
+      "failed_jobs": 0
+    },
+    {
+      "phase": "plan_main",
+      "status": "all_planned_jobs_completed",
+      "controller_wall_seconds": 10520.149910209002,
+      "gpu_job_count": 8,
+      "cpu_job_count": 0,
+      "gpu_job_wall_seconds": 10519.143361079041,
+      "cpu_job_wall_seconds": 0.0,
+      "failed_jobs": 0
+    }
+  ],
+  "recorded_job_identities_checked": 23,
+  "cpu_finalization_jobs": [
+    {
+      "label": "checkpoint_check",
+      "return_code": 0,
+      "wall_seconds": 11.213502086000517,
+      "started_utc": "2026-10-04T20:27:05.306474+00:00",
+      "ended_utc": "2026-10-04T20:27:16.184997+00:00"
+    },
+    {
+      "label": "offline_score",
+      "return_code": 0,
+      "wall_seconds": 2.504621056956239,
+      "started_utc": "2026-10-04T20:27:16.523729+00:00",
+      "ended_utc": "2026-10-04T20:27:18.690657+00:00"
+    }
+  ],
+  "owned_process_cleanup_passed": true,
+  "active_owned_job_count": 0,
+  "active_campaign_controller_count": 0,
+  "selected_gpu_compute_process_count_at_check": 0,
+  "post_prediction_audit": {
+    "label": "post_prediction_parse_audit",
+    "started_utc": "2026-10-04T20:34:08.038319+00:00",
+    "ended_utc": "2026-10-04T20:34:09.755407+00:00",
+    "max_seconds": 120,
+    "evaluator_code_commit": "6064999c7d3279d0f25bf870e7a3802eed00d287",
+    "return_code": 0,
+    "wall_seconds": 2.056435205042362,
+    "primary_scores_unchanged": true
+  },
+  "t0_utc": "2026-10-04T14:27:18.205797+00:00",
+  "report_sealed_at_utc": "2026-10-04T20:43:53.353350+00:00",
+  "elapsed_to_report_seal_seconds": 22595.147553,
+  "elapsed_scope": "through report sealing; final publication verification is recorded in the handoff",
+  "hard_deadline_utc": "2026-10-05T02:27:18.205797+00:00",
+  "clock_note": "Request was inside an attachment. First execution opened the reader before the requirement was known; UTC starts at the first command dispatch, monotonic origin is reconstructed from the first recorded clock pair, not directly sampled at dispatch."
+}

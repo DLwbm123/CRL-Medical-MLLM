@@ -1,0 +1,26 @@
+method,metric,correct,total,percent
+Frozen SC-8,parsed_candidates,98,128,76.5625
+Frozen SC-8,ties,3,16,18.75
+Frozen SC-8,all_unparseable,0,16,0.0
+Frozen SC-8,zero_advantage_groups,1,16,6.25
+Frozen SC-8,correct_candidate_exists,9,16,56.25
+Frozen SC-8,correct_candidate_but_wrong_vote,8,16,50.0
+Frozen SC-8,wrong_vote_given_correct_candidate,8,9,88.88888888888889
+TTRL,parsed_candidates,102,128,79.6875
+TTRL,ties,1,16,6.25
+TTRL,all_unparseable,0,16,0.0
+TTRL,zero_advantage_groups,0,16,0.0
+TTRL,correct_candidate_exists,9,16,56.25
+TTRL,correct_candidate_but_wrong_vote,7,16,43.75
+TTRL,wrong_vote_given_correct_candidate,7,9,77.77777777777777
+TTRL,before_matches_vote,10,16,62.5
+TTRL,after_matches_vote,11,16,68.75
+SPINE,parsed_candidates,95,128,74.21875
+SPINE,ties,2,16,12.5
+SPINE,all_unparseable,0,16,0.0
+SPINE,zero_advantage_groups,0,16,0.0
+SPINE,correct_candidate_exists,11,16,68.75
+SPINE,correct_candidate_but_wrong_vote,10,16,62.5
+SPINE,wrong_vote_given_correct_candidate,10,11,90.9090909090909
+SPINE,before_matches_vote,7,16,43.75
+SPINE,after_matches_vote,8,16,50.0

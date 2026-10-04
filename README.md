@@ -1,64 +1,30 @@
-# Medical MLLM adaptation: independent SPINE pilot
+# Continual RL adaptation for medical MLLMs
 
-An independent implementation based on [SPINE v2](https://arxiv.org/html/2511.17938v2), with a completed **single optimizer-update diagnostic** on Qwen2.5-VL-3B-Instruct. This is not the authors' implementation or a reproduction of their accuracy results.
+This repository implements resumable, independently scored continual test-time adaptation for Qwen2.5-VL-3B-Instruct. It extends the original single-update SPINE diagnostic with persistent FP32 master weights and AdamW state, a fixed reference model, state/RNG checkpoints, and four methods on the same fixed stream. SPINE and the matched TTRL comparator are independent implementations; author-code equivalence is not established.
 
-The corrected run used one predetermined six-image MedXpertQA-MM input, eight sampled responses, and a 2048-token output cap. It completed sampling, label-free voting, backward propagation through the language and vision modules, an AdamW update, greedy decoding, and checkpoint saving in 101.50 seconds. See [the report](reports/pilot_20261004.md) and [aggregate results](reports/pilot_results.json).
+The completed development experiment uses **16 stream cases, 16 held-out probe groups, and seed 42**. The official dev split had only five questions, so the user authorized a fixed test-derived development subset that is now retired from future final-test use. Sample count, order and configurations were fixed before correctness scoring.
 
-## Implementation
+| Method | Greedy before | Greedy after | Frozen SC-8 vote | Historical gain |
+|---|---:|---:|---:|---:|
+| Frozen greedy | 2/16 (12.50%) | N/A | N/A | reference |
+| Frozen SC-8 | N/A | N/A | 1/16 (6.25%) | N/A |
+| Continual TTRL | 5/16 (31.25%) | 5/16 (31.25%) | N/A | +18.75 pp |
+| Continual SPINE | 3/16 (18.75%) | 3/16 (18.75%) | N/A | +6.25 pp |
 
-`implementation/core.py` contains exact full-vocabulary entropy and KL calculations in FP32, response-wise Otsu selection with 100 bins, detached median/MAD entropy bands, a masked clipped policy objective, and label-free answer voting. Policy and band terms use the total response-token denominator; KL uses the number of selected tokens. Since selection is guaranteed nonempty, the KL denominator omits the paper's additional epsilon. This is a declared numerical difference.
+Historical gains correspond to three additional correctly selected options for TTRL and one for SPINE, with no originally correct frozen prediction lost. Current-case TTRL updates correct one case and harm one; SPINE has no correctness transitions. Neither has a net current-case gain.
 
-`implementation/run_update.py` implements one update with BF16 model parameters, gradient checkpointing, serialized rollout/backward work, and native PyTorch AdamW on CPU FP32 master parameters and states. It does not freeze vision, add adapters, quantize weights, reduce the eight-response group, shorten the configured output limit, or override image resolution. The CPU environment used about 61 GiB peak RSS; GPU memory alone is not the resource requirement.
+Probe correctness remains 3/16 for TTRL. SPINE goes from 3/16 to 1/16 at the midpoint and 2/16 at the endpoint. Its lost correct cases become unparseable outputs, so this shows lower valid-answer/MCQ retention without establishing medical-knowledge forgetting. TTRL's stream parse rate improves from 14/16 to 16/16 with unchanged current-case accuracy.
 
-Before this only update, actor, behavior, and reference parameters are identical. Detached full-vocabulary base logits therefore serve as the fixed reference for the same sampled states. **The driver deliberately rejects more than one update.** A continuing trainer needs an independently preserved reference policy and a separately specified adaptation protocol. Checkpoints contain model and processor files, not optimizer states.
+These are engineering-scale results from one dependent trajectory. They do not establish statistical significance, general superiority, patient-level isolation, real domain adaptation, or a reproduction of published accuracy. Eight-sample voting and RL are not matched in total compute. Exact-count tables replace trend plots at this sample size.
 
-The `TTRL` and `No adaptation` code paths are available for controlled follow-up work. Only the SPINE branch has received this GPU integration test; no comparison between methods has been run. The answer parser is an independent implementation, not the unavailable author `grade_answer` implementation.
+The [full report](reports/continual_20261005.md) contains paired effects, online block/cumulative tables, probe changes, reward failure diagnostics, optimization/drift measurements, costs, failures and evidence limits. The machine-readable [aggregate results](reports/continual_results.json), [checkpoint checks](reports/continual_checkpoint_check.json) and [completion record](reports/continual_completion.json) are public. CSV tables cover [accuracy](reports/continual_accuracy.csv), [online blocks](reports/continual_online_blocks.csv), [probes](reports/continual_probe.csv), [reward diagnostics](reports/continual_reward_audit.csv), [parse transitions](reports/continual_parse_transitions.csv) and [resources](reports/continual_resources.csv).
 
-## Reproduce the diagnostic
+Continuous ten-step versus fresh-process five-plus-five tiny-model recovery passed with identical complete state and outputs. Actual-model two-step versus one-plus-one recovery passed with identical FP32 masters, Adam state, buffers, RNG and stored outputs after setting one CPU intra-op thread. The earlier sixteen-thread output discrepancy and deterministic CUDA histogram failure are retained in the [engineering record](reports/continual_engineering.json). All eight main GPU jobs completed successfully; all task-owned experiment/controller processes ended. Full RL checkpoints are about 45 GB each and remain on allocated private storage.
 
-Use an available, authorized GPU and sufficient CPU RAM/storage. The tested environment was Python 3.12.3, torch 2.7.1+cu128, torchvision 0.22.1+cu128, transformers 4.51.3, CUDA runtime 12.8, driver 595.58.03, and one RTX PRO 5000 72GB Blackwell. The package snapshot is in [metadata/gpu_environment.freeze.txt](metadata/gpu_environment.freeze.txt).
+Use the [reproduction guide](reports/continual_reproduction.md) for acceptance, bounded startup, restart and independent scoring. Read the [locked protocol](reports/continual_protocol.md) and [pre-score budget decision](reports/continual_budget.json) before interpreting the results. Main training used commit `7bf769d420bcb63004295e0d1900e5df6467c2d5`; the post-prediction evaluator audit used `6064999c7d3279d0f25bf870e7a3802eed00d287` without changing the original scores.
 
-Install the matching CUDA PyTorch wheels from the PyTorch cu128 index, then install the remaining versions in the package snapshot. `pip check` must pass. The snapshot records the tested environment; it is not a promise of compatibility with another CUDA/driver combination.
+The key entries are [the continual trainer](implementation/continual.py), [independent evaluator](implementation/evaluate.py), [state handling](implementation/state.py), [CPU acceptance tests](implementation/test_continual.py), [actual-model recovery comparison](scripts/compare_recovery.py), and [bounded controller](scripts/supervise.py). The four method configurations are [A](configs/p2_a.json), [B](configs/p2_b.json), [C](configs/p2_c.json), and [D](configs/p2_d.json).
 
-Keep the interpreter, neutral launcher, cache, and outputs on your allocated storage. Run these commands from the repository root after activating the environment:
+The original single-update driver, pilot configuration and results remain available: [pilot report](reports/pilot_20261004.md), [pilot results](reports/pilot_results.json), and [historical reproduction instructions](reports/pilot_reproduction.md). The tested package snapshot is [recorded here](metadata/gpu_environment.freeze.txt). No adapters, quantization, vision freezing, reduced rollout groups or shorter production output cap were introduced.
 
-```bash
-export P0_ROOT="$PWD"
-export P1_ENTRY=/path/on/your/storage/p1.py
-cp scripts/entry.py "$P1_ENTRY"
-
-# Downloads pinned public resources into data/ and models/.
-# Set working HTTP(S) proxies where required by your environment.
-export P1_TASK=download_resources.py
-python "$P1_ENTRY"
-
-# Checks source structure/images and writes separate input and label views.
-export P1_TASK=prepare_views.py
-python "$P1_ENTRY"
-
-# Small CPU numerical and label-isolation tests.
-export CUDA_VISIBLE_DEVICES=""
-export P1_TASK=test_core.py
-python "$P1_ENTRY"
-
-# Choose an authorized GPU; keep this value consistent with the config.
-export CUDA_VISIBLE_DEVICES=7
-export P1_CONFIG=configs/pilot.json
-export P1_RUN=p1-unique-run-id
-export P1_TASK=run_update.py
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-export OMP_NUM_THREADS=16
-python -u "$P1_ENTRY"
-```
-
-The launcher passes task selection and root paths through environment variables. Existing output directories are rejected. Confirm full process arguments and GPU process names after starting. The runner requires locally downloaded weights and runs Hugging Face in offline mode.
-
-`metadata/pinned_downloads.json` records publisher revisions and file sizes for the original model, official SLAKE mirror, and MedXpertQA-MM. The downloader uses Hugging Face resume support and ZIP's built-in CRC checks. It does not add a separate full-file hash pass. Retain the publishers' licenses and access conditions; this repository does not redistribute their resources.
-
-## Data and evaluation boundaries
-
-The adaptation view has exactly these fields: `id`, `source_id`, `dataset`, `split`, `question`, `options`, `images`, `image_paths`, and `language`. The runner rejects extra fields and never opens `views/evaluation_labels`. View construction reads source labels only to save them separately and validate source structure. This is data-flow separation, not an operating-system security sandbox.
-
-The pilot input was fixed as the first maximum-image-count MedXpertQA-MM test example (MM-7, six images) before examining generated outputs. Its identity, seed, prompt, parser, coefficients, optimizer settings, and other engineering choices are explicit in [configs/pilot.json](configs/pilot.json). They have not been verified as author settings. No ground-truth correctness, Pass@1 accuracy, benefit from adaptation, or SLAKE training result is claimed.
-
-Raw datasets, images, prompts/completions, checkpoints, private paths, credentials, and complete runtime logs are excluded from Git. The first parser failure and its cost are retained in the public aggregate report. No continuing experiment or background monitor is part of this release.
+Raw medical images, questions, completions, labels, manifests, full logs, credentials, private paths, model files and checkpoints are excluded from the public repository. The evaluator alone reads labels after predictions close; this is data-flow separation, not an operating-system security sandbox.

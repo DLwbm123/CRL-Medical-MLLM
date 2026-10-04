@@ -1,0 +1,140 @@
+{
+  "passed": true,
+  "checked_at_utc": "2026-10-04T20:27:15.766737+00:00",
+  "elapsed_seconds": 8.784074474941008,
+  "checks": {
+    "a": {
+      "cursor": 16,
+      "optimizer_updates": 0,
+      "state_bytes": 18469,
+      "mmap_load_and_metadata_checks": true,
+      "rng_state_present": true,
+      "reference_integrity_recorded": true,
+      "file_hash_performed": false,
+      "actor_reconstruction": "pinned unchanged base model and saved configuration",
+      "greedy_length_caps": {
+        "before": {
+          "capped": 0,
+          "generated": 16
+        },
+        "after": {
+          "capped": 0,
+          "generated": 0
+        }
+      },
+      "probe_length_caps": {
+        "capped": 0,
+        "generated": 48
+      },
+      "initial_probe_matches_shared_base": true,
+      "main_resume_event_present": true,
+      "model_ready_to_restored_seconds": [
+        0.031903897994197905
+      ],
+      "restore_interval_scope": "checkpoint load, master/Adam/RNG restoration and tail archival after model construction"
+    },
+    "b": {
+      "cursor": 16,
+      "optimizer_updates": 0,
+      "state_bytes": 18469,
+      "mmap_load_and_metadata_checks": true,
+      "rng_state_present": true,
+      "reference_integrity_recorded": true,
+      "file_hash_performed": false,
+      "actor_reconstruction": "pinned unchanged base model and saved configuration",
+      "greedy_length_caps": {
+        "before": {
+          "capped": 0,
+          "generated": 0
+        },
+        "after": {
+          "capped": 0,
+          "generated": 0
+        }
+      },
+      "probe_length_caps": {
+        "capped": 0,
+        "generated": 48
+      },
+      "initial_probe_matches_shared_base": true,
+      "main_resume_event_present": true,
+      "model_ready_to_restored_seconds": [
+        0.00526137207634747
+      ],
+      "restore_interval_scope": "checkpoint load, master/Adam/RNG restoration and tail archival after model construction"
+    },
+    "c": {
+      "cursor": 16,
+      "optimizer_updates": 16,
+      "state_bytes": 45056481971,
+      "mmap_load_and_metadata_checks": true,
+      "rng_state_present": true,
+      "reference_integrity_recorded": true,
+      "file_hash_performed": false,
+      "master_tensors": 824,
+      "master_elements": 3754622976,
+      "adam_state_entries": 824,
+      "actor_buffers": 38,
+      "greedy_length_caps": {
+        "before": {
+          "capped": 0,
+          "generated": 16
+        },
+        "after": {
+          "capped": 0,
+          "generated": 16
+        }
+      },
+      "probe_length_caps": {
+        "capped": 0,
+        "generated": 48
+      },
+      "initial_probe_matches_shared_base": true,
+      "main_resume_event_present": true,
+      "model_ready_to_restored_seconds": [
+        28.211976289981976
+      ],
+      "restore_interval_scope": "checkpoint load, master/Adam/RNG restoration and tail archival after model construction"
+    },
+    "d": {
+      "cursor": 16,
+      "optimizer_updates": 16,
+      "state_bytes": 45056481971,
+      "mmap_load_and_metadata_checks": true,
+      "rng_state_present": true,
+      "reference_integrity_recorded": true,
+      "file_hash_performed": false,
+      "master_tensors": 824,
+      "master_elements": 3754622976,
+      "adam_state_entries": 824,
+      "actor_buffers": 38,
+      "greedy_length_caps": {
+        "before": {
+          "capped": 0,
+          "generated": 16
+        },
+        "after": {
+          "capped": 1,
+          "generated": 16
+        }
+      },
+      "probe_length_caps": {
+        "capped": 2,
+        "generated": 48
+      },
+      "initial_probe_matches_shared_base": true,
+      "main_resume_event_present": true,
+      "model_ready_to_restored_seconds": [
+        39.053191147046164
+      ],
+      "restore_interval_scope": "checkpoint load, master/Adam/RNG restoration and tail archival after model construction"
+    }
+  },
+  "storage": {
+    "campaign_output_files": 484,
+    "campaign_logical_bytes": 540681473999,
+    "campaign_allocated_bytes": 540682702848,
+    "filesystem_free_bytes": 18057572990976
+  },
+  "scope": "Trusted checkpoint mmap load, metadata, tensor schema, Adam steps, saved RNG and main probe invariants; no full-file hash or repeated full-state equality pass."
+}

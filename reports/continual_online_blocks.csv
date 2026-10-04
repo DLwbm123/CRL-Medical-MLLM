@@ -1,0 +1,33 @@
+method,cursor,metric,correct,total,percent
+Frozen greedy,8,greedy_before_cumulative,1,8,12.5
+Frozen greedy,8,greedy_before_block,1,8,12.5
+Frozen greedy,16,greedy_before_cumulative,2,16,12.5
+Frozen greedy,16,greedy_before_block,1,8,12.5
+Frozen SC-8,8,consensus_cumulative,0,8,0.0
+Frozen SC-8,8,consensus_block,0,8,0.0
+Frozen SC-8,16,consensus_cumulative,1,16,6.25
+Frozen SC-8,16,consensus_block,1,8,12.5
+TTRL,8,greedy_before_cumulative,3,8,37.5
+TTRL,8,greedy_before_block,3,8,37.5
+TTRL,8,greedy_after_cumulative,3,8,37.5
+TTRL,8,greedy_after_block,3,8,37.5
+TTRL,8,consensus_cumulative,1,8,12.5
+TTRL,8,consensus_block,1,8,12.5
+TTRL,16,greedy_before_cumulative,5,16,31.25
+TTRL,16,greedy_before_block,2,8,25.0
+TTRL,16,greedy_after_cumulative,5,16,31.25
+TTRL,16,greedy_after_block,2,8,25.0
+TTRL,16,consensus_cumulative,2,16,12.5
+TTRL,16,consensus_block,1,8,12.5
+SPINE,8,greedy_before_cumulative,2,8,25.0
+SPINE,8,greedy_before_block,2,8,25.0
+SPINE,8,greedy_after_cumulative,2,8,25.0
+SPINE,8,greedy_after_block,2,8,25.0
+SPINE,8,consensus_cumulative,1,8,12.5
+SPINE,8,consensus_block,1,8,12.5
+SPINE,16,greedy_before_cumulative,3,16,18.75
+SPINE,16,greedy_before_block,1,8,12.5
+SPINE,16,greedy_after_cumulative,3,16,18.75
+SPINE,16,greedy_after_block,1,8,12.5
+SPINE,16,consensus_cumulative,1,16,6.25
+SPINE,16,consensus_block,0,8,0.0

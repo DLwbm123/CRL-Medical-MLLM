@@ -1,0 +1,13 @@
+method,cursor,correct,total,percent,delta_from_initial_pp,parsed,decoding
+Frozen greedy,0,3,16,18.75,0.0,13,greedy
+Frozen greedy,8,3,16,18.75,0.0,13,greedy
+Frozen greedy,16,3,16,18.75,0.0,13,greedy
+Frozen SC-8,0,3,16,18.75,0.0,13,greedy
+Frozen SC-8,8,3,16,18.75,0.0,13,greedy
+Frozen SC-8,16,3,16,18.75,0.0,13,greedy
+TTRL,0,3,16,18.75,0.0,13,greedy
+TTRL,8,3,16,18.75,0.0,12,greedy
+TTRL,16,3,16,18.75,0.0,13,greedy
+SPINE,0,3,16,18.75,0.0,13,greedy
+SPINE,8,1,16,6.25,-12.5,9,greedy
+SPINE,16,2,16,12.5,-6.25,11,greedy

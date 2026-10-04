@@ -1,6 +1,6 @@
 # Reproduce or resume the continual development experiment
 
-Read [the locked protocol](continual_protocol.md) before interpreting results. This is an independent implementation, using the pilot's engineering settings. It is not verified author code. The old single-update entry remains available.
+Read [the locked protocol](continual_protocol.md) and [completed report](continual_20261005.md) before interpreting results. This is an independent implementation, using the pilot's engineering settings. It is not verified author code. The old single-update entry remains available.
 
 Use the pinned model and label-free views prepared by the original resource scripts. The runtime is Python 3.12.3, torch 2.7.1+cu128 and transformers 4.51.3. Both RL methods require substantial CPU RAM for full FP32 master weights, gradients and Adam states, as well as a GPU with headroom for two BF16 models and activations. A full trained checkpoint is about 45 GB; retain enough allocated storage for two per run, engineering checkpoints, and atomic-write temporary space. Use an authorized GPU and check actual available memory before each job. Shared-GPU wall times are environment dependent.
 
@@ -181,3 +181,5 @@ python -u "$P2_ENTRY"
 Default run IDs are `main-a` through `main-d`; override them with `P2_SCORE_RUNS`, a JSON object keyed by `a`, `b`, `c`, `d`. Private case scoring and the redacted public summary are written separately under `scores/`. Trainer processes never read evaluator outputs.
 
 `scripts/plot_continual.py` accepts `P2_SUMMARY` and `P2_PLOT_DIR` through the environment and uses matplotlib 3.10.6. Run it via a neutral copied filename or Python standard input. It exports unsmoothed eight-case cumulative accuracy points and the initial/midpoint/final probe plot as PNG/PDF. For fewer than 32 common cases it emits no trend plots; report exact-count tables instead. Plotting dependencies can be installed in a separate environment without changing the model runtime.
+
+The completed main runs recorded training commit `7bf769d420bcb63004295e0d1900e5df6467c2d5`. Post-prediction parse-attribution diagnostics were added in evaluator commit `6064999c7d3279d0f25bf870e7a3802eed00d287` and left primary scores unchanged. When scoring those preserved predictions, set `P2_EVAL_CODE_COMMIT` to the actual evaluator commit; do not overwrite the training commit recorded in run/checkpoint metadata. The parse audit uses only stored predictions and the evaluator's labels, with no additional training or generation.
