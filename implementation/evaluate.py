@@ -80,8 +80,8 @@ def score_cases(rows, labels, base):
             "wrong_vote_given_correct_candidate": fraction(candidate_available_wrong_vote, available),
             "first_half_top_vote_mean": mean([vote["top_count"] for vote in votes[:half]]),
             "second_half_top_vote_mean": mean([vote["top_count"] for vote in votes[half:]]),
-            "before_matches_vote": fraction(sum(row.get("before", {}).get("answer") == row["vote"]["winner"] and row["vote"]["winner"] is not None for row in rows), n),
-            "after_matches_vote": fraction(sum(row.get("after", {}).get("answer") == row["vote"]["winner"] and row["vote"]["winner"] is not None for row in rows), n),
+            "before_matches_vote": fraction(sum(row["before"]["answer"] == row["vote"]["winner"] and row["vote"]["winner"] is not None for row in rows), n) if before else None,
+            "after_matches_vote": fraction(sum(row["after"]["answer"] == row["vote"]["winner"] and row["vote"]["winner"] is not None for row in rows), n) if after else None,
         }
     optimized = [row["optimization"] for row in rows if row.get("update_applied")]
     result["optimization"] = {
@@ -91,8 +91,8 @@ def score_cases(rows, labels, base):
         "selected_token_fraction": sum(x["selected_tokens"] for x in optimized) / sum(x["response_tokens"] for x in optimized) if optimized else None,
         "loss_components": {key: range_summary([x["loss_components"][key] for x in optimized]) for key in ["policy", "band", "kl"]},
         "gradient_norms": {key: range_summary([x["gradient_norms"][key] for x in optimized]) for key in ["vision", "language"]},
-        "masters_persisted_all": all(x["masters_persisted"] for x in optimized),
-        "moments_persisted_all": all(x["moments_persisted"] for x in optimized),
+        "masters_persisted_all": all(x["masters_persisted"] for x in optimized) if optimized else None,
+        "moments_persisted_all": all(x["moments_persisted"] for x in optimized) if optimized else None,
         "ratio_mean_before_step": range_summary([x["ratio_mean_before_step"] for x in optimized]),
         "clip_fraction_before_step": range_summary([x["clip_fraction_before_step"] for x in optimized]),
         "exact_full_vocabulary_kl_before_step": range_summary([x["exact_full_vocabulary_kl_mean_before_step"] for x in optimized]),
@@ -198,6 +198,8 @@ def main():
     run_ids = json.loads(os.environ.get("P2_SCORE_RUNS", '{"a":"main-a","b":"main-b","c":"main-c","d":"main-d"}'))
     runs = {key: folder / "runs" / run_ids[key] for key in METHODS}
     loaded = {key: read_cases(run, manifest, digest) for key, run in runs.items()}
+    if any(result["method"] != METHODS[key] for key, (_, result) in loaded.items()):
+        raise ValueError("Method mapping differs from prediction artifacts")
     n = min(len(rows) for rows, _ in loaded.values())
     if n == 0:
         raise ValueError("There is no completed four-method prefix to score")
