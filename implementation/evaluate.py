@@ -122,6 +122,28 @@ def score_cases(rows, labels, base):
     return result, private
 
 
+def prediction_transition_audit(before, after, labels):
+    """Offline paired correctness changes, decomposed by parser validity."""
+    if [x["id"] for x in before] != [x["id"] for x in after]:
+        raise ValueError("Paired prediction IDs differ")
+    bc = [is_correct(x["answer"], labels[x["id"]]) for x in before]
+    ac = [is_correct(x["answer"], labels[x["id"]]) for x in after]
+    bp = [x["answer"] is not None for x in before]
+    ap = [x["answer"] is not None for x in after]
+    result = {"n": len(before), **paired(bc, ac),
+              "before_parsed": sum(bp), "after_parsed": sum(ap),
+              "newly_parsed": sum(not x and y for x, y in zip(bp, ap)),
+              "newly_unparseable": sum(x and not y for x, y in zip(bp, ap)),
+              "invalid_to_correct": sum(not p and c for p, c in zip(bp, ac)),
+              "parsed_wrong_to_correct": sum(p and not c and a for p, c, a in zip(bp, bc, ac)),
+              "correct_to_invalid": sum(c and not p for c, p in zip(bc, ap)),
+              "correct_to_parsed_wrong": sum(c and p and not a for c, p, a in zip(bc, ap, ac))}
+    assert result["wrong_to_correct"] == result["invalid_to_correct"] + result["parsed_wrong_to_correct"]
+    assert result["correct_to_wrong"] == result["correct_to_invalid"] + result["correct_to_parsed_wrong"]
+    assert result["after_parsed"] - result["before_parsed"] == result["newly_parsed"] - result["newly_unparseable"]
+    return result
+
+
 def read_cases(run, manifest, digest):
     result = json.loads((run / "result.json").read_text())
     if result["manifest_sha256"] != digest or not result["reference_unchanged"]:
@@ -193,7 +215,13 @@ def self_test():
     assert summary["reward_audit"]["all_unparseable"] == fraction(8, 8)
     assert summary["optimization"]["skips_in_prefix"] == {"all_unparseable": 8}
     assert summary["prefix_generation"]["rollouts"] == 64 and len(private) == 8
-    print(json.dumps({"passed": True, "scoring": "denominators, paired gains/harms, skips, invalid answers and token counts", "real_labels_read": False}))
+    before = [{"id": str(i), "answer": answer} for i, answer in enumerate([None, "B", "A", "A", "B"])]
+    after = [{"id": str(i), "answer": answer} for i, answer in enumerate(["A", "A", None, "B", "B"])]
+    audit = prediction_transition_audit(before, after, {str(i): "A" for i in range(5)})
+    assert audit["wrong_to_correct"] == audit["correct_to_wrong"] == 2
+    assert all(audit[key] == 1 for key in ["invalid_to_correct", "parsed_wrong_to_correct", "correct_to_invalid", "correct_to_parsed_wrong"])
+    assert audit["newly_parsed"] == audit["newly_unparseable"] == 1
+    print(json.dumps({"passed": True, "scoring": "denominators, paired gains/harms, skips, invalid answers, token counts and parser-attributed transitions", "real_labels_read": False}))
 
 
 def main():
@@ -238,6 +266,8 @@ def main():
     base = [is_correct(row["before"]["answer"], labels[row["id"]]) for row in loaded["a"][0][:n]]
     public = {"status": "completed" if n == manifest["selected_n"] else "common_prefix_only",
               "scored_at_utc": datetime.now(timezone.utc).isoformat(), "common_n": n,
+              "evaluator_code_commit": os.environ.get("P2_EVAL_CODE_COMMIT"),
+              "transition_audit": "post-prediction paired parse/correctness decomposition; not used to select any experiment",
               "planned_n": manifest["selected_n"], "probe_n": len(expected_probe_ids),
               "manifest_sha256": digest, "candidate_manifest_sha256": manifest["candidate_manifest_sha256"],
               "seed": manifest["seed"], "source_split": "test retired for development use",
@@ -260,6 +290,18 @@ def main():
             method["probe"].append({"cursor": cursor, **fraction(correct, len(predictions)),
                                     "delta_from_initial_pp": 100 * (correct - initial) / len(predictions) if initial is not None else None,
                                     "parsed": sum(row["answer"] is not None for row in predictions), "decoding": "greedy"})
+
+        # Post-prediction audit only; these counts never control training.
+        compact = lambda data, field: [{"id": row["id"], "answer": row[field]["answer"]} for row in data]
+        if key in {"c", "d"}:
+            method["historical_transition_audit"] = prediction_transition_audit(
+                compact(loaded["a"][0][:n], "before"), compact(rows[:n], "before"), labels)
+            method["current_transition_audit"] = prediction_transition_audit(
+                compact(rows[:n], "before"), compact(rows[:n], "after"), labels)
+        method["probe_transition_audit"] = [
+            {"cursor": cursor, **prediction_transition_audit(probes[key][0]["predictions"],
+                                                           probes[key][cursor]["predictions"], labels)}
+            for cursor in common_probes if 0 in probes[key]]
         public["methods"][key] = method
     atomic_json(folder / "scores/private_case_scores.json", private)
     atomic_json(folder / "scores/public_summary.json", public)

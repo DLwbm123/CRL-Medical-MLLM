@@ -26,7 +26,7 @@ def main():
     folder_b, b = read_state(NAMES[1])
     checked = {}
     # Predeclared before running either branch: full floating state within these
-    # tolerances, RNG/counters and all generated token sequences exactly equal.
+    # tolerances; RNG/counters, rollout token IDs and stored greedy/probe outputs exactly equal.
     for key in ["master_weights", "optimizer", "actor_buffers"]:
         checked[key] = compare_values(a[key], b[key], atol=1e-7, rtol=1e-6, path=key)
     for key in ["rng", "cursor", "processed_ids", "optimizer_updates", "configuration", "code_commit", "manifest_sha256", "model_revision"]:
