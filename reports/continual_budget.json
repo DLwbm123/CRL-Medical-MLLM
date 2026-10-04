@@ -1,0 +1,276 @@
+{
+  "decided_utc": "2026-10-04T17:26:47.777776+00:00",
+  "training_code_commit": "7bf769d420bcb63004295e0d1900e5df6467c2d5",
+  "labels_read_for_decision": false,
+  "accuracy_used_for_decision": false,
+  "measured_mean_case_seconds": {
+    "a": 6.761484998976812,
+    "b": 81.17291996104177,
+    "c": 283.8969012260204,
+    "d": 200.89243870752398
+  },
+  "planning_case_seconds": {
+    "a": 6.761484998976812,
+    "b": 81.17291996104177,
+    "c": 283.8969012260204,
+    "d": 283.8969012260204
+  },
+  "planning_probe_seconds_per_group": {
+    "a": 16.648337907351863,
+    "b": 17.554191327343386,
+    "c": 12.092385910645438,
+    "d": 12.092385910645438
+  },
+  "shared_gpu_at_planning": true,
+  "shared_gpu_adjustment": "When another process is present, budget both RL methods using the slower observed RL mean and probe cost. No unrelated process is changed.",
+  "maximum_observed_training_checkpoint_seconds": 499.94278559600934,
+  "maximum_observed_training_load_seconds": 82.31405651499517,
+  "maximum_observed_startup_seconds": 12.115500549087301,
+  "resume_and_unattributed_overhead_seconds": 7.344127575168386,
+  "remaining_gpu_seconds": 28830.428021,
+  "maximum_planned_fraction": 0.7,
+  "candidates": [
+    {
+      "n": 16,
+      "checkpoint_chunk": 16,
+      "estimated_seconds": 14541.824880679604,
+      "by_method": {
+        "a": {
+          "stream_seconds": 108.18375998362899,
+          "probe_seconds": 799.1202195528895,
+          "initialization_and_control_seconds": 20.80351381318178,
+          "checkpoint_seconds": 0.0066273369593545794,
+          "resume_and_unattributed_seconds": 0.0,
+          "total_seconds": 928.1141206866596
+        },
+        "b": {
+          "stream_seconds": 1298.7667193766683,
+          "probe_seconds": 842.6011837124825,
+          "initialization_and_control_seconds": 19.8128449000651,
+          "checkpoint_seconds": 0.0057390149449929595,
+          "resume_and_unattributed_seconds": 0.0,
+          "total_seconds": 2161.186487004161
+        },
+        "c": {
+          "stream_seconds": 4542.350419616327,
+          "probe_seconds": 580.434523710981,
+          "initialization_and_control_seconds": 103.53440757107455,
+          "checkpoint_seconds": 499.94278559600934,
+          "resume_and_unattributed_seconds": 0.0,
+          "total_seconds": 5726.262136494392
+        },
+        "d": {
+          "stream_seconds": 4542.350419616327,
+          "probe_seconds": 580.434523710981,
+          "initialization_and_control_seconds": 103.53440757107455,
+          "checkpoint_seconds": 499.94278559600934,
+          "resume_and_unattributed_seconds": 0.0,
+          "total_seconds": 5726.262136494392
+        }
+      },
+      "fits_70_percent_of_remaining_gpu_time": true
+    },
+    {
+      "n": 32,
+      "checkpoint_chunk": 16,
+      "estimated_seconds": 26310.435820972547,
+      "by_method": {
+        "a": {
+          "stream_seconds": 216.36751996725798,
+          "probe_seconds": 799.1202195528895,
+          "initialization_and_control_seconds": 41.60702762636356,
+          "checkpoint_seconds": 0.013254673918709159,
+          "resume_and_unattributed_seconds": 7.344127575168386,
+          "total_seconds": 1064.452149395598
+        },
+        "b": {
+          "stream_seconds": 2597.5334387533367,
+          "probe_seconds": 842.6011837124825,
+          "initialization_and_control_seconds": 39.6256898001302,
+          "checkpoint_seconds": 0.011478029889985919,
+          "resume_and_unattributed_seconds": 7.344127575168386,
+          "total_seconds": 3487.1159178710077
+        },
+        "c": {
+          "stream_seconds": 9084.700839232653,
+          "probe_seconds": 580.434523710981,
+          "initialization_and_control_seconds": 207.0688151421491,
+          "checkpoint_seconds": 999.8855711920187,
+          "resume_and_unattributed_seconds": 7.344127575168386,
+          "total_seconds": 10879.43387685297
+        },
+        "d": {
+          "stream_seconds": 9084.700839232653,
+          "probe_seconds": 580.434523710981,
+          "initialization_and_control_seconds": 207.0688151421491,
+          "checkpoint_seconds": 999.8855711920187,
+          "resume_and_unattributed_seconds": 7.344127575168386,
+          "total_seconds": 10879.43387685297
+        }
+      },
+      "fits_70_percent_of_remaining_gpu_time": false
+    },
+    {
+      "n": 64,
+      "checkpoint_chunk": 16,
+      "estimated_seconds": 49847.65770155843,
+      "by_method": {
+        "a": {
+          "stream_seconds": 432.73503993451595,
+          "probe_seconds": 799.1202195528895,
+          "initialization_and_control_seconds": 83.21405525272712,
+          "checkpoint_seconds": 0.026509347837418318,
+          "resume_and_unattributed_seconds": 22.03238272550516,
+          "total_seconds": 1337.1282068134751
+        },
+        "b": {
+          "stream_seconds": 5195.066877506673,
+          "probe_seconds": 842.6011837124825,
+          "initialization_and_control_seconds": 79.2513796002604,
+          "checkpoint_seconds": 0.022956059779971838,
+          "resume_and_unattributed_seconds": 22.03238272550516,
+          "total_seconds": 6138.974779604701
+        },
+        "c": {
+          "stream_seconds": 18169.401678465307,
+          "probe_seconds": 580.434523710981,
+          "initialization_and_control_seconds": 414.1376302842982,
+          "checkpoint_seconds": 1999.7711423840374,
+          "resume_and_unattributed_seconds": 22.03238272550516,
+          "total_seconds": 21185.77735757013
+        },
+        "d": {
+          "stream_seconds": 18169.401678465307,
+          "probe_seconds": 580.434523710981,
+          "initialization_and_control_seconds": 414.1376302842982,
+          "checkpoint_seconds": 1999.7711423840374,
+          "resume_and_unattributed_seconds": 22.03238272550516,
+          "total_seconds": 21185.77735757013
+        }
+      },
+      "fits_70_percent_of_remaining_gpu_time": false
+    },
+    {
+      "n": 96,
+      "checkpoint_chunk": 16,
+      "estimated_seconds": 73384.87958214432,
+      "by_method": {
+        "a": {
+          "stream_seconds": 649.1025599017739,
+          "probe_seconds": 799.1202195528895,
+          "initialization_and_control_seconds": 124.82108287909068,
+          "checkpoint_seconds": 0.03976402175612748,
+          "resume_and_unattributed_seconds": 36.72063787584193,
+          "total_seconds": 1609.8042642313521
+        },
+        "b": {
+          "stream_seconds": 7792.60031626001,
+          "probe_seconds": 842.6011837124825,
+          "initialization_and_control_seconds": 118.87706940039061,
+          "checkpoint_seconds": 0.03443408966995776,
+          "resume_and_unattributed_seconds": 36.72063787584193,
+          "total_seconds": 8790.833641338395
+        },
+        "c": {
+          "stream_seconds": 27254.10251769796,
+          "probe_seconds": 580.434523710981,
+          "initialization_and_control_seconds": 621.2064454264473,
+          "checkpoint_seconds": 2999.656713576056,
+          "resume_and_unattributed_seconds": 36.72063787584193,
+          "total_seconds": 31492.120838287286
+        },
+        "d": {
+          "stream_seconds": 27254.10251769796,
+          "probe_seconds": 580.434523710981,
+          "initialization_and_control_seconds": 621.2064454264473,
+          "checkpoint_seconds": 2999.656713576056,
+          "resume_and_unattributed_seconds": 36.72063787584193,
+          "total_seconds": 31492.120838287286
+        }
+      },
+      "fits_70_percent_of_remaining_gpu_time": false
+    },
+    {
+      "n": 128,
+      "checkpoint_chunk": 16,
+      "estimated_seconds": 96922.1014627302,
+      "by_method": {
+        "a": {
+          "stream_seconds": 865.4700798690319,
+          "probe_seconds": 799.1202195528895,
+          "initialization_and_control_seconds": 166.42811050545424,
+          "checkpoint_seconds": 0.053018695674836636,
+          "resume_and_unattributed_seconds": 51.4088930261787,
+          "total_seconds": 1882.4803216492292
+        },
+        "b": {
+          "stream_seconds": 10390.133755013347,
+          "probe_seconds": 842.6011837124825,
+          "initialization_and_control_seconds": 158.5027592005208,
+          "checkpoint_seconds": 0.045912119559943676,
+          "resume_and_unattributed_seconds": 51.4088930261787,
+          "total_seconds": 11442.692503072089
+        },
+        "c": {
+          "stream_seconds": 36338.80335693061,
+          "probe_seconds": 580.434523710981,
+          "initialization_and_control_seconds": 828.2752605685964,
+          "checkpoint_seconds": 3999.5422847680748,
+          "resume_and_unattributed_seconds": 51.4088930261787,
+          "total_seconds": 41798.464319004444
+        },
+        "d": {
+          "stream_seconds": 36338.80335693061,
+          "probe_seconds": 580.434523710981,
+          "initialization_and_control_seconds": 828.2752605685964,
+          "checkpoint_seconds": 3999.5422847680748,
+          "resume_and_unattributed_seconds": 51.4088930261787,
+          "total_seconds": 41798.464319004444
+        }
+      },
+      "fits_70_percent_of_remaining_gpu_time": false
+    }
+  ],
+  "selected": {
+    "n": 16,
+    "checkpoint_chunk": 8,
+    "estimated_seconds": 15818.784502379596,
+    "by_method": {
+      "a": {
+        "stream_seconds": 108.18375998362899,
+        "probe_seconds": 799.1202195528895,
+        "initialization_and_control_seconds": 41.60702762636356,
+        "checkpoint_seconds": 0.013254673918709159,
+        "resume_and_unattributed_seconds": 7.344127575168386,
+        "total_seconds": 956.2683894119691
+      },
+      "b": {
+        "stream_seconds": 1298.7667193766683,
+        "probe_seconds": 842.6011837124825,
+        "initialization_and_control_seconds": 39.6256898001302,
+        "checkpoint_seconds": 0.011478029889985919,
+        "resume_and_unattributed_seconds": 7.344127575168386,
+        "total_seconds": 2188.3491984943394
+      },
+      "c": {
+        "stream_seconds": 4542.350419616327,
+        "probe_seconds": 580.434523710981,
+        "initialization_and_control_seconds": 207.0688151421491,
+        "checkpoint_seconds": 999.8855711920187,
+        "resume_and_unattributed_seconds": 7.344127575168386,
+        "total_seconds": 6337.083457236644
+      },
+      "d": {
+        "stream_seconds": 4542.350419616327,
+        "probe_seconds": 580.434523710981,
+        "initialization_and_control_seconds": 207.0688151421491,
+        "checkpoint_seconds": 999.8855711920187,
+        "resume_and_unattributed_seconds": 7.344127575168386,
+        "total_seconds": 6337.083457236644
+      }
+    }
+  },
+  "projected_reserve_fraction": 0.4513163491413572,
+  "probe_groups": 16,
+  "limitations": "Two engineering cases per method; variable response lengths, shared GPU contention and checkpoint IO. This is a planning estimate, not an algorithm speed benchmark."
+}

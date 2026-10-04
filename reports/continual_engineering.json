@@ -1,0 +1,468 @@
+{
+  "status": "passed",
+  "clinical_accuracy_scored": false,
+  "cpu_acceptance": {
+    "restart": {
+      "passed": true,
+      "continuous_steps": 10,
+      "restart_after": 5,
+      "fresh_process": true,
+      "atol": 0,
+      "rtol": 0,
+      "tensor_count": 21,
+      "tensor_elements": 5742,
+      "nonexact_tensors": 0,
+      "max_abs_difference": 0.0
+    },
+    "probability": {
+      "passed": true,
+      "temperature": 1,
+      "top_p": 1,
+      "top_k": 0,
+      "max_error": 2.384185791015625e-07,
+      "atol": 1e-06
+    },
+    "probe": {
+      "passed": true,
+      "rng_restored": true,
+      "all_module_modes_restored": true,
+      "parameters_unchanged": true
+    },
+    "boundaries": {
+      "passed": true,
+      "all_invalid_skips_without_dropping_prediction": true,
+      "tie_rule_preserved": true,
+      "zero_advantage_identified": true,
+      "label_fields_and_paths_rejected": true
+    },
+    "passed": true
+  },
+  "core_acceptance": {
+    "passed": true,
+    "tests": [
+      "statistics_and_gradient",
+      "selection_and_band",
+      "masked_update_and_global_normalization",
+      "label_free_io_and_consensus"
+    ],
+    "utc": "2026-10-04T15:12:25.969479+00:00"
+  },
+  "evaluator_acceptance": {
+    "passed": true,
+    "tests": [
+      "denominators",
+      "paired_gains_and_harms",
+      "skips",
+      "invalid_answers",
+      "token_counts"
+    ],
+    "real_labels_read": false
+  },
+  "failed_attempts": [
+    {
+      "attempt": "deterministic_cuda_histogram",
+      "outcome": "stopped_before_first_optimizer_step",
+      "process_wall_seconds": 128.047,
+      "cause": "CUDA histc unsupported with deterministic algorithms",
+      "resolution": "same detached entropy statistics on CPU in deterministic mode"
+    },
+    {
+      "attempt": "sixteen_thread_actual_model_restart",
+      "outcome": "full floating state within tolerance, exact generated output criterion failed",
+      "state_comparison": {
+        "master_weights": {
+          "tensor_count": 824,
+          "tensor_elements": 3754622976,
+          "nonexact_tensors": 1,
+          "max_abs_difference": 3.725290298461914e-09
+        },
+        "optimizer": {
+          "tensor_count": 2472,
+          "tensor_elements": 7509246776,
+          "nonexact_tensors": 0,
+          "max_abs_difference": 0.0
+        },
+        "actor_buffers": {
+          "tensor_count": 38,
+          "tensor_elements": 2388,
+          "nonexact_tensors": 0,
+          "max_abs_difference": 0.0
+        }
+      },
+      "differing_master_elements": 24230,
+      "differing_actor_bf16_elements": 2,
+      "affected_tensor": "visual.patch_embed.proj.weight",
+      "affected_after_texts": 1,
+      "discrete_output_tolerance_relaxed": false,
+      "followup": "One CPU intra-op thread passed fresh actual-model full-state and output comparisons exactly; original parallel discrepancy root cause is not conclusively established."
+    },
+    {
+      "attempt": "cpu_progress_logger_fixture",
+      "outcome": "fixture lacked initialized event logger; fixed mock; strict state tests had already passed"
+    },
+    {
+      "attempt": "cpu_test_launch",
+      "outcome": "misspelled environment variable; failed before testing; corrected and rerun"
+    },
+    {
+      "attempt": "isolated_plot_environment",
+      "outcome": "venv ensurepip unavailable; matplotlib installed to separate target directory; model environment unchanged"
+    }
+  ],
+  "completed_pre_fix_job_costs": [
+    {
+      "plan": "plan_acceptance",
+      "status": "stopped_after_job_failure",
+      "elapsed_seconds": 128.22986037598457,
+      "jobs": [
+        {
+          "label": "eng-d-full",
+          "gpu": true,
+          "wall_seconds": 128.04739258997142,
+          "return_code": 1
+        }
+      ]
+    },
+    {
+      "plan": "plan_acceptance2",
+      "status": "stopped_after_job_failure",
+      "elapsed_seconds": 3091.3961184619693,
+      "jobs": [
+        {
+          "label": "eng2-d-full",
+          "gpu": true,
+          "wall_seconds": 823.9443579110084,
+          "return_code": 0
+        },
+        {
+          "label": "eng2-d-split-first",
+          "gpu": true,
+          "wall_seconds": 656.8317432240583,
+          "return_code": 0
+        },
+        {
+          "label": "eng2-d-split-rest",
+          "gpu": true,
+          "wall_seconds": 573.5949128529755,
+          "return_code": 0
+        },
+        {
+          "label": "eng2-c-full",
+          "gpu": true,
+          "wall_seconds": 728.126538658049,
+          "return_code": 0
+        },
+        {
+          "label": "eng2-a-full",
+          "gpu": true,
+          "wall_seconds": 72.8726334249368,
+          "return_code": 0
+        },
+        {
+          "label": "eng2-b-full",
+          "gpu": true,
+          "wall_seconds": 201.62128227006178,
+          "return_code": 0
+        },
+        {
+          "label": "eng2-recovery-compare",
+          "gpu": false,
+          "wall_seconds": 33.44564965099562,
+          "return_code": 1
+        }
+      ]
+    }
+  ],
+  "measured_cost_caveat": "GPU job wall time is not GPU active time; shared resources and variable checkpoint IO prevent a controlled throughput comparison",
+  "scope": "engineering-only diagnostics; clinical accuracy is reported separately",
+  "actual_model_acceptance": {
+    "sealed_utc": "2026-10-04T17:25:05.670176+00:00",
+    "tests": {
+      "cpu_acceptance": {
+        "restart": {
+          "passed": true,
+          "continuous_steps": 10,
+          "restart_after": 5,
+          "fresh_process": true,
+          "atol": 0,
+          "rtol": 0,
+          "tensor_count": 21,
+          "tensor_elements": 5742,
+          "nonexact_tensors": 0,
+          "max_abs_difference": 0.0
+        },
+        "probability": {
+          "passed": true,
+          "temperature": 1,
+          "top_p": 1,
+          "top_k": 0,
+          "max_error": 2.384185791015625e-07,
+          "atol": 1e-06
+        },
+        "probe": {
+          "passed": true,
+          "rng_restored": true,
+          "all_module_modes_restored": true,
+          "parameters_unchanged": true
+        },
+        "boundaries": {
+          "passed": true,
+          "all_invalid_skips_without_dropping_prediction": true,
+          "tie_rule_preserved": true,
+          "zero_advantage_identified": true,
+          "label_fields_and_paths_rejected": true
+        },
+        "passed": true
+      },
+      "core_acceptance": {
+        "passed": true,
+        "tests": [
+          "statistics_and_gradient",
+          "selection_and_band",
+          "masked_update_and_global_normalization",
+          "label_free_io_and_consensus"
+        ],
+        "utc": "2026-10-04T15:12:25.969479+00:00"
+      },
+      "evaluator_acceptance": {
+        "passed": true,
+        "tests": [
+          "denominators",
+          "paired_gains_and_harms",
+          "skips",
+          "invalid_answers",
+          "token_counts"
+        ],
+        "real_labels_read": false
+      },
+      "recovery_acceptance": {
+        "passed": true,
+        "continuous_steps": 2,
+        "restart_after": 1,
+        "fresh_process": true,
+        "floating_atol": 1e-07,
+        "floating_rtol": 1e-06,
+        "rng_and_outputs_exact": true,
+        "full_state_comparison": {
+          "master_weights": {
+            "tensor_count": 824,
+            "tensor_elements": 3754622976,
+            "nonexact_tensors": 0,
+            "max_abs_difference": 0.0
+          },
+          "optimizer": {
+            "tensor_count": 2472,
+            "tensor_elements": 7509246776,
+            "nonexact_tensors": 0,
+            "max_abs_difference": 0.0
+          },
+          "actor_buffers": {
+            "tensor_count": 38,
+            "tensor_elements": 2388,
+            "nonexact_tensors": 0,
+            "max_abs_difference": 0.0
+          }
+        },
+        "reference_unchanged": true,
+        "clinical_accuracy_scored": false,
+        "runs": [
+          "eng3-d-full",
+          "eng3-d-split"
+        ]
+      }
+    },
+    "actual_methods": {
+      "a": {
+        "method": "Frozen greedy",
+        "cursor": 2,
+        "updates": 0,
+        "reference_unchanged": true,
+        "code_commit": "7bf769d420bcb63004295e0d1900e5df6467c2d5",
+        "update_checks": [],
+        "wall_seconds": 72.37344454403501,
+        "case_seconds": [
+          6.136751772952266,
+          7.3862182250013575
+        ],
+        "phase_seconds": {
+          "load": 8.68801326409448,
+          "probe": 49.94501372205559,
+          "preprocess": 0.275251931976527,
+          "greedy_before": 13.223462937981822,
+          "checkpoint": 0.0066273369593545794
+        },
+        "peak_allocated_bytes": 8368273920,
+        "peak_cpu_rss_kib": 4899424,
+        "checkpoint_bytes": 18277
+      },
+      "b": {
+        "method": "Frozen SC-8",
+        "cursor": 2,
+        "updates": 0,
+        "reference_unchanged": true,
+        "code_commit": "7bf769d420bcb63004295e0d1900e5df6467c2d5",
+        "update_checks": [],
+        "wall_seconds": 222.8999864179641,
+        "case_seconds": [
+          70.56289772805758,
+          91.78294219402596
+        ],
+        "phase_seconds": {
+          "load": 7.697344350977801,
+          "probe": 52.66257398203015,
+          "preprocess": 0.2726282320218161,
+          "rollout": 162.0170476048952,
+          "checkpoint": 0.0057390149449929595
+        },
+        "peak_allocated_bytes": 8368408064,
+        "peak_cpu_rss_kib": 4892360,
+        "checkpoint_bytes": 18277
+      },
+      "c": {
+        "method": "TTRL",
+        "cursor": 2,
+        "updates": 2,
+        "reference_unchanged": true,
+        "code_commit": "7bf769d420bcb63004295e0d1900e5df6467c2d5",
+        "update_checks": [
+          {
+            "cursor": 1,
+            "vision_gradient_nonzero": true,
+            "language_gradient_nonzero": true,
+            "tracked_actor_changed": true,
+            "behavior_logp_recompute_error": 0.0
+          },
+          {
+            "cursor": 2,
+            "vision_gradient_nonzero": true,
+            "language_gradient_nonzero": true,
+            "tracked_actor_changed": true,
+            "behavior_logp_recompute_error": 0.0
+          }
+        ],
+        "wall_seconds": 940.9962876470527,
+        "case_seconds": [
+          307.8726642529946,
+          259.92113819904625
+        ],
+        "phase_seconds": {
+          "load": 43.401064508012496,
+          "probe": 36.27715773193631,
+          "preprocess": 0.31021643709391356,
+          "greedy_before": 12.374160324921831,
+          "rollout": 176.66518848505802,
+          "behavior_forward": 20.46962964895647,
+          "reference_forward": 22.200678141554818,
+          "backward": 161.10202980588656,
+          "cpu_optimizer": 149.76385951705743,
+          "post_update_drift": 5.119370742933825,
+          "greedy_after": 19.557251645135693,
+          "reference_integrity": 8.733664146042429,
+          "checkpoint": 284.5321677339962
+        },
+        "peak_allocated_bytes": 26189011968,
+        "peak_cpu_rss_kib": 72252904,
+        "checkpoint_bytes": 45056481715
+      },
+      "d": {
+        "method": "SPINE",
+        "cursor": 2,
+        "updates": 2,
+        "reference_unchanged": true,
+        "code_commit": "7bf769d420bcb63004295e0d1900e5df6467c2d5",
+        "update_checks": [
+          {
+            "cursor": 1,
+            "vision_gradient_nonzero": true,
+            "language_gradient_nonzero": true,
+            "tracked_actor_changed": true,
+            "behavior_logp_recompute_error": 0.0
+          },
+          {
+            "cursor": 2,
+            "vision_gradient_nonzero": true,
+            "language_gradient_nonzero": true,
+            "tracked_actor_changed": true,
+            "behavior_logp_recompute_error": 0.0
+          }
+        ],
+        "wall_seconds": 850.303980269935,
+        "case_seconds": [
+          224.11556595598813,
+          177.66931145905983
+        ],
+        "phase_seconds": {
+          "load": 49.13713571801782,
+          "probe": 24.802712354110554,
+          "preprocess": 0.2629373630043119,
+          "greedy_before": 11.385481912991963,
+          "rollout": 123.71178757096641,
+          "behavior_forward": 9.501484651002102,
+          "reference_forward": 8.327081344090402,
+          "backward": 84.0349938115105,
+          "cpu_optimizer": 146.7643341050716,
+          "post_update_drift": 2.0069843539968133,
+          "greedy_after": 15.512856300920248,
+          "reference_integrity": 7.951655231998302,
+          "checkpoint": 360.85487805493176
+        },
+        "peak_allocated_bytes": 26189011968,
+        "peak_cpu_rss_kib": 72472692,
+        "checkpoint_bytes": 45056481715
+      }
+    },
+    "probability": {
+      "tokens": 4,
+      "temperature": 1,
+      "top_p": 1,
+      "top_k": 0,
+      "max_logp_difference": 0.007085084915161133,
+      "atol": 0.1,
+      "production_sampling": "temperature 0.7/top-p 0.95; loss uses raw untempered model softmax",
+      "strict_on_policy_consistency_claimed": false
+    },
+    "initial_probe_predictions_identical": true,
+    "configurations_match_except_method": true
+  },
+  "stored_output_comparison_scope": "All rollout token IDs, greedy/probe texts and token counts, votes and rewards; greedy/probe token ID arrays are not separately serialized.",
+  "successful_acceptance_job_costs": {
+    "elapsed_seconds": 3655.586710355943,
+    "jobs": [
+      {
+        "label": "eng3-d-full",
+        "wall_seconds": 862.4194808190223,
+        "return_code": 0
+      },
+      {
+        "label": "eng3-d-split-first",
+        "wall_seconds": 788.369770001038,
+        "return_code": 0
+      },
+      {
+        "label": "eng3-d-split-rest",
+        "wall_seconds": 741.4371649390087,
+        "return_code": 0
+      },
+      {
+        "label": "eng3-c-full",
+        "wall_seconds": 949.4918417850276,
+        "return_code": 0
+      },
+      {
+        "label": "eng3-a-full",
+        "wall_seconds": 77.37740367790684,
+        "return_code": 0
+      },
+      {
+        "label": "eng3-b-full",
+        "wall_seconds": 228.00005453499034,
+        "return_code": 0
+      },
+      {
+        "label": "eng3-recovery-compare",
+        "wall_seconds": 7.568639745935798,
+        "return_code": 0
+      }
+    ]
+  }
+}
