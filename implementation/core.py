@@ -67,6 +67,10 @@ def consensus_rewards(completions, options=None):
 
 def select_and_band(entropy, bins=100):
     values = entropy.detach().float()
+    if values.is_cuda and torch.are_deterministic_algorithms_enabled():
+        # CUDA histc is not deterministic in the tested PyTorch version. Only
+        # these detached per-token statistics move to CPU; the formula is shared.
+        return tuple(value.to(values.device) for value in select_and_band(values.cpu(), bins))
     if values.ndim != 1 or values.numel() == 0 or not torch.isfinite(values).all():
         raise ValueError("Expected finite, nonempty response-token entropies")
     low, high = values.min(), values.max()
