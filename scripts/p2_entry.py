@@ -13,5 +13,6 @@ paths = {
     "score": "implementation/evaluate.py",
     "supervise": "scripts/supervise.py",
     "compare": "scripts/compare_recovery.py",
+    "accept": "scripts/accept_campaign.py",
 }
 runpy.run_path(str(root / paths[os.environ["P2_MODE"]]), run_name="__main__")
