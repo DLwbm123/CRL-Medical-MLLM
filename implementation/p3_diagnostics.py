@@ -150,7 +150,8 @@ def reward_direction(rows, options, labels):
         counts.update(groups=1, rollouts=len(answers), coverage=int(coverage), vote_correct=int(voted_correct),
                       candidate_but_wrong_vote=int(coverage and not voted_correct), ties=int(vote["tie"]),
                       fewer_than_eight_valid=int(vote["valid"] < 8), all_invalid=int(vote["all_unparseable"]),
-                      zero_advantage=int(vote["zero_advantage_group"]))
+                      zero_advantage=int(vote["zero_advantage_group"]),
+                      all_equal_rewards=int(len(set(rewards)) == 1))
         for answer, right, reward, advantage in zip(answers, correct, rewards, advantages):
             counts["parsed_rollouts"] += answer is not None
             counts["correct_parsed_rollouts"] += right
@@ -181,6 +182,7 @@ def reward_direction(rows, options, labels):
         "fewer_than_eight_valid": fraction(counts["fewer_than_eight_valid"], counts["groups"]),
         "all_invalid": fraction(counts["all_invalid"], counts["groups"]),
         "zero_advantage": fraction(counts["zero_advantage"], counts["groups"]),
+        "all_equal_rewards": fraction(counts["all_equal_rewards"], counts["groups"]),
         "parsed_rollouts": fraction(counts["parsed_rollouts"], counts["rollouts"]),
     }
     return {"counts": dict(counts), "metrics": metrics,

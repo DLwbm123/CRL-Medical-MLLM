@@ -103,6 +103,8 @@ Before scoring, compare both supervisor ownership receipts and every archived wo
 
 Resume is supported by the unchanged P2 trainer, but P3 did not add restarts solely to demonstrate it. Resume only an explicitly authorized interrupted trajectory with exactly its original configuration, manifest and training commit, under the original deadline. Do not load a P2 adapted actor into P3 main runs:
 
+The executed P3 main trajectories save only their final states. An interrupted run before that save can retain predictions without a restorable actor/optimizer state. The following command requires a complete checkpoint whose cursor is below the locked next cursor; a completed cursor-16 run cannot resume to cursor 16, and prediction files alone cannot reconstruct missing training state.
+
 ```sh
 export P2_MODE=run P2_MANIFEST=manifest.json P2_RUN="$ORIGINAL_RUN"
 export P2_CONFIG="$ORIGINAL_CONFIG" P2_CODE_COMMIT="$ORIGINAL_TRAINING_COMMIT"
@@ -111,6 +113,8 @@ export P2_RESUME=1 P2_STOP_CURSOR="$LOCKED_NEXT_CURSOR"
 ```
 
 When the main controller closes, confirm every recorded main worker/session has ended and save the private `owned_cleanup_before_score.json` attestation. The scorer validates both seeds' configuration, contiguous coverage, original parse outputs and all probe/readout records, writes `scores/prediction_seal.json`, and only then reads truth labels:
+
+This seal describes the new P3 evaluator's label access. Task A already used the previously observed P2 labels for its independent old-artifact audit; the reused development examples do not become an unseen test set again.
 
 ```sh
 export CUDA_VISIBLE_DEVICES="" P2_MODE=p3_score

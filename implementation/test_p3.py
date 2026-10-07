@@ -68,6 +68,8 @@ def main():
     assert audit["metrics"]["wrong_parsed_positive_reward"]["total"] == 14
     assert audit["counts"]["groups"] == 3 and audit["counts"]["rollouts"] == 24
     assert audit["metrics"]["all_invalid"]["correct"] == 1
+    assert audit["metrics"]["all_equal_rewards"] == {"correct": 2, "total": 3, "percent": 200 / 3}
+    assert audit["metrics"]["zero_advantage"]["correct"] == 1
     high = next(x for x in audit["fixed_bins"] if x["axis"] == "top_votes" and x["bin"] == "6-8")
     assert high["groups"] == 2 and high["vote_correct"] == 1
 
