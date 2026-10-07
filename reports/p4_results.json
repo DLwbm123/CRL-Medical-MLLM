@@ -1,0 +1,80 @@
+{
+  "round": "P4",
+  "status": "reference_gate_negative",
+  "launch_code_commit": "915d8f81fe1ff90d20b5331e14a73ecf7a544fde",
+  "manifest_sha256": "af39f88bed859a9e27146d7183bb436bf87902ddfd7f547ccae9c4a780c246b5",
+  "reference_audit": {
+    "scored_utc": "2026-10-07T15:32:13.597922+00:00",
+    "reference_stream_correct": 1,
+    "reference_stream_n": 16,
+    "majority_old_pool": {
+      "counts": {
+        "groups": 64,
+        "correct_parsed": 64,
+        "correct_negative": 40,
+        "positive_reward": 274,
+        "wrong_positive": 250,
+        "target_correct": 6,
+        "all_invalid": 0,
+        "zero_advantage": 1
+      },
+      "correct_negative": {
+        "correct": 40,
+        "total": 64,
+        "percent": 62.5
+      },
+      "wrong_positive": {
+        "correct": 250,
+        "total": 274,
+        "percent": 91.24087591240875
+      },
+      "target_accuracy": {
+        "correct": 6,
+        "total": 64,
+        "percent": 9.375
+      }
+    },
+    "reference_old_pool": {
+      "counts": {
+        "groups": 64,
+        "correct_parsed": 64,
+        "correct_negative": 45,
+        "positive_reward": 241,
+        "wrong_positive": 224,
+        "target_correct": 4,
+        "all_invalid": 0,
+        "zero_advantage": 3
+      },
+      "correct_negative": {
+        "correct": 45,
+        "total": 64,
+        "percent": 70.3125
+      },
+      "wrong_positive": {
+        "correct": 224,
+        "total": 241,
+        "percent": 92.9460580912863
+      },
+      "target_accuracy": {
+        "correct": 4,
+        "total": 64,
+        "percent": 6.25
+      }
+    },
+    "go": false,
+    "only_previously_observed_development_labels": true,
+    "clinical_labels_enter_trainer": false,
+    "thresholds_fixed_before_scoring": true
+  },
+  "gpu_process_seconds_used": 28.726142450002953,
+  "cpu_checks_passed": true,
+  "main_matrix_launched": false,
+  "stable_positive_development_result": false,
+  "independent_generalization_established": false,
+  "reason": "Fixed original-base legal-option pseudo-target failed every prespecified quality gate",
+  "seeds_reserved_not_executed": [
+    45,
+    46,
+    47
+  ]
+}
