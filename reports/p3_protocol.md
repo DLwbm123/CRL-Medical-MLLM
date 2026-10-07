@@ -66,3 +66,5 @@ Priority: four equal-length RL trajectories across both seeds, frozen controls, 
 Publish source, six seed configs, reproducible environment-based launch/resume/scoring commands, aggregate CSV/JSON and final report on the new branch. Exclude raw images, full questions, completions, truth labels/IDs, weights, checkpoints, credentials and private absolute paths. Verify branch publication and anonymous report access using the required proxy. Confirm all owned GPU jobs have ended. The final report answers H1–H3 and selects one evidence-based next research question without executing it.
 
 Private manifest SHA-256: `6076bd13e6c36d0fa12ef88530f5688633d74762e069b9038f8db971dd8b1306`. Its scope/order and two seeds were fixed before any P3 scoring.
+
+Budget locked at 2026-10-07T06:56:18.152491+00:00: main forecast 6.94 h; with 20% reserve 8.32 h; 9.79 h remained before the main stop. Final delivery has a separate one-hour reserve. Fixed main order: c43, d43, c44, d44, b43, b44; job limits 7200 seconds per RL trajectory and 3000 per SC-8. See `p3_budget_plan.json`.

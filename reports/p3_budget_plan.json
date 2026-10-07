@@ -1,0 +1,170 @@
+{
+  "locked_utc": "2026-10-07T06:56:18.152491+00:00",
+  "manifest_sha256": "6076bd13e6c36d0fa12ef88530f5688633d74762e069b9038f8db971dd8b1306",
+  "n": 16,
+  "rollout_seeds": [
+    43,
+    44
+  ],
+  "scope_reason": "explicit P3 fallback to previously scored development data; unused candidate retirement not separately evidenced",
+  "p3_accuracy_seen": false,
+  "phase_evidence": {
+    "a": {
+      "phases": {
+        "load": 18.63874030590523,
+        "preprocess": 3.025477765011601,
+        "greedy_before": 121.74657061288599,
+        "probe": 342.91723147500306,
+        "checkpoint": 0.028049444081261754
+      },
+      "case_seconds": 124.94554338022135,
+      "cases": 16,
+      "load_count": 2,
+      "checkpoint_seconds": [
+        0.02024246600922197,
+        0.007806978072039783
+      ],
+      "probe_total_seconds": 342.91723147500306,
+      "probe_count": 3
+    },
+    "b": {
+      "phases": {
+        "load": 17.939192406949587,
+        "preprocess": 5.792339104926214,
+        "rollout": 1027.154847890255,
+        "probe": 326.88324059406295,
+        "checkpoint": 0.010920163942500949
+      },
+      "case_seconds": 1033.145254315692,
+      "cases": 16,
+      "load_count": 2,
+      "checkpoint_seconds": [
+        0.005155398976057768,
+        0.005764764966443181
+      ],
+      "probe_total_seconds": 326.88324059406295,
+      "probe_count": 3
+    },
+    "c": {
+      "phases": {
+        "load": 81.12676346302032,
+        "preprocess": 1.7363412090344355,
+        "greedy_before": 112.2438729503192,
+        "rollout": 1064.5904804808088,
+        "behavior_forward": 93.40026630205102,
+        "reference_forward": 89.51402353856247,
+        "backward": 809.8524675942026,
+        "cpu_optimizer": 1082.304575799848,
+        "greedy_after": 107.45322604291141,
+        "post_update_drift": 5.561394680989906,
+        "probe": 337.33851610380225,
+        "reference_integrity": 17.503719218075275,
+        "checkpoint": 424.04674575605895
+      },
+      "case_seconds": 3368.338692395715,
+      "cases": 16,
+      "load_count": 2,
+      "checkpoint_seconds": [
+        206.2354735120898,
+        217.81127224396914
+      ],
+      "probe_total_seconds": 337.33851610380225,
+      "probe_count": 3
+    },
+    "d": {
+      "phases": {
+        "load": 82.36613823508378,
+        "preprocess": 1.4912773537216708,
+        "greedy_before": 116.88530039472971,
+        "rollout": 1012.286060443148,
+        "behavior_forward": 76.30196164839435,
+        "reference_forward": 72.0969264182495,
+        "backward": 743.1741413666168,
+        "cpu_optimizer": 1104.8111299582524,
+        "greedy_after": 183.13728224136867,
+        "post_update_drift": 2.9331632570829242,
+        "probe": 456.9744127759477,
+        "reference_integrity": 15.604879073915072,
+        "checkpoint": 418.45096472406294
+      },
+      "case_seconds": 3314.6753334758105,
+      "cases": 16,
+      "load_count": 2,
+      "checkpoint_seconds": [
+        200.96553900302388,
+        217.48542572103906
+      ],
+      "probe_total_seconds": 456.9744127759477,
+      "probe_count": 3
+    }
+  },
+  "throughput": {
+    "status": "completed",
+    "method": "TTRL",
+    "cursor": 1,
+    "optimizer_updates": 1,
+    "manifest_sha256": "ee9800bf128676e9a5fa0895688e43d17880a9cab576e195987291a567d5c988",
+    "code_commit": "a0f4d9a60ae4e421b172a49c5244b4b5caa337d5",
+    "reference_unchanged": true,
+    "evaluation_labels_read": false,
+    "elapsed_seconds": 467.3159092529677,
+    "phase_seconds": {
+      "load": 37.65087667386979,
+      "preprocess": 0.10314964596182108,
+      "greedy_before": 7.186230159830302,
+      "rollout": 74.86364804697223,
+      "behavior_forward": 2.7443574289791286,
+      "reference_forward": 2.7886578298639506,
+      "backward": 24.15056236111559,
+      "cpu_optimizer": 76.4667103330139,
+      "post_update_drift": 0.7011060980148613,
+      "greedy_after": 4.255139576969668,
+      "reference_integrity": 7.6250049830414355,
+      "checkpoint": 228.54013642505743
+    },
+    "peak_allocated_bytes": 25870244352,
+    "peak_reserved_bytes": 29590814720,
+    "cpu_peak_rss_kib": 71000816
+  },
+  "planning_case_seconds": {
+    "rl": 283.8969012260204,
+    "frozen_sc8": 81.17291996104177
+  },
+  "planning_probe_pass_seconds": {
+    "rl": 152.32480425864924,
+    "frozen_sc8": 108.96108019802098
+  },
+  "planning_rl_checkpoint_seconds": 499.94278559600934,
+  "planning_rl_load_seconds": 82.31405651499517,
+  "main_forecast_seconds": 24970.405240523938,
+  "forecast_with_twenty_percent_reserve_seconds": 29964.486288628723,
+  "remaining_main_seconds": 35226.505505,
+  "available_reserve_fraction": 0.2911472516914948,
+  "final_delivery_reserved_seconds": 3600,
+  "new_readout_process_seconds": 206.5094791641459,
+  "new_throughput_process_seconds": 474.2744725840166,
+  "frozen_greedy_new_generation_seconds": 0,
+  "full_checkpoint_writes_main": 6,
+  "rl_final_states_main": 4,
+  "main_schedule": [
+    "c43",
+    "d43",
+    "c44",
+    "d44",
+    "b43",
+    "b44"
+  ],
+  "job_hard_seconds": {
+    "rl": 7200,
+    "sc8": 3000
+  },
+  "deadlines": {
+    "t0_utc": "2026-10-07T06:13:24.657782+00:00",
+    "t0_monotonic": 861873.005386125,
+    "freeze_scope_utc": "2026-10-07T15:13:24.657782+00:00",
+    "main_gpu_stop_utc": "2026-10-07T16:43:24.657782+00:00",
+    "all_gpu_stop_utc": "2026-10-07T17:13:24.657782+00:00",
+    "hard_deadline_utc": "2026-10-07T18:13:24.657782+00:00"
+  },
+  "forecast_note": "Separate measured stream phases, loading, probe, and checkpoint costs; use slower historical engineering means as conservative case estimates. This is a planning estimate, not a speed ranking."
+}

@@ -14,7 +14,7 @@ from state import atomic_json
 PARSER_VERSION = "marked_choice_v1_eval_only"
 MARKER = re.compile(
     r"(?<!\w)(?:final[ \t*_`]*answer|(?:the[ \t]+)?correct[ \t*_`]*answer|answer|最终答案|答案)"
-    r"[ \t*_`]*(?:[：:]|[ \t]+is\b|(?=\n))\s*", re.I)
+    r"[ \t*_`]*(?:[：:]|[ \t]+is\b[ \t]*[：:]?|(?=\n))\s*", re.I)
 
 
 def marked_choices(text, options):
@@ -53,10 +53,16 @@ def failure_type(text, options, capped):
     choices, payloads = marked_choices(text, options)
     if len(set(choices)) > 1 or any(re.fullmatch(r"[\s*`({\[]*[A-Za-z][\s*`)}\].]*(?:or|and|/)[\s*`({\[]*[A-Za-z][\s*`)}\].]*", x, re.I) for x in payloads):
         return "conflicting_or_nonunique_final_choices"
-    if eval_only_choice(text, options) is not None:
+    explicit_identifier = any((match := re.match(r"^[*`({\[]*([A-Z])[\s*)}\]]*[.,:](?:[ \t]|$)", payload))
+                              and match.group(1) in options
+                              for payload in payloads)
+    if eval_only_choice(text, options) is not None or explicit_identifier:
         return "explicit_choice_unsupported_syntax"
     if capped:
         return "token_cap_without_parseable_final_choice"
+    if any((match := re.fullmatch(r"[*`({\[]*([A-Z])[\s*)}\].,;:!?]*", payload))
+           and match.group(1) not in options for payload in payloads):
+        return "explicit_choice_outside_legal_options"
     if payloads and any(payloads):
         return "prose_final_payload_without_unambiguous_identifier"
     if text.strip() and not payloads:

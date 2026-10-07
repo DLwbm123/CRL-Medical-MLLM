@@ -11,6 +11,7 @@ from continual import validate_development_configuration
 from core import consensus_rewards, extract_answer
 from p3_diagnostics import eval_only_choice, failure_type, reward_direction
 from p3_readout import option_log_probabilities, option_tokens
+from p3_evaluate import available_run
 from state import inference_without_state_change, rng_state
 from test_continual import compare_values
 
@@ -34,6 +35,7 @@ def main():
     options = {"A": "one", "B": "two"}
     syntax = [("Final answer: A", "A"), ("**Final answer**: **B**", "B"),
               ("Final answer:\nA", "A"), (r"Final answer: \boxed{B}", "B"),
+              ("The final answer is:\nB", "B"),
               ("Options: A. one B. two", None), ("I considered A or B.", None),
               ("Final answer: A\nFinal answer: B", None),
               ("Final answer: pulmonary finding", None)]
@@ -41,6 +43,9 @@ def main():
         assert eval_only_choice(text, options) == expected, text
     assert extract_answer("Final answer:\nA", options) is None
     assert failure_type("unfinished", options, True) == "token_cap_without_parseable_final_choice"
+    assert failure_type("The correct answer is B. listed option text", options, False) == "explicit_choice_unsupported_syntax"
+    assert failure_type("The correct answer is (B): listed option text", options, False) == "explicit_choice_unsupported_syntax"
+    assert failure_type("Final answer: F.", options, False) == "explicit_choice_outside_legal_options"
     rows = []
     labels = {"x": "B", "y": "B", "z": "B"}
     choices = {key: options for key in labels}
@@ -88,9 +93,17 @@ def main():
     assert abs(scores["B"] - float(expected[2] + expected[3])) < 1e-6
     assert actor.training
     compare_values(before_rng, rng_state())
+    folder = root / "outputs" / os.environ["P2_CAMPAIGN"]
+    manifest = json.loads((folder / "manifest.json").read_text())
+    cached_cfg = json.loads((root / "configs/p2_a.json").read_text())
+    rows, result, probes = available_run(folder / "runs/main-a", manifest,
+                                       (folder / "manifest.sha256").read_text().strip(), cached_cfg,
+                                       json.loads((folder / "acceptance.json").read_text()))
+    assert len(rows) == result["cursor"] == 16 and set(probes) == {0, 16}
     print(json.dumps({"passed": True, "checks": ["declared-seed-only guard", "label-free syntax examples",
                      "original parser preserved", "reward direction denominators and high-vote errors",
-                     "complete multi-token likelihood", "readout RNG/mode preservation"], "real_labels_read": False}))
+                     "complete multi-token likelihood", "readout RNG/mode preservation",
+                     "real cache provenance and probe schema without labels"], "real_labels_read": False}))
 
 
 if __name__ == "__main__":
