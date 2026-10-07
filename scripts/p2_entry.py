@@ -26,5 +26,8 @@ paths = {
     "p4_score": "implementation/p4_evaluate.py",
     "p4_test": "implementation/test_p4.py",
     "p4_pipeline": "scripts/p4_pipeline.py",
+    "p5_prepare": "scripts/prepare_p4.py",
+    "p5_score": "implementation/p4_evaluate.py",
+    "p5_pipeline": "scripts/p4_pipeline.py",
 }
 runpy.run_path(str(root / paths[os.environ["P2_MODE"]]), run_name="__main__")

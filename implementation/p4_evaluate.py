@@ -46,8 +46,8 @@ def gate_passes(reference_correct, majority, reference):
             and v["wrong_positive"]["percent"] <= m["wrong_positive"]["percent"] - 10)
 
 
-def stable_development_success(seeds):
-    return len(seeds) == 3 and {s["seed"] for s in seeds} == {45, 46, 47} and all(s["candidate_before_correct"] > s["frozen_before_correct"]
+def stable_development_success(seeds, expected_seeds=(45, 46, 47)):
+    return len(seeds) == 3 and {s["seed"] for s in seeds} == set(expected_seeds) and all(s["candidate_before_correct"] > s["frozen_before_correct"]
                                   and s["candidate_before_correct"] > s["control_before_correct"]
                                   and s["candidate_initial_correct_retained"] == 3
                                   and s["n"] == 16 for s in seeds)
@@ -78,8 +78,12 @@ def main():
     if digest != (folder / "manifest.sha256").read_text().strip():
         raise ValueError("Manifest changed")
     manifest = json.loads(raw)
-    signal = checked_signal(folder, manifest, digest)
-    targets = {p["id"]: p["winner"] for p in signal["predictions"]}
+    p5 = manifest.get("p5_version") == 1
+    seeds = [48, 49, 50] if p5 else [45, 46, 47]
+    if manifest["rollout_seeds"] != seeds:
+        raise ValueError("Unexpected locked seed matrix")
+    signal = None if p5 else checked_signal(folder, manifest, digest)
+    targets = None if p5 else {p["id"]: p["winner"] for p in signal["predictions"]}
     choices = options_by_id(folder, manifest)
     if os.environ["P2_MODE"] == "p4_audit":
         completion = json.loads((folder / "reference/completion.json").read_text())
@@ -107,33 +111,37 @@ def main():
         print(json.dumps(decision))
         return
     controller = json.loads((folder / "controllers/main-plan.json").read_text())
-    if "finished_utc" not in controller or any(j.get("return_code") != 0 for j in controller["jobs"]):
+    if "finished_utc" not in controller or controller["status"] != "all_planned_jobs_completed" or len(controller["jobs"]) != 6 or any(j.get("return_code") != 0 for j in controller["jobs"]):
         raise ValueError("Main matrix not closed successfully")
     if not json.loads((folder / "owned_cleanup_before_score.json").read_text())["owned_main_processes_ended"]:
         raise ValueError("Owned workers not verified ended")
-    if not json.loads((folder / "reference/audit_public.json").read_text())["go"]:
+    if not p5 and not json.loads((folder / "reference/audit_public.json").read_text())["go"]:
         raise ValueError("Reference gate did not pass")
     acceptance = json.loads((folder / "acceptance.json").read_text())
     loaded = {}
-    for name in ["a"] + [k + str(seed) for seed in [45, 46, 47] for k in "mv"]:
-        cfgname = "p2_a" if name == "a" else "p4_" + name
+    for name in ["a"] + [k + str(seed) for seed in seeds for k in "mv"]:
+        cfgname = "p2_a" if name == "a" else ("p5_" if p5 else "p4_") + name
         cfg = json.loads((root / "configs" / (cfgname + ".json")).read_text())
         run = folder / "runs" / ("main-" + name)
         rows, result, probes = available_run(run, manifest, digest, cfg, acceptance)
         if len(rows) != 16 or result["status"] != "completed" or set(probes) != {0, 16}:
             raise ValueError("Incomplete fixed main matrix")
-        if name.startswith("v") and json.loads((run / "reference_signal_snapshot.json").read_text()) != signal:
+        if not p5 and name.startswith("v") and json.loads((run / "reference_signal_snapshot.json").read_text()) != signal:
             raise ValueError("Candidate reward signal differed between runs")
+        if p5 and name.startswith("v"):
+            probability = json.loads((run / "probability_check.json").read_text())
+            if not probability["raw_sampler_configuration_matches_check"] or probability["max_logp_difference"] > cfg["probability_check_bf16_atol"]:
+                raise ValueError("Actual-model raw sampling probability check failed")
         for row in rows:
             for phase in ["before", "after"]:
                 if phase in row and row[phase]["answer"] != extract_answer(row[phase]["text"], choices[row["id"]]):
                     raise ValueError("Stored primary parsing differs")
-            target = targets[row["id"]] if name.startswith("v") else None
+            target = targets[row["id"]] if not p5 and name.startswith("v") else None
             if name != "a":
                 rewards, advantages, vote = group_rewards(row["completions"], choices[row["id"]], target)
                 if (None if rewards is None else rewards.tolist()) != row["rewards"]:
                     raise ValueError("Stored rewards differ from declared source")
-                if name.startswith("v") and row["vote"]["reward_target"] != target:
+                if not p5 and name.startswith("v") and row["vote"]["reward_target"] != target:
                     raise ValueError("Stored target differs")
         loaded[name] = rows, result, probes
     expected_initial = loaded["a"][2][0]["predictions"]
@@ -141,7 +149,7 @@ def main():
         if probes[0]["predictions"] != expected_initial:
             raise ValueError("Initial fixed probe predictions differ from frozen cache")
     seal = {"sealed_utc": datetime.now(timezone.utc).isoformat(), "manifest_sha256": digest,
-            "seeds": [45, 46, 47], "main_labels_read_before_seal": False, "coverage": {k: len(v[0]) for k,v in loaded.items()}}
+            "seeds": seeds, "main_labels_read_before_seal": False, "coverage": {k: len(v[0]) for k,v in loaded.items()}}
     atomic_json(folder / "scores/prediction_seal.json", seal)
     labels = read_labels(root, manifest)
     base = [{"id": r["id"], "answer": r["before"]["answer"]} for r in loaded["a"][0]]
@@ -149,10 +157,11 @@ def main():
     public = {"scored_utc": datetime.now(timezone.utc).isoformat(), "manifest_sha256": digest,
               "evaluator_commit": os.environ["P2_EVAL_CODE_COMMIT"], "prediction_seal": seal,
               "unique_stream_groups": 16, "unique_probe_groups": 16, "data_status": manifest["data_status"],
-              "reference_audit": json.loads((folder / "reference/audit_public.json").read_text()),
+              "reference_audit": None if p5 else json.loads((folder / "reference/audit_public.json").read_text()),
+              "sampling_variants": manifest.get("sampling_variants"),
               "seeds": {}, "resources": {}}
     criteria = []
-    for seed in [45, 46, 47]:
+    for seed in seeds:
         context = {}
         for kind in "mv":
             name = kind + str(seed);rows,result,probes = loaded[name]
@@ -167,7 +176,9 @@ def main():
                               "initial_parsed": sum(p["answer"] is not None for p in initial),
                               "final_parsed": sum(p["answer"] is not None for p in final),
                               "transition": prediction_transition_audit(initial, final, labels)}
-            metric["reward_direction"] = reward_audit(rows, choices, labels, targets if kind=="v" else None)
+            metric["reward_direction"] = reward_audit(rows, choices, labels, targets if not p5 and kind=="v" else None)
+            if p5 and kind=="v":
+                metric["sampling_probability_check"] = json.loads((folder / "runs" / ("main-"+name) / "probability_check.json").read_text())
             metric["format"] = summarize_formats(output_units(folder / "runs" / ("main-" + name), rows, choices), labels)
             context[kind] = metric
             public["resources"][name] = resource_summary(folder / "runs" / ("main-" + name), rows, result)
@@ -180,7 +191,7 @@ def main():
                          "candidate_before_correct":context["v"]["greedy_before"]["correct"],
                          "candidate_initial_correct_retained":context["v"]["probe"]["transition"]["correct_to_correct"]})
     public["success_checks"] = criteria
-    public["stable_positive_development_result"] = stable_development_success(criteria)
+    public["stable_positive_development_result"] = stable_development_success(criteria, seeds)
     public["independent_generalization_established"] = False
     atomic_json(folder / "scores/public_summary.json", public)
     print(json.dumps({"scored_after_matrix_seal": True, "stable_positive_development_result":public["stable_positive_development_result"]}))

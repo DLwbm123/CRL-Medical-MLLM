@@ -69,6 +69,15 @@ def validate_development_configuration(cfg, acceptance, manifest):
         if cfg["method"] != "Frozen greedy" and cfg.get("reward_source") not in manifest["reward_sources"]:
             raise RuntimeError("Reward source is outside the locked P4 manifest")
         current = {k: v for k, v in current.items() if k != "reward_source"}
+    if manifest.get("p5_version") == 1 and cfg["method"] != "Frozen greedy":
+        source = cfg.get("sampling_source")
+        if source not in manifest["sampling_variants"]:
+            raise RuntimeError("Sampling source is outside the locked P5 manifest")
+        if {k: cfg[k] for k in ["temperature", "top_p"]} != manifest["sampling_variants"][source]:
+            raise RuntimeError("Sampling transforms differ from the locked source")
+        current.pop("sampling_source")
+        for key in ["temperature", "top_p"]:
+            current[key] = accepted[key]
     allowed = manifest["rollout_seeds"]
     cached_base = cfg["method"] == "Frozen greedy" and cfg["seed"] == accepted["seed"]
     if not cached_base and cfg["seed"] not in allowed:
@@ -244,7 +253,8 @@ class Engine:
                 raise RuntimeError(f"Unwarped generation/recompute log-prob mismatch: {error}")
         return {"tokens": len(response), "temperature": 1, "top_p": 1, "top_k": 0,
                 "max_logp_difference": error, "atol": self.cfg["probability_check_bf16_atol"],
-                "production_sampling": "temperature 0.7/top-p 0.95; loss uses raw untempered model softmax",
+                "production_sampling": f'temperature {self.cfg["temperature"]}/top-p {self.cfg["top_p"]}; loss uses raw untempered model softmax',
+                "raw_sampler_configuration_matches_check": self.cfg["temperature"] == 1.0 and self.cfg["top_p"] == 1.0 and self.cfg["top_k"] == 0 and self.cfg["repetition_penalty"] == 1.0,
                 "strict_on_policy_consistency_claimed": False}
 
     def probe(self, folder, entries, cursor):

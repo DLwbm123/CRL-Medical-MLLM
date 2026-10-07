@@ -50,6 +50,20 @@ def main():
     good=[{"seed":s,"n":16,"frozen_before_correct":2,"control_before_correct":3,"candidate_before_correct":4,"candidate_initial_correct_retained":3} for s in [45,46,47]]
     assert stable_development_success(good) and not stable_development_success(good[:2])
     assert not stable_development_success([good[0]]*3)
+    aligned=dict(cfg,seed=48,reward_source="majority",sampling_source="raw_softmax",temperature=1.0,top_p=1.0)
+    p5_manifest={"p4_version":1,"p5_version":1,"rollout_seeds":[48,49,50],"reward_sources":["majority"],
+                 "sampling_variants":{"original":{"temperature":0.7,"top_p":0.95},"raw_softmax":{"temperature":1.0,"top_p":1.0}}}
+    validate_development_configuration(aligned,acceptance,p5_manifest)
+    validate_development_configuration(dict(aligned,sampling_source="original",temperature=0.7,top_p=0.95),acceptance,p5_manifest)
+    for changed in [dict(aligned,temperature=0.9),dict(aligned,sampling_source="original"),dict(aligned,reward_source="frozen_legal")]:
+        try:
+            validate_development_configuration(changed,acceptance,p5_manifest)
+        except RuntimeError:
+            pass
+        else:
+            raise AssertionError("Undeclared P5 change accepted")
+    shifted=[dict(s,seed=s["seed"]+3) for s in good]
+    assert stable_development_success(shifted,[48,49,50]) and not stable_development_success(shifted)
     for key,value in [("candidate_before_correct",3),("candidate_initial_correct_retained",2)]:
         bad=copy.deepcopy(good);bad[0][key]=value
         assert not stable_development_success(bad)

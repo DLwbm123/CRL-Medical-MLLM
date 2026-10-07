@@ -13,6 +13,9 @@ def main():
     root = Path(os.environ["P0_ROOT"])
     source = Path(os.environ["P4_P3_FOLDER"])
     folder = root / "outputs" / os.environ["P2_CAMPAIGN"]
+    p5 = os.environ["P2_MODE"] == "p5_prepare"
+    seeds = [48, 49, 50] if p5 else [45, 46, 47]
+    prefix = "p5_" if p5 else "p4_"
     folder.mkdir(parents=True, exist_ok=False)
     (folder / "inputs").mkdir()
     raw = (source / "manifest.json").read_bytes()
@@ -28,20 +31,24 @@ def main():
         for entry in old[section]:
             load_input(source, entry)
             shutil.copyfile(source / entry["input"], folder / entry["input"])
-    manifest = {**old, "p4_version": 1, "rollout_seeds": [45, 46, 47],
-                "reward_sources": ["majority", "frozen_legal"],
+    manifest = {**old, "p4_version": 1, "rollout_seeds": seeds,
+                "reward_sources": ["majority"] if p5 else ["majority", "frozen_legal"],
                 "data_status": "reused observed development groups; new rollout seeds",
                 "probe_cursors": [0, 16], "selected_n": 16,
                 "data_decision": "No new test retirement; prior observed groups only"}
+    if p5:
+        manifest.update(p5_version=1, sampling_variants={"original": {"temperature": 0.7, "top_p": 0.95},
+                                                       "raw_softmax": {"temperature": 1.0, "top_p": 1.0}})
     digest = write_manifest(folder / "manifest.json", manifest)
     acceptance = json.loads((source / "acceptance.json").read_text())
     if not acceptance["passed"]:
         raise ValueError("Inherited engineering acceptance did not pass")
     acceptance.update(inherited_for_p4=True,
-                      inheritance_scope="same binary-reward normalization, objective, optimizer, state and RNG; added fixed pseudo-target source tested separately")
+                      inheritance_scope=("same reward, objective, optimizer, state and RNG; declared sampler alignment tested separately" if p5 else
+                                         "same binary-reward normalization, objective, optimizer, state and RNG; added fixed pseudo-target source tested separately"))
     for kind in ["m", "v"]:
-        for seed in [45, 46, 47]:
-            cfg = json.loads((root / "configs" / f"p4_{kind}{seed}.json").read_text())
+        for seed in seeds:
+            cfg = json.loads((root / "configs" / f"{prefix}{kind}{seed}.json").read_text())
             validate_development_configuration(cfg, acceptance, manifest)
     atomic_json(folder / "acceptance.json", acceptance)
     original = source / "runs/main-a"
@@ -63,7 +70,7 @@ def main():
     result = json.loads((original / "result.json").read_text())
     result.update(manifest_sha256=digest, cached=True)
     atomic_json(cached / "result.json", result)
-    print(json.dumps({"prepared": True, "stream": 16, "probe": 16, "seeds": [45, 46, 47],
+    print(json.dumps({"prepared": True, "stream": 16, "probe": 16, "seeds": seeds,
                       "manifest_sha256": digest, "labels_read": False}))
 
 

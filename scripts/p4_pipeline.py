@@ -78,8 +78,12 @@ def main():
     final = {"started_utc": datetime.now(timezone.utc).isoformat(),
              "code_commit": os.environ["P2_CODE_COMMIT"], "status": "running"}
     try:
-        invoke("supervise", "supervisor-reference.log", P2_PLAN="reference-plan.json")
-        audit = json.loads((FOLDER / "reference/audit_public.json").read_text())
+        p5 = json.loads((FOLDER / "manifest.json").read_text()).get("p5_version") == 1
+        if p5:
+            audit = {"go": True}
+        else:
+            invoke("supervise", "supervisor-reference.log", P2_PLAN="reference-plan.json")
+            audit = json.loads((FOLDER / "reference/audit_public.json").read_text())
         if not audit["go"]:
             final["status"] = "reference_gate_negative"
         else:
@@ -99,7 +103,7 @@ def main():
             if ledger["status"] != "all_planned_jobs_completed" or len(ledger["jobs"]) != 6:
                 raise RuntimeError("Fixed main matrix did not fully close")
             verify_ended(ledger)
-            invoke("p4_score", "offline-score.log")
+            invoke("p5_score" if p5 else "p4_score", "offline-score.log")
             final["status"] = "scored_awaiting_public_delivery"
             final["stable_positive_development_result"] = json.loads((FOLDER / "scores/public_summary.json").read_text())["stable_positive_development_result"]
     except Exception as exc:
