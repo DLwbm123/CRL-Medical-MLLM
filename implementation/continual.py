@@ -2,6 +2,7 @@
 import contextlib
 import hashlib
 import json
+import math
 import os
 import random
 import signal
@@ -25,14 +26,20 @@ from core import INPUT_KEYS, consensus_rewards, extract_answer, objective, promp
 from state import PersistentAdam, atomic_json, inference_without_state_change, load_checkpoint, restore_rng, rng_state, save_checkpoint
 
 
-def group_rewards(completions, options):
-    """Keep the pilot reward/tie rule, but expose all-invalid as an explicit skip."""
+def group_rewards(completions, options, reward_target=None):
+    """Preserve consensus by default; optionally reward a fixed legal pseudo-target."""
+    if reward_target is not None and reward_target not in options:
+        raise ValueError("Reference reward target is not a legal option")
     answers = [extract_answer(text, options) for text in completions]
     if all(answer is None for answer in answers):
         return None, None, {"answers": answers, "winner": None, "valid": 0, "counts": {},
                             "tie": False, "top_count": 0, "margin": 0,
                             "all_unparseable": True, "zero_advantage_group": False}
     rewards, advantages, detail = consensus_rewards(completions, options)
+    if reward_target is not None:
+        rewards = torch.tensor([float(answer == reward_target) if answer is not None else 0.0 for answer in answers])
+        advantages = (rewards - rewards.mean()) / (rewards.std(correction=0) + 1e-6)
+        detail.update(reward_source="frozen_legal", reward_target=reward_target)
     counts = sorted(detail["counts"].values(), reverse=True)
     detail.update(tie=len(counts) > 1 and counts[0] == counts[1], top_count=counts[0],
                   margin=counts[0] - (counts[1] if len(counts) > 1 else 0), all_unparseable=False,
@@ -58,6 +65,10 @@ def validate_development_configuration(cfg, acceptance, manifest):
         if current != accepted:
             raise RuntimeError("Configuration differs from engineering acceptance")
         return
+    if manifest.get("p4_version") == 1:
+        if cfg["method"] != "Frozen greedy" and cfg.get("reward_source") not in manifest["reward_sources"]:
+            raise RuntimeError("Reward source is outside the locked P4 manifest")
+        current = {k: v for k, v in current.items() if k != "reward_source"}
     allowed = manifest["rollout_seeds"]
     cached_base = cfg["method"] == "Frozen greedy" and cfg["seed"] == accepted["seed"]
     if not cached_base and cfg["seed"] not in allowed:
@@ -90,6 +101,30 @@ class Deadline(StoppingCriteria):
 class Engine:
     def __init__(self, root, out, cfg, deadline):
         self.root, self.out, self.cfg, self.deadline = root, out, cfg, deadline
+        self.reward_targets = None
+        if cfg.get("reward_source") == "frozen_legal":
+            folder = out.parent.parent
+            manifest_bytes = (folder / os.environ.get("P2_MANIFEST", "manifest.json")).read_bytes()
+            manifest = json.loads(manifest_bytes)
+            signal = json.loads((folder / "reference/stream_targets.json").read_text())
+            if signal["labels_read"] or signal["model_revision"] != cfg["model_revision"] or signal["manifest_sha256"] != hashlib.sha256(manifest_bytes).hexdigest():
+                raise ValueError("Frozen reward signal provenance differs")
+            if [x["id"] for x in signal["predictions"]] != [x["id"] for x in manifest["stream"]]:
+                raise ValueError("Reward signal must cover only the locked stream in order")
+            self.reward_targets = {}
+            for prediction, entry in zip(signal["predictions"], manifest["stream"]):
+                options = load_input(folder, entry)["options"]
+                if prediction["winner"] not in options or set(prediction["scores"]) != set(options):
+                    raise ValueError("Reference signal contains an illegal option")
+                if not all(math.isfinite(v) for v in prediction["scores"].values()) or prediction["winner"] != min(prediction["scores"], key=lambda k: (-prediction["scores"][k], k)):
+                    raise ValueError("Reference signal differs from finite legal-option maximum")
+                self.reward_targets[prediction["id"]] = prediction["winner"]
+            snapshot = out / "reference_signal_snapshot.json"
+            if snapshot.exists():
+                if json.loads(snapshot.read_text()) != signal:
+                    raise ValueError("Frozen reward signal changed during resume")
+            else:
+                atomic_json(snapshot, signal)
         self.method = cfg["method"]
         self.training = self.method in {"TTRL", "SPINE"}
         self.timings = {}
@@ -325,7 +360,10 @@ class Engine:
                     token_sequences.append(response.tolist())
                     self.event("rollout_complete", index=index, response_index=response_index, tokens=len(response),
                                hit_length_cap=len(response) == self.cfg["max_new_tokens"])
-            rewards, advantages, vote = group_rewards(completions, row["options"])
+            target = None if self.reward_targets is None else self.reward_targets[row["id"]]
+            rewards, advantages, vote = group_rewards(completions, row["options"], target)
+            if target is not None:
+                vote.update(reward_source="frozen_legal", reward_target=target)
             record.update(vote=vote, completions=completions, response_token_ids=token_sequences,
                           response_lengths=[len(response) for response in responses],
                           hit_length_cap=[len(response) == self.cfg["max_new_tokens"] for response in responses],

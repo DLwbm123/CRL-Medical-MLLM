@@ -1,0 +1,21 @@
+# P4 reproduction and completion
+
+Read `p4_protocol.md` first. Use the existing pinned runtime, original frozen model, and only the authorized reused development inputs. Select all private paths, source commit, GPU UUID and modes via environment; interpreter and entry argv must remain neutral. Do not edit the source, configurations, seeds or gate during a running round.
+
+Create an isolated source workspace at this branch's launch commit, link its existing model/views and shared outputs, and record `metadata/campaign_budget.json` before any GPU work. Required fields: `gpu_stop_utc` (preparation start +10.5h), `hard_deadline_utc` (+12h), `remaining_total_gpu_process_seconds_at_start` (approved cumulative budget less all earlier optimization GPU workers). Count whole GPU-worker lifetimes, including CPU optimization/checkpoint time. Preserve all prior campaign budgets and files.
+
+Copy `scripts/p2_entry.py` to a private neutral entry path through Python stdin. Export `P0_ROOT`, `P2_CAMPAIGN`, `P4_P3_FOLDER`, `P2_ENTRY`, `P2_GPU_INDEX=4`, `P2_GPU_UUID`, `P2_CODE_COMMIT`, `P2_EVAL_CODE_COMMIT`, and `P2_FORBIDDEN_ARGV`. Set CPU thread envs to 1. With CUDA hidden, invoke that neutral entry in modes `p4_prepare` and `p4_test`; run `p3_test` against its original P3 campaign to verify unchanged original reward/readout behavior. Preparation refuses an existing campaign.
+
+Create two private JSON plans after preparation, using the existing supervisor schema. `reference-plan.json` requires engineering acceptance, minimum free 12288 MiB, with:
+- neutral label `reference`: GPU, 900s, mode `p4_reference`;
+- neutral label `audit`: CPU only, 120s, mode `p4_audit`.
+
+`main-plan.json` requires acceptance, minimum free 48000 MiB, six GPU jobs in order m45,v45,m46,v46,m47,v47, each max 7200s and expected cursor 16. Each has neutral label `r` + key, and environment mode `run`, run `main-` + key, config `configs/p4_` + key + `.json`, manifest `manifest.json`, stop cursor `16`. No resume flag for fresh runs. The original frozen cache is prepared, not rerun.
+
+Detach one neutral-entry process in mode `p4_pipeline`, with stdin closed, a new exclusive log, and a recorded PID/start tick. The pipeline uses the inherited supervisor for both plans, checks the prespecified gate, locks measured cost plus 20% reserve, then runs the entire matrix only if both permit it. It verifies all recorded main worker sessions have ended before invoking CPU-only `p4_score`. The scorer seals all six trajectories and probes before joining labels. It rejects altered reward targets, illegal sources, partial coverage, changed parsing or initial probe predictions. Reference-gate failure is a negative scientific result and does not launch the matrix. Failures are retained; there is no automatic identical restart.
+
+The private `FINAL.json` distinguishes a negative reference gate, pipeline failure, or scored results awaiting public delivery. Its GPU-process total includes every closed GPU job in both controllers. Hourly monitoring must also count live-worker elapsed time and all earlier rounds; never use a single campaign total to reset the cumulative 24h authorization.
+
+After actual completion, create aggregate `reports/p4_results.json` plus a report and tables covering all three seeds, paired history/current gains and harms, initial/final probe correctness and parsed counts, retained originally correct groups, reward numerators/denominators, reference gate, failures and actual compute. Retain negative outcomes. Source/configs/aggregate reports go to this project's new GitHub branch through the required proxy; verify anonymous retrieval at the final commit and preserve prior branches. Raw inputs/labels/IDs/text, private paths/logs/plans and checkpoints stay private. Publication is a separate receipt; GPU completion alone is not delivery.
+
+If this round fails its fixed all-seed criterion, hourly continuation may choose another grounded single change within remaining budget, with a new preregistered comparison and fresh fixed seeds before scoring. It must not change this round's output protocol or success criterion. Disable the monitor only after stable development success and public delivery, or stop new compute and report budget exhaustion. A development result on these reused small groups does not establish independent generalization.

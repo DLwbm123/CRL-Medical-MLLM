@@ -1,0 +1,58 @@
+"""One small check of reward changes, gate and all-seed success boundaries."""
+import copy
+import json
+import os
+from pathlib import Path
+import torch
+from continual import group_rewards, validate_development_configuration
+from core import consensus_rewards
+from p4_evaluate import reward_audit, gate_passes, stable_development_success
+
+
+def main():
+    options = {"A":"wrong example","B":"correct example"}
+    completions = ["Final answer: A"]*6 + ["Final answer: B"]*2
+    old, old_adv, detail = group_rewards(completions, options)
+    expected, expected_adv, _ = consensus_rewards(completions, options)
+    assert torch.equal(old, expected) and torch.equal(old_adv, expected_adv)
+    new, adv, vote = group_rewards(completions, options, "B")
+    assert new.tolist() == [0.0]*6+[1.0]*2 and torch.all(adv[:6]<0) and torch.all(adv[6:]>0)
+    assert vote["winner"]=="A" and vote["reward_target"]=="B"
+    assert group_rewards(["invalid"]*8, options, "B")[:2] == (None,None)
+    try:
+        group_rewards(completions,options,"C")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("Illegal reward target accepted")
+    rows=[{"id":"synthetic","completions":completions}]
+    labels={"synthetic":"B"}; choices={"synthetic":options}
+    m=reward_audit(rows,choices,labels);v=reward_audit(rows,choices,labels,labels)
+    assert m["correct_negative"]["correct"]==2 and v["correct_negative"]["correct"]==0
+    assert m["wrong_positive"]["correct"]==6 and v["wrong_positive"]["correct"]==0
+    assert gate_passes(3,m,v) and not gate_passes(2,m,v)
+    assert not gate_passes(3,m,m)
+    cfg=json.loads((Path(os.environ["P0_ROOT"])/"configs/p3_d43.json").read_text())
+    acceptance={"validated_configuration_without_method":{k:v for k,v in cfg.items() if k!="method"}}
+    newcfg=dict(cfg,seed=45,reward_source="frozen_legal")
+    manifest={"p4_version":1,"rollout_seeds":[45,46,47],"reward_sources":["majority","frozen_legal"]}
+    validate_development_configuration(newcfg,acceptance,manifest)
+    validate_development_configuration(dict(cfg,method="Frozen greedy"),acceptance,manifest)
+    for changed in [dict(newcfg,seed=44),dict(newcfg,reward_source="labels"),dict(newcfg,learning_rate=2e-6)]:
+        try:
+            validate_development_configuration(changed,acceptance,manifest)
+        except RuntimeError:
+            pass
+        else:
+            raise AssertionError("Undeclared P4 change accepted")
+    good=[{"seed":s,"n":16,"frozen_before_correct":2,"control_before_correct":3,"candidate_before_correct":4,"candidate_initial_correct_retained":3} for s in [45,46,47]]
+    assert stable_development_success(good) and not stable_development_success(good[:2])
+    assert not stable_development_success([good[0]]*3)
+    for key,value in [("candidate_before_correct",3),("candidate_initial_correct_retained",2)]:
+        bad=copy.deepcopy(good);bad[0][key]=value
+        assert not stable_development_success(bad)
+    print(json.dumps({"passed":True,"checks":["original rewards identical","reference rewards and original vote separated","all-invalid retained","no illegal target","offline gate denominators","declared scope guard","no best-seed success"],"real_labels_read":False}))
+
+
+if __name__ == "__main__":
+    main()
