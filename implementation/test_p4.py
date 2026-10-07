@@ -67,6 +67,22 @@ def main():
     for key,value in [("candidate_before_correct",3),("candidate_initial_correct_retained",2)]:
         bad=copy.deepcopy(good);bad[0][key]=value
         assert not stable_development_success(bad)
+    half=dict(cfg,seed=51,reward_source="majority",learning_rate_source="half",learning_rate=5e-7)
+    p6_manifest={"p4_version":1,"p6_version":1,"rollout_seeds":[51,52,53],"reward_sources":["majority"],
+                 "learning_rate_variants":{"original":1e-6,"half":5e-7}}
+    validate_development_configuration(half,acceptance,p6_manifest)
+    validate_development_configuration(dict(half,learning_rate_source="original",learning_rate=1e-6),acceptance,p6_manifest)
+    for changed in [dict(half,learning_rate=1e-7),dict(half,seed=50),dict(half,temperature=1),
+                    dict(half,reward_source="frozen_legal"),dict(half,kl_coefficient=1),
+                    dict(half,learning_rate_source="original")]:
+        try:
+            validate_development_configuration(changed,acceptance,p6_manifest)
+        except RuntimeError:
+            pass
+        else:
+            raise AssertionError("Undeclared P6 change accepted")
+    p6_good=[dict(s,seed=s["seed"]+6) for s in good]
+    assert stable_development_success(p6_good,[51,52,53]) and not stable_development_success(p6_good)
     old_folder=p4_pipeline.FOLDER
     with tempfile.TemporaryDirectory() as temporary:
         p4_pipeline.FOLDER=Path(temporary)

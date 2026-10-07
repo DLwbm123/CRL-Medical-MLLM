@@ -78,8 +78,10 @@ def main():
     final = {"started_utc": datetime.now(timezone.utc).isoformat(),
              "code_commit": os.environ["P2_CODE_COMMIT"], "status": "running"}
     try:
-        p5 = json.loads((FOLDER / "manifest.json").read_text()).get("p5_version") == 1
-        if p5:
+        manifest = json.loads((FOLDER / "manifest.json").read_text())
+        p5 = manifest.get("p5_version") == 1
+        p6 = manifest.get("p6_version") == 1
+        if p5 or p6:
             audit = {"go": True}
         else:
             invoke("supervise", "supervisor-reference.log", P2_PLAN="reference-plan.json")
@@ -91,19 +93,20 @@ def main():
             used = gpu_seconds()
             allowance = float(budget["remaining_total_gpu_process_seconds_at_start"]) - used
             remaining = (datetime.fromisoformat(budget["gpu_stop_utc"]) - datetime.now(timezone.utc)).total_seconds()
-            required = 6 * 3554 * 1.2
+            expected = 6 * (3966 if p6 else 3554)
+            required = expected * 1.2
             if min(allowance, remaining) < required:
                 raise RuntimeError("Remaining budget cannot cover measured matrix cost plus 20 percent reserve")
             atomic_json(FOLDER / "main_budget_lock.json",
                         {"locked_utc": datetime.now(timezone.utc).isoformat(), "gpu_seconds_already_used": used,
-                         "expected_seconds": 6*3554, "required_with_reserve": required,
+                         "expected_seconds": expected, "required_with_reserve": required,
                          "round_seconds_remaining": remaining, "total_seconds_remaining": allowance})
             invoke("supervise", "supervisor-main.log", P2_PLAN="main-plan.json")
             ledger = json.loads((FOLDER / "controllers/main-plan.json").read_text())
             if ledger["status"] != "all_planned_jobs_completed" or len(ledger["jobs"]) != 6:
                 raise RuntimeError("Fixed main matrix did not fully close")
             verify_ended(ledger)
-            invoke("p5_score" if p5 else "p4_score", "offline-score.log")
+            invoke("p6_score" if p6 else ("p5_score" if p5 else "p4_score"), "offline-score.log")
             final["status"] = "scored_awaiting_public_delivery"
             final["stable_positive_development_result"] = json.loads((FOLDER / "scores/public_summary.json").read_text())["stable_positive_development_result"]
     except Exception as exc:

@@ -79,11 +79,13 @@ def main():
         raise ValueError("Manifest changed")
     manifest = json.loads(raw)
     p5 = manifest.get("p5_version") == 1
-    seeds = [48, 49, 50] if p5 else [45, 46, 47]
+    p6 = manifest.get("p6_version") == 1
+    no_reference = p5 or p6
+    seeds = [51, 52, 53] if p6 else ([48, 49, 50] if p5 else [45, 46, 47])
     if manifest["rollout_seeds"] != seeds:
         raise ValueError("Unexpected locked seed matrix")
-    signal = None if p5 else checked_signal(folder, manifest, digest)
-    targets = None if p5 else {p["id"]: p["winner"] for p in signal["predictions"]}
+    signal = None if no_reference else checked_signal(folder, manifest, digest)
+    targets = None if no_reference else {p["id"]: p["winner"] for p in signal["predictions"]}
     choices = options_by_id(folder, manifest)
     if os.environ["P2_MODE"] == "p4_audit":
         completion = json.loads((folder / "reference/completion.json").read_text())
@@ -115,18 +117,18 @@ def main():
         raise ValueError("Main matrix not closed successfully")
     if not json.loads((folder / "owned_cleanup_before_score.json").read_text())["owned_main_processes_ended"]:
         raise ValueError("Owned workers not verified ended")
-    if not p5 and not json.loads((folder / "reference/audit_public.json").read_text())["go"]:
+    if not no_reference and not json.loads((folder / "reference/audit_public.json").read_text())["go"]:
         raise ValueError("Reference gate did not pass")
     acceptance = json.loads((folder / "acceptance.json").read_text())
     loaded = {}
     for name in ["a"] + [k + str(seed) for seed in seeds for k in "mv"]:
-        cfgname = "p2_a" if name == "a" else ("p5_" if p5 else "p4_") + name
+        cfgname = "p2_a" if name == "a" else ("p6_" if p6 else ("p5_" if p5 else "p4_")) + name
         cfg = json.loads((root / "configs" / (cfgname + ".json")).read_text())
         run = folder / "runs" / ("main-" + name)
         rows, result, probes = available_run(run, manifest, digest, cfg, acceptance)
         if len(rows) != 16 or result["status"] != "completed" or set(probes) != {0, 16}:
             raise ValueError("Incomplete fixed main matrix")
-        if not p5 and name.startswith("v") and json.loads((run / "reference_signal_snapshot.json").read_text()) != signal:
+        if not no_reference and name.startswith("v") and json.loads((run / "reference_signal_snapshot.json").read_text()) != signal:
             raise ValueError("Candidate reward signal differed between runs")
         if p5 and name.startswith("v"):
             probability = json.loads((run / "probability_check.json").read_text())
@@ -136,12 +138,12 @@ def main():
             for phase in ["before", "after"]:
                 if phase in row and row[phase]["answer"] != extract_answer(row[phase]["text"], choices[row["id"]]):
                     raise ValueError("Stored primary parsing differs")
-            target = targets[row["id"]] if not p5 and name.startswith("v") else None
+            target = targets[row["id"]] if not no_reference and name.startswith("v") else None
             if name != "a":
                 rewards, advantages, vote = group_rewards(row["completions"], choices[row["id"]], target)
                 if (None if rewards is None else rewards.tolist()) != row["rewards"]:
                     raise ValueError("Stored rewards differ from declared source")
-                if not p5 and name.startswith("v") and row["vote"]["reward_target"] != target:
+                if not no_reference and name.startswith("v") and row["vote"]["reward_target"] != target:
                     raise ValueError("Stored target differs")
         loaded[name] = rows, result, probes
     expected_initial = loaded["a"][2][0]["predictions"]
@@ -157,8 +159,9 @@ def main():
     public = {"scored_utc": datetime.now(timezone.utc).isoformat(), "manifest_sha256": digest,
               "evaluator_commit": os.environ["P2_EVAL_CODE_COMMIT"], "prediction_seal": seal,
               "unique_stream_groups": 16, "unique_probe_groups": 16, "data_status": manifest["data_status"],
-              "reference_audit": None if p5 else json.loads((folder / "reference/audit_public.json").read_text()),
+              "reference_audit": None if no_reference else json.loads((folder / "reference/audit_public.json").read_text()),
               "sampling_variants": manifest.get("sampling_variants"),
+              "learning_rate_variants": manifest.get("learning_rate_variants"),
               "seeds": {}, "resources": {}}
     criteria = []
     for seed in seeds:
@@ -176,7 +179,7 @@ def main():
                               "initial_parsed": sum(p["answer"] is not None for p in initial),
                               "final_parsed": sum(p["answer"] is not None for p in final),
                               "transition": prediction_transition_audit(initial, final, labels)}
-            metric["reward_direction"] = reward_audit(rows, choices, labels, targets if not p5 and kind=="v" else None)
+            metric["reward_direction"] = reward_audit(rows, choices, labels, targets if not no_reference and kind=="v" else None)
             if p5 and kind=="v":
                 metric["sampling_probability_check"] = json.loads((folder / "runs" / ("main-"+name) / "probability_check.json").read_text())
             metric["format"] = summarize_formats(output_units(folder / "runs" / ("main-" + name), rows, choices), labels)

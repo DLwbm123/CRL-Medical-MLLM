@@ -14,8 +14,9 @@ def main():
     source = Path(os.environ["P4_P3_FOLDER"])
     folder = root / "outputs" / os.environ["P2_CAMPAIGN"]
     p5 = os.environ["P2_MODE"] == "p5_prepare"
-    seeds = [48, 49, 50] if p5 else [45, 46, 47]
-    prefix = "p5_" if p5 else "p4_"
+    p6 = os.environ["P2_MODE"] == "p6_prepare"
+    seeds = [51, 52, 53] if p6 else ([48, 49, 50] if p5 else [45, 46, 47])
+    prefix = "p6_" if p6 else ("p5_" if p5 else "p4_")
     folder.mkdir(parents=True, exist_ok=False)
     (folder / "inputs").mkdir()
     raw = (source / "manifest.json").read_bytes()
@@ -32,19 +33,22 @@ def main():
             load_input(source, entry)
             shutil.copyfile(source / entry["input"], folder / entry["input"])
     manifest = {**old, "p4_version": 1, "rollout_seeds": seeds,
-                "reward_sources": ["majority"] if p5 else ["majority", "frozen_legal"],
+                "reward_sources": ["majority"] if p5 or p6 else ["majority", "frozen_legal"],
                 "data_status": "reused observed development groups; new rollout seeds",
                 "probe_cursors": [0, 16], "selected_n": 16,
                 "data_decision": "No new test retirement; prior observed groups only"}
     if p5:
         manifest.update(p5_version=1, sampling_variants={"original": {"temperature": 0.7, "top_p": 0.95},
                                                        "raw_softmax": {"temperature": 1.0, "top_p": 1.0}})
+    if p6:
+        manifest.update(p6_version=1, learning_rate_variants={"original": 1e-6, "half": 5e-7})
     digest = write_manifest(folder / "manifest.json", manifest)
     acceptance = json.loads((source / "acceptance.json").read_text())
     if not acceptance["passed"]:
         raise ValueError("Inherited engineering acceptance did not pass")
     acceptance.update(inherited_for_p4=True,
-                      inheritance_scope=("same reward, objective, optimizer, state and RNG; declared sampler alignment tested separately" if p5 else
+                      inheritance_scope=("same reward, objective, optimizer algorithm, state and RNG; declared learning rates checked separately" if p6 else
+                                         "same reward, objective, optimizer, state and RNG; declared sampler alignment tested separately" if p5 else
                                          "same binary-reward normalization, objective, optimizer, state and RNG; added fixed pseudo-target source tested separately"))
     for kind in ["m", "v"]:
         for seed in seeds:

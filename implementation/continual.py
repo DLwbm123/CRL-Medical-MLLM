@@ -78,6 +78,12 @@ def validate_development_configuration(cfg, acceptance, manifest):
         current.pop("sampling_source")
         for key in ["temperature", "top_p"]:
             current[key] = accepted[key]
+    if manifest.get("p6_version") == 1 and cfg["method"] != "Frozen greedy":
+        source = cfg.get("learning_rate_source")
+        if source not in manifest["learning_rate_variants"] or cfg["learning_rate"] != manifest["learning_rate_variants"][source]:
+            raise RuntimeError("Learning rate is outside the locked P6 source")
+        current.pop("learning_rate_source")
+        current["learning_rate"] = accepted["learning_rate"]
     allowed = manifest["rollout_seeds"]
     cached_base = cfg["method"] == "Frozen greedy" and cfg["seed"] == accepted["seed"]
     if not cached_base and cfg["seed"] not in allowed:
