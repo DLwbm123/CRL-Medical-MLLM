@@ -41,7 +41,11 @@ def gpu_seconds():
         ledger = json.loads(path.read_text())
         plan = json.loads((FOLDER / ledger["plan"]).read_text())
         gpu_labels = {j["label"] for j in plan["jobs"] if j.get("gpu", True)}
-        total += sum(j.get("wall_seconds", 0) for j in ledger["jobs"] if j["label"] in gpu_labels)
+        for job in ledger["jobs"]:
+            if job["label"] in gpu_labels:
+                end = datetime.fromisoformat(ledger["finished_utc"])
+                fallback = (end - datetime.fromisoformat(job["started_utc"])).total_seconds()
+                total += job.get("wall_seconds", fallback)
     return total
 
 

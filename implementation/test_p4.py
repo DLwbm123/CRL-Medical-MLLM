@@ -2,11 +2,13 @@
 import copy
 import json
 import os
+import tempfile
 from pathlib import Path
 import torch
 from continual import group_rewards, validate_development_configuration
 from core import consensus_rewards
 from p4_evaluate import reward_audit, gate_passes, stable_development_success
+import p4_pipeline
 
 
 def main():
@@ -51,6 +53,18 @@ def main():
     for key,value in [("candidate_before_correct",3),("candidate_initial_correct_retained",2)]:
         bad=copy.deepcopy(good);bad[0][key]=value
         assert not stable_development_success(bad)
+    old_folder=p4_pipeline.FOLDER
+    with tempfile.TemporaryDirectory() as temporary:
+        p4_pipeline.FOLDER=Path(temporary)
+        (p4_pipeline.FOLDER/'controllers').mkdir()
+        (p4_pipeline.FOLDER/'plan.json').write_text(json.dumps({'jobs':[{'label':'g','gpu':True},{'label':'c','gpu':False}]}))
+        ledger={'plan':'plan.json','finished_utc':'2020-01-01T00:00:07+00:00',
+                'jobs':[{'label':'g','wall_seconds':2,'started_utc':'2020-01-01T00:00:00+00:00'},
+                        {'label':'c','wall_seconds':5,'started_utc':'2020-01-01T00:00:00+00:00'},
+                        {'label':'g','started_utc':'2020-01-01T00:00:00+00:00'}]}
+        (p4_pipeline.FOLDER/'controllers/plan.json').write_text(json.dumps(ledger))
+        assert p4_pipeline.gpu_seconds()==9
+    p4_pipeline.FOLDER=old_folder
     print(json.dumps({"passed":True,"checks":["original rewards identical","reference rewards and original vote separated","all-invalid retained","no illegal target","offline gate denominators","declared scope guard","no best-seed success"],"real_labels_read":False}))
 
 
