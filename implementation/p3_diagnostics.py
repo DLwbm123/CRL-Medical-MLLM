@@ -151,7 +151,7 @@ def reward_direction(rows, options, labels):
                       candidate_but_wrong_vote=int(coverage and not voted_correct), ties=int(vote["tie"]),
                       fewer_than_eight_valid=int(vote["valid"] < 8), all_invalid=int(vote["all_unparseable"]),
                       zero_advantage=int(vote["zero_advantage_group"]),
-                      all_equal_rewards=int(len(set(rewards)) == 1))
+                      all_equal_rewards=int(not vote["all_unparseable"] and len(set(rewards)) == 1))
         for answer, right, reward, advantage in zip(answers, correct, rewards, advantages):
             counts["parsed_rollouts"] += answer is not None
             counts["correct_parsed_rollouts"] += right
