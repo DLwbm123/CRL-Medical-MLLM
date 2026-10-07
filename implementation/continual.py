@@ -50,6 +50,22 @@ def load_input(folder, entry):
     return row
 
 
+def validate_development_configuration(cfg, acceptance, manifest):
+    """P3 varies only its declared rollout seed; P2 keeps its exact check."""
+    current = {name: value for name, value in cfg.items() if name != "method"}
+    accepted = acceptance["validated_configuration_without_method"]
+    if "rollout_seeds" not in manifest:
+        if current != accepted:
+            raise RuntimeError("Configuration differs from engineering acceptance")
+        return
+    allowed = manifest["rollout_seeds"]
+    cached_base = cfg["method"] == "Frozen greedy" and cfg["seed"] == accepted["seed"]
+    if not cached_base and cfg["seed"] not in allowed:
+        raise RuntimeError("Rollout seed is outside the locked manifest")
+    if {k: v for k, v in current.items() if k != "seed"} != {k: v for k, v in accepted.items() if k != "seed"}:
+        raise RuntimeError("P3 changes more than the declared rollout seed")
+
+
 def forward_response(model, encoded, response):
     length = encoded["input_ids"].shape[-1]
     inputs = dict(encoded)
@@ -377,8 +393,7 @@ def main():
         acceptance = json.loads((folder / "acceptance.json").read_text())
         if not acceptance["passed"]:
             raise RuntimeError("Engineering acceptance has not passed")
-        if {name: value for name, value in cfg.items() if name != "method"} != acceptance["validated_configuration_without_method"]:
-            raise RuntimeError("Configuration differs from engineering acceptance")
+        validate_development_configuration(cfg, acceptance, manifest)
     visible = os.environ.get("CUDA_VISIBLE_DEVICES")
     if visible not in {str(cfg["gpu_index"]), os.environ.get("P2_GPU_UUID")} or torch.cuda.device_count() != 1:
         raise RuntimeError("Only the configured authorized GPU may be visible")
