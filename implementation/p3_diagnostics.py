@@ -47,6 +47,12 @@ def eval_only_choice(text, options):
     return choices[0] if choices else None
 
 
+def eval_only_consensus(completions, options):
+    counts = Counter(eval_only_choice(text, options) for text in completions)
+    counts.pop(None, None)
+    return min(counts, key=lambda answer: (-counts[answer], answer)) if counts else None
+
+
 def failure_type(text, options, capped):
     if extract_answer(text, options) is not None:
         return "parsed_control"
@@ -235,11 +241,14 @@ def audit_p2(root, folder, destination):
             transition = prediction_transition_audit(initial, predictions, labels)
             if {"cursor": cursor, **transition} != next(x for x in published["methods"][key]["probe_transition_audit"] if x["cursor"] == cursor):
                 raise ValueError("P2 original probe transitions differ")
-            probes.append({"cursor": cursor, "correct": right, "parsed": parsed, "n": len(predictions)})
+            probes.append({"cursor": cursor, "correct": right, "parsed": parsed, "n": len(predictions),
+                           "transition_from_initial": transition})
         method = {"original_scores_match": True, "original_scores": recomputed, "original_probe": probes,
                   "format": summarize_formats(units[key], labels)}
         if key != "a":
             method["reward_direction"], private_groups[key] = reward_direction(rows, options, labels)
+            method["eval_only_consensus"] = fraction(sum(is_correct(
+                eval_only_consensus(row["completions"], options[row["id"]]), labels[row["id"]]) for row in rows), len(rows))
         methods[key] = method
         control_counts = Counter()
         for unit in units[key]:

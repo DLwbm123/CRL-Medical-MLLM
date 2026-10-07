@@ -9,7 +9,7 @@ import torch
 
 from continual import validate_development_configuration
 from core import consensus_rewards, extract_answer
-from p3_diagnostics import eval_only_choice, failure_type, reward_direction
+from p3_diagnostics import eval_only_choice, eval_only_consensus, failure_type, reward_direction
 from p3_readout import option_log_probabilities, option_tokens
 from p3_evaluate import available_run
 from state import inference_without_state_change, rng_state
@@ -42,6 +42,8 @@ def main():
     for text, expected in syntax:
         assert eval_only_choice(text, options) == expected, text
     assert extract_answer("Final answer:\nA", options) is None
+    assert eval_only_consensus(["Final answer:\nB", "Final answer: A"], options) == "A"
+    assert eval_only_consensus(["unparsed", "no choice"], options) is None
     assert failure_type("unfinished", options, True) == "token_cap_without_parseable_final_choice"
     assert failure_type("The correct answer is B. listed option text", options, False) == "explicit_choice_unsupported_syntax"
     assert failure_type("The correct answer is (B): listed option text", options, False) == "explicit_choice_unsupported_syntax"
