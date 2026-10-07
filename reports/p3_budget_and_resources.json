@@ -1,13 +1,13 @@
 {
   "t0_utc": "2026-10-07T06:13:24.657782+00:00",
   "t0_monotonic": 861873.005386125,
-  "receipt_utc": "2026-10-07T13:59:04.263587+00:00",
-  "actual_total_wall_seconds_through_receipt": 27939.349008750054,
-  "actual_total_wall_hours_through_receipt": 7.760930280208348,
+  "receipt_utc": "2026-10-07T14:03:05.160644+00:00",
+  "actual_total_wall_seconds_through_receipt": 28180.231621125014,
+  "actual_total_wall_hours_through_receipt": 7.827842116979171,
   "total_wall_scope": "First execution through this receipt, including code/development, all tests and failed attempts, GPU experiments, CPU scoring/report work, inactive interval, and any publication already verified below. Subsequent accounting commit/anonymous verification/helper exit are outside this timestamp and included in the final chat completion duration.",
   "hard_deadline_utc": "2026-10-07T18:13:24.657782+00:00",
   "within_12h_at_receipt": true,
-  "remaining_seconds_at_receipt": 15260.650991249946,
+  "remaining_seconds_at_receipt": 15019.768378874986,
   "phase_boundaries": {
     "pre_initial_controller_seconds": 1708.498583,
     "initial_controller_elapsed_seconds": 681.3975349219982,
@@ -730,8 +730,20 @@
     "unrelated_processes_modified": false
   },
   "publication": {
-    "status": "ready_for_first_publication",
-    "branch": "codex/p3-12h"
+    "status": "published_and_anonymous_report_verified",
+    "branch": "codex/p3-12h",
+    "commit": "342de607f554ffc2310cf8f579756a094eea46e1",
+    "verified_utc": "2026-10-07T14:01:45.298861+00:00",
+    "report_url": "https://github.com/DLwbm123/CRL-Medical-MLLM/blob/342de607f554ffc2310cf8f579756a094eea46e1/reports/p3_report.md",
+    "anonymous_http_status": 200,
+    "proxy_used": true,
+    "protected_refs_unchanged": {
+      "main": "0e2ed4d4f6ea8ae9d77ca7b62855acbd22364cdf",
+      "codex/p2-12h": "68c1733025c7be4135aba4b0f9db57c0a6ccaf09"
+    },
+    "initial_publication_and_verification_wall_seconds": 173.38665275007952,
+    "accounting_commit_status": "receipt_to_be_committed_after_this_timestamp",
+    "accounting_commit_note": "The following accounting commit and its verification/remote receipt copy/helper exit occur after this measured receipt. Final chat duration includes them; no future elapsed time is invented."
   },
   "public_exclusions": [
     "medical images",
@@ -742,5 +754,7 @@
     "model weights and checkpoints",
     "credentials",
     "private absolute paths"
-  ]
+  ],
+  "main_forecast_error_seconds": -9058.818464547705,
+  "main_forecast_error_percent": -36.27821966559975
 }
