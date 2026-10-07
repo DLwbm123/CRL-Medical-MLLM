@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -89,7 +90,7 @@ def main():
         if record["protocol"]["label_fields_read"] or not record["parameters_unchanged_by_readout"] or not record["rng_and_modes_preserved"]:
             raise ValueError("Readout entered labels or updated the actor")
         for row in record["predictions"]:
-            if set(row["scores"]) != set(options[row["id"]]) or row["answer"] != min(row["scores"], key=lambda k: (-row["scores"][k], k)):
+            if set(row["scores"]) != set(options[row["id"]]) or set(row["option_token_ids"]) != set(row["scores"]) or any(not tokens for tokens in row["option_token_ids"].values()) or row["answer"] != min(row["scores"], key=lambda k: (-row["scores"][k], k)):
                 raise ValueError("Readout does not score every legal identifier")
         readouts[record["actor"]] = record
         key, cursor = free_actor_map[record["actor"]]
@@ -174,6 +175,7 @@ def main():
         public["readout"][actor] = {"correct": sum(is_correct(x["answer"], labels[x["id"]]) for x in preds),
                                      "parsed": len(preds), "n": len(preds), "protocol": record["protocol"],
                                      "elapsed_seconds": record["elapsed_seconds"], "provenance": record["provenance"],
+                                     "option_token_length_counts": dict(Counter(len(tokens) for row in preds for tokens in row["option_token_ids"].values())),
                                      "peak_allocated_bytes": record["peak_allocated_bytes"],
                                      "peak_reserved_bytes": record["peak_reserved_bytes"]}
         public["readout"][actor]["same_actor_free_vs_legal_readout"] = prediction_transition_audit(

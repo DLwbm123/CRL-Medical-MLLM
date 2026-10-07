@@ -46,6 +46,61 @@ export P2_PLAN=main-plan.json
 
 The executed private plan JSONs and controller receipts are retained. Each plan has `requires_acceptance`, `minimum_free_mib` and a `jobs` array; each job has `label`, `gpu`, `max_seconds`, `expected_cursor` where applicable, and `environment`. Supervision records PID/start ticks, checks `ps`/`nvidia-smi`, and stops only owned workers on failure or deadline. Background execution should use the established private launcher so disconnects cannot interrupt jobs. Do not launch a second supervisor while one is active.
 
+Generate those plans without placing method names or private paths in process arguments:
+
+```sh
+"$RUNTIME" - <<'PY'
+import json, os
+from pathlib import Path
+folder = Path(os.environ['P0_ROOT']) / 'outputs' / os.environ['P2_CAMPAIGN']
+initial = {'requires_acceptance': True, 'minimum_free_mib': 62000, 'jobs': [
+    {'label': 'readout', 'gpu': True, 'max_seconds': 2700,
+     'environment': {'P2_MODE': 'p3_readout', 'P3_READOUT_SECONDS': '2650'}},
+    {'label': 'throughput', 'gpu': True, 'max_seconds': 1500, 'expected_cursor': 1,
+     'environment': {'P2_MODE': 'run', 'P2_RUN': 'throughput',
+                     'P2_MANIFEST': 'manifest_throughput.json',
+                     'P2_CONFIG': 'configs/p3_c43.json', 'P2_STOP_CURSOR': '1'}}]}
+jobs = []
+for name in ['c43', 'd43', 'c44', 'd44', 'b43', 'b44']:
+    jobs.append({'label': 'r' + name, 'gpu': True,
+                 'max_seconds': 3000 if name[0] == 'b' else 7200,
+                 'expected_cursor': 16,
+                 'environment': {'P2_MODE': 'run', 'P2_RUN': 'main-' + name,
+                                 'P2_MANIFEST': 'manifest.json',
+                                 'P2_CONFIG': 'configs/p3_' + name + '.json',
+                                 'P2_STOP_CURSOR': '16'}})
+for filename, plan in [('initial-plan.json', initial),
+                       ('main-plan.json', {'requires_acceptance': True,
+                                           'minimum_free_mib': 48000, 'jobs': jobs})]:
+    with (folder / filename).open('x') as stream:
+        json.dump(plan, stream, indent=2)
+PY
+```
+
+Write `metadata/campaign_budget.json` in the isolated workspace before launching. The inherited supervisor and trainer require `gpu_stop_utc` (use T0 + 10.5 hours). Also record `hard_deadline_utc` (T0 + 12 hours) and the all-GPU stop at T0 + 11 hours in the campaign ledger. Launch source is recorded with `P2_CODE_COMMIT`; do not edit training arithmetic or configurations while these jobs run.
+
+For a detached supervisor, set `P2_PLAN` to the appropriate plan above, then use the neutral entry and retain its ownership receipt:
+
+```sh
+"$RUNTIME" - <<'PY'
+import json, os, subprocess, sys
+from pathlib import Path
+folder = Path(os.environ['P0_ROOT']) / 'outputs' / os.environ['P2_CAMPAIGN']
+name = Path(os.environ['P2_PLAN']).stem
+with (folder / ('supervisor-' + name + '.log')).open('x') as log:
+    child = subprocess.Popen([sys.executable, '-u', os.environ['P2_ENTRY']],
+                             stdout=log, stderr=subprocess.STDOUT,
+                             stdin=subprocess.DEVNULL, start_new_session=True)
+raw = Path('/proc/' + str(child.pid) + '/stat').read_text()
+fields = raw[raw.rfind(')') + 2:].split()
+with (folder / ('supervisor-' + name + '-pid.json')).open('x') as stream:
+    json.dump({'pid': child.pid, 'start_ticks': fields[19]}, stream)
+print({'supervisor_started': child.pid})
+PY
+```
+
+Before scoring, compare both supervisor ownership receipts and every archived worker PID/start tick with `/proc`, and check that none of their POSIX sessions has a live member. Write `owned_cleanup_before_score.json` only after that check succeeds, with `owned_main_processes_ended: true`; retain the detailed verification privately. Do not terminate unrelated processes or substitute a manually asserted completion flag for this check.
+
 Resume is supported by the unchanged P2 trainer, but P3 did not add restarts solely to demonstrate it. Resume only an explicitly authorized interrupted trajectory with exactly its original configuration, manifest and training commit, under the original deadline. Do not load a P2 adapted actor into P3 main runs:
 
 ```sh
@@ -59,8 +114,14 @@ When the main controller closes, confirm every recorded main worker/session has 
 
 ```sh
 export CUDA_VISIBLE_DEVICES="" P2_MODE=p3_score
+export P2_EVAL_CODE_COMMIT="$EVALUATOR_COMMIT"
 unset P2_RESUME
 "$RUNTIME" -u "$P2_ENTRY"
+"$RUNTIME" - <<'PY'
+import os, runpy
+from pathlib import Path
+runpy.run_path(str(Path(os.environ['P0_ROOT']) / 'scripts/report_p3.py'), run_name='__main__')
+PY
 ```
 
 Publish only aggregate reports and source. Generated text, patient data, truth labels/IDs, full states and private plans/paths remain private. GitHub access must use the configured proxy without direct fallback. The original P2/main branches and reports are unchanged.
