@@ -1,0 +1,57 @@
+stage,seed,method,readout_protocol,cursor,n,correct,parsed,from_initial_parsed_wrong_to_correct,from_initial_invalid_to_correct,from_initial_correct_to_parsed_wrong,from_initial_correct_to_invalid,from_initial_correct_to_correct,from_initial_newly_parsed,from_initial_newly_unparseable
+P2,42,Frozen greedy,original_free,0,16,3,13,0,0,0,0,3,0,0
+P2,42,Frozen greedy,eval_only_syntax,0,16,3,13,,,,,,,
+P2,42,Frozen greedy,original_free,8,16,3,13,0,0,0,0,3,0,0
+P2,42,Frozen greedy,eval_only_syntax,8,16,3,13,,,,,,,
+P2,42,Frozen greedy,original_free,16,16,3,13,0,0,0,0,3,0,0
+P2,42,Frozen greedy,eval_only_syntax,16,16,3,13,,,,,,,
+P2,42,Frozen SC-8,original_free,0,16,3,13,0,0,0,0,3,0,0
+P2,42,Frozen SC-8,eval_only_syntax,0,16,3,13,,,,,,,
+P2,42,Frozen SC-8,original_free,8,16,3,13,0,0,0,0,3,0,0
+P2,42,Frozen SC-8,eval_only_syntax,8,16,3,13,,,,,,,
+P2,42,Frozen SC-8,original_free,16,16,3,13,0,0,0,0,3,0,0
+P2,42,Frozen SC-8,eval_only_syntax,16,16,3,13,,,,,,,
+P2,42,TTRL,original_free,0,16,3,13,0,0,0,0,3,0,0
+P2,42,TTRL,eval_only_syntax,0,16,3,13,,,,,,,
+P2,42,TTRL,original_free,8,16,3,12,0,0,0,0,3,0,1
+P2,42,TTRL,eval_only_syntax,8,16,3,13,,,,,,,
+P2,42,TTRL,original_free,16,16,3,13,0,0,0,0,3,1,1
+P2,42,TTRL,eval_only_syntax,16,16,3,14,,,,,,,
+P2,42,SPINE,original_free,0,16,3,13,0,0,0,0,3,0,0
+P2,42,SPINE,eval_only_syntax,0,16,3,13,,,,,,,
+P2,42,SPINE,original_free,8,16,1,9,0,0,0,2,1,0,4
+P2,42,SPINE,eval_only_syntax,8,16,1,11,,,,,,,
+P2,42,SPINE,original_free,16,16,2,11,0,0,0,1,2,1,3
+P2,42,SPINE,eval_only_syntax,16,16,2,13,,,,,,,
+P3,,Frozen greedy,original_free,0,16,3,13,0,0,0,0,3,0,0
+P3,,Frozen greedy,eval_only_syntax,0,16,3,13,,,,,,,
+P3,,Frozen greedy,original_free,16,16,3,13,0,0,0,0,3,0,0
+P3,,Frozen greedy,eval_only_syntax,16,16,3,13,,,,,,,
+P3,43,Frozen SC-8,original_free,0,16,3,13,0,0,0,0,3,0,0
+P3,43,Frozen SC-8,eval_only_syntax,0,16,3,13,,,,,,,
+P3,43,Frozen SC-8,original_free,16,16,3,13,0,0,0,0,3,0,0
+P3,43,Frozen SC-8,eval_only_syntax,16,16,3,13,,,,,,,
+P3,43,TTRL,original_free,0,16,3,13,0,0,0,0,3,0,0
+P3,43,TTRL,eval_only_syntax,0,16,3,13,,,,,,,
+P3,43,TTRL,original_free,16,16,4,13,2,0,0,1,2,2,2
+P3,43,TTRL,eval_only_syntax,16,16,5,15,,,,,,,
+P3,43,SPINE,original_free,0,16,3,13,0,0,0,0,3,0,0
+P3,43,SPINE,eval_only_syntax,0,16,3,13,,,,,,,
+P3,43,SPINE,original_free,16,16,2,10,0,0,0,1,2,0,3
+P3,43,SPINE,eval_only_syntax,16,16,3,15,,,,,,,
+P3,44,Frozen SC-8,original_free,0,16,3,13,0,0,0,0,3,0,0
+P3,44,Frozen SC-8,eval_only_syntax,0,16,3,13,,,,,,,
+P3,44,Frozen SC-8,original_free,16,16,3,13,0,0,0,0,3,0,0
+P3,44,Frozen SC-8,eval_only_syntax,16,16,3,13,,,,,,,
+P3,44,TTRL,original_free,0,16,3,13,0,0,0,0,3,0,0
+P3,44,TTRL,eval_only_syntax,0,16,3,13,,,,,,,
+P3,44,TTRL,original_free,16,16,4,16,1,0,0,0,3,3,0
+P3,44,TTRL,eval_only_syntax,16,16,4,16,,,,,,,
+P3,44,SPINE,original_free,0,16,3,13,0,0,0,0,3,0,0
+P3,44,SPINE,eval_only_syntax,0,16,3,13,,,,,,,
+P3,44,SPINE,original_free,16,16,4,15,1,0,0,0,3,2,0
+P3,44,SPINE,eval_only_syntax,16,16,4,15,,,,,,,
+P2_actor_diagnosis,,frozen_base,legal_option_likelihood,0,16,5,16,,,,,,,
+P2_actor_diagnosis,,p2_spine_final,legal_option_likelihood,16,16,5,16,0,0,0,0,5,0,0
+P2_actor_diagnosis,,p2_spine_midpoint,legal_option_likelihood,8,16,5,16,0,0,0,0,5,0,0
+P2_actor_diagnosis,,p2_ttrl_final,legal_option_likelihood,16,16,5,16,0,0,0,0,5,0,0

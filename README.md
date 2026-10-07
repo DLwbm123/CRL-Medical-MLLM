@@ -2,7 +2,15 @@
 
 This repository implements resumable, independently scored continual test-time adaptation for Qwen2.5-VL-3B-Instruct. It extends the original single-update SPINE diagnostic with persistent FP32 master weights and AdamW state, a fixed reference model, state/RNG checkpoints, and four methods on the same fixed stream. SPINE and the matched TTRL comparator are independent implementations; author-code equivalence is not established.
 
-The completed development experiment uses **16 stream cases, 16 held-out probe groups, and seed 42**. The official dev split had only five questions, so the user authorized a fixed test-derived development subset that is now retired from future final-test use. Sample count, order and configurations were fixed before correctness scoring.
+## P3: two-seed reward/format replication (2026-10-07)
+
+The completed replication reuses the 16 observed stream groups with rollout seeds 43 and 44. TTRL history gain changes sign (−6.25/+18.75 pp), and the SPINE–TTRL ranking reverses (+6.25/−12.50 pp before). SPINE current-case scores rise in both seeds, but this small reused sample does not establish superiority. Across four RL trajectories, 250/274 positive-reward rollouts are parsed wrong and high-vote groups are correct in 0/13 observations. Old P2 actors preserve the same five correct groups under a separate legal-option protocol, supporting protocol sensitivity without proving knowledge retention.
+
+Read the [P3 report](reports/p3_report.md), [protocol](reports/p3_protocol.md), [main CSV](reports/p3_main_results.csv), [reward audit](reports/p3_reward_audit.csv), [format/readout audit](reports/p3_format_audit.md), [probe CSV](reports/p3_probe_results.csv), [aggregate JSON](reports/p3_results.json), [resources](reports/p3_budget_and_resources.json) and [reproduction guide](reports/p3_reproduce.md). All six new runs completed and all owned GPU jobs ended. P2/main history and reports are preserved.
+
+## P2: original one-seed experiment
+
+The completed P2 development experiment uses **16 stream cases, 16 held-out probe groups, and seed 42**. The official dev split had only five questions, so the user authorized a fixed test-derived development subset that is now retired from future final-test use. Sample count, order and configurations were fixed before correctness scoring.
 
 | Method | Greedy before | Greedy after | Frozen SC-8 vote | Historical gain |
 |---|---:|---:|---:|---:|

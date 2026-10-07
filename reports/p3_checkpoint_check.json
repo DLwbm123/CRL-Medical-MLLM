@@ -1,0 +1,94 @@
+{
+  "passed": true,
+  "read_only_mmap": true,
+  "full_tensor_values_compared": false,
+  "full_state_hashes_computed": false,
+  "gpu_resume_reexecuted": false,
+  "elapsed_seconds": 9.955074700992554,
+  "states": [
+    {
+      "run": "throughput",
+      "seed": 43,
+      "cursor": 1,
+      "optimizer_updates": 1,
+      "code_commit": "a0f4d9a60ae4e421b172a49c5244b4b5caa337d5",
+      "state_bytes": 45056481651,
+      "fp32_master_tensor_count": 824,
+      "checkpoint_seconds": 228.53483121003956,
+      "initial_probe_matches_cached_base": null,
+      "metadata_schema_passed": true
+    },
+    {
+      "run": "c43",
+      "seed": 43,
+      "cursor": 16,
+      "optimizer_updates": 16,
+      "code_commit": "0d3f87831e0d195534715f9eddb8edbe2f46ace0",
+      "state_bytes": 45056481907,
+      "fp32_master_tensor_count": 824,
+      "checkpoint_seconds": 229.5700895320624,
+      "initial_probe_matches_cached_base": true,
+      "metadata_schema_passed": true
+    },
+    {
+      "run": "d43",
+      "seed": 43,
+      "cursor": 16,
+      "optimizer_updates": 16,
+      "code_commit": "0d3f87831e0d195534715f9eddb8edbe2f46ace0",
+      "state_bytes": 45056481907,
+      "fp32_master_tensor_count": 824,
+      "checkpoint_seconds": 241.25232686381787,
+      "initial_probe_matches_cached_base": true,
+      "metadata_schema_passed": true
+    },
+    {
+      "run": "c44",
+      "seed": 44,
+      "cursor": 16,
+      "optimizer_updates": 16,
+      "code_commit": "0d3f87831e0d195534715f9eddb8edbe2f46ace0",
+      "state_bytes": 45056481907,
+      "fp32_master_tensor_count": 824,
+      "checkpoint_seconds": 244.0571625798475,
+      "initial_probe_matches_cached_base": true,
+      "metadata_schema_passed": true
+    },
+    {
+      "run": "d44",
+      "seed": 44,
+      "cursor": 16,
+      "optimizer_updates": 16,
+      "code_commit": "0d3f87831e0d195534715f9eddb8edbe2f46ace0",
+      "state_bytes": 45056481907,
+      "fp32_master_tensor_count": 824,
+      "checkpoint_seconds": 219.1540538498666,
+      "initial_probe_matches_cached_base": true,
+      "metadata_schema_passed": true
+    },
+    {
+      "run": "b43",
+      "seed": 43,
+      "cursor": 16,
+      "optimizer_updates": 0,
+      "code_commit": "0d3f87831e0d195534715f9eddb8edbe2f46ace0",
+      "state_bytes": 18405,
+      "fp32_master_tensor_count": 0,
+      "checkpoint_seconds": 0.0034989940468221903,
+      "initial_probe_matches_cached_base": true,
+      "metadata_schema_passed": true
+    },
+    {
+      "run": "b44",
+      "seed": 44,
+      "cursor": 16,
+      "optimizer_updates": 0,
+      "code_commit": "0d3f87831e0d195534715f9eddb8edbe2f46ace0",
+      "state_bytes": 18469,
+      "fp32_master_tensor_count": 0,
+      "checkpoint_seconds": 0.0037157118786126375,
+      "initial_probe_matches_cached_base": true,
+      "metadata_schema_passed": true
+    }
+  ]
+}
