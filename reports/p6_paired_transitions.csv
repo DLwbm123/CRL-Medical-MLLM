@@ -1,0 +1,4 @@
+seed,n,wrong_to_correct,correct_to_wrong,correct_to_correct,wrong_to_wrong,gain_pp,before_parsed,after_parsed,newly_parsed,newly_unparseable,invalid_to_correct,parsed_wrong_to_correct,correct_to_invalid,correct_to_parsed_wrong
+51,16,0,1,4,11,-6.25,12,14,3,1,0,0,0,1
+52,16,1,0,2,13,6.25,11,13,3,1,1,0,0,0
+53,16,0,2,1,13,-12.5,12,13,2,1,0,0,0,2

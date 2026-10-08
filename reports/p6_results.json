@@ -1,0 +1,3229 @@
+{
+  "scored_utc": "2026-10-08T04:26:16.988457+00:00",
+  "manifest_sha256": "27d6b27ea72f4b4c99eee1789bb90e94a8d45fb68ead439d5738bfebfb2e2a8b",
+  "evaluator_commit": "b8c4c63b851a7eb901cbd8873c5fd310b786ce51",
+  "prediction_seal": {
+    "sealed_utc": "2026-10-08T04:26:16.969668+00:00",
+    "manifest_sha256": "27d6b27ea72f4b4c99eee1789bb90e94a8d45fb68ead439d5738bfebfb2e2a8b",
+    "seeds": [
+      51,
+      52,
+      53
+    ],
+    "main_labels_read_before_seal": false,
+    "coverage": {
+      "a": 16,
+      "m51": 16,
+      "v51": 16,
+      "m52": 16,
+      "v52": 16,
+      "m53": 16,
+      "v53": 16
+    }
+  },
+  "unique_stream_groups": 16,
+  "unique_probe_groups": 16,
+  "data_status": "reused observed development groups; new rollout seeds",
+  "reference_audit": null,
+  "sampling_variants": null,
+  "learning_rate_variants": {
+    "original": 1e-06,
+    "half": 5e-07
+  },
+  "seeds": {
+    "51": {
+      "m": {
+        "n": 16,
+        "greedy_before": {
+          "correct": 5,
+          "total": 16,
+          "percent": 31.25
+        },
+        "greedy_after": {
+          "correct": 5,
+          "total": 16,
+          "percent": 31.25
+        },
+        "consensus": {
+          "correct": 2,
+          "total": 16,
+          "percent": 12.5
+        },
+        "historical_gain_vs_frozen_pp": 18.75,
+        "historical_transitions_vs_frozen": {
+          "wrong_to_correct": 3,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 2,
+          "wrong_to_wrong": 11,
+          "gain_pp": 18.75
+        },
+        "before_parse_rate": {
+          "correct": 12,
+          "total": 16,
+          "percent": 75.0
+        },
+        "current_case_transitions": {
+          "wrong_to_correct": 1,
+          "correct_to_wrong": 1,
+          "correct_to_correct": 4,
+          "wrong_to_wrong": 10,
+          "gain_pp": 0.0
+        },
+        "after_parse_rate": {
+          "correct": 13,
+          "total": 16,
+          "percent": 81.25
+        },
+        "reward_audit": {
+          "parsed_candidates": {
+            "correct": 106,
+            "total": 128,
+            "percent": 82.8125
+          },
+          "ties": {
+            "correct": 2,
+            "total": 16,
+            "percent": 12.5
+          },
+          "all_unparseable": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "zero_advantage_groups": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "top_vote_count": {
+            "count": 16,
+            "mean": 4.1875,
+            "minimum": 3,
+            "maximum": 7
+          },
+          "top_vote_margin": {
+            "count": 16,
+            "mean": 2.4375,
+            "minimum": 0,
+            "maximum": 7
+          },
+          "correct_candidate_exists": {
+            "correct": 10,
+            "total": 16,
+            "percent": 62.5
+          },
+          "correct_candidate_but_wrong_vote": {
+            "correct": 8,
+            "total": 16,
+            "percent": 50.0
+          },
+          "wrong_vote_given_correct_candidate": {
+            "correct": 8,
+            "total": 10,
+            "percent": 80.0
+          },
+          "first_half_top_vote_mean": 3.625,
+          "second_half_top_vote_mean": 4.75,
+          "before_matches_vote": {
+            "correct": 8,
+            "total": 16,
+            "percent": 50.0
+          },
+          "after_matches_vote": {
+            "correct": 8,
+            "total": 16,
+            "percent": 50.0
+          }
+        },
+        "optimization": {
+          "updates_in_prefix": 16,
+          "skips_in_prefix": {},
+          "zero_advantage_updates": 0,
+          "selected_token_fraction": 0.3447935368043088,
+          "loss_components": {
+            "policy": {
+              "count": 16,
+              "mean": -0.0004838036111323163,
+              "minimum": -0.0921022929251194,
+              "maximum": 0.13519835658371449
+            },
+            "band": {
+              "count": 16,
+              "mean": 0.0011561222116824865,
+              "minimum": 0.0009487574625381967,
+              "maximum": 0.0013469307796185603
+            },
+            "kl": {
+              "count": 16,
+              "mean": 3.132775074554672e-05,
+              "minimum": 0.0,
+              "maximum": 5.9405247384347604e-05
+            }
+          },
+          "gradient_norms": {
+            "vision": {
+              "count": 16,
+              "mean": 9.193595005273064,
+              "minimum": 0.8184916829239708,
+              "maximum": 58.89363520313793
+            },
+            "language": {
+              "count": 16,
+              "mean": 3.7226508391448836,
+              "minimum": 2.690199807467896,
+              "maximum": 4.6133683509097265
+            }
+          },
+          "masters_persisted_all": true,
+          "moments_persisted_all": true,
+          "ratio_mean_before_step": {
+            "count": 16,
+            "mean": 1.0,
+            "minimum": 1.0,
+            "maximum": 1.0
+          },
+          "clip_fraction_before_step": {
+            "count": 16,
+            "mean": 0.0,
+            "minimum": 0.0,
+            "maximum": 0.0
+          },
+          "exact_full_vocabulary_kl_before_step": {
+            "count": 16,
+            "mean": 0.0014790605584319519,
+            "minimum": 0.0,
+            "maximum": 0.002951559089915215
+          },
+          "post_update_drift": [
+            {
+              "cursor": 1,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 79,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0008697436423972249,
+              "sampled_token_log_ratio_to_behavior_mean": 0.004396312870085239,
+              "sampled_token_log_ratio_abs_max": 0.13994991779327393,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            },
+            {
+              "cursor": 8,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 114,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0013258382678031921,
+              "sampled_token_log_ratio_to_behavior_mean": -0.003920887131243944,
+              "sampled_token_log_ratio_abs_max": 0.11567139625549316,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            },
+            {
+              "cursor": 16,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 40,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.007717383559793234,
+              "sampled_token_log_ratio_to_behavior_mean": -0.0035444253589957952,
+              "sampled_token_log_ratio_abs_max": 0.0723276138305664,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            }
+          ]
+        },
+        "prefix_generation": {
+          "rollouts": 128,
+          "rollout_tokens": 22280,
+          "rollouts_at_length_cap": {
+            "correct": 0,
+            "total": 128,
+            "percent": 0.0
+          },
+          "greedy_before_tokens": 3960,
+          "greedy_after_tokens": 4058,
+          "case_wall_seconds": 3009.556097781984
+        },
+        "online_blocks": [
+          {
+            "cursor": 8,
+            "greedy_before_cumulative": {
+              "correct": 3,
+              "total": 8,
+              "percent": 37.5
+            },
+            "greedy_before_block": {
+              "correct": 3,
+              "total": 8,
+              "percent": 37.5
+            },
+            "greedy_after_cumulative": {
+              "correct": 3,
+              "total": 8,
+              "percent": 37.5
+            },
+            "greedy_after_block": {
+              "correct": 3,
+              "total": 8,
+              "percent": 37.5
+            },
+            "consensus_cumulative": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "consensus_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            }
+          },
+          {
+            "cursor": 16,
+            "greedy_before_cumulative": {
+              "correct": 5,
+              "total": 16,
+              "percent": 31.25
+            },
+            "greedy_before_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "greedy_after_cumulative": {
+              "correct": 5,
+              "total": 16,
+              "percent": 31.25
+            },
+            "greedy_after_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "consensus_cumulative": {
+              "correct": 2,
+              "total": 16,
+              "percent": 12.5
+            },
+            "consensus_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            }
+          }
+        ],
+        "history_parse_transition": {
+          "n": 16,
+          "wrong_to_correct": 3,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 2,
+          "wrong_to_wrong": 11,
+          "gain_pp": 18.75,
+          "before_parsed": 14,
+          "after_parsed": 12,
+          "newly_parsed": 2,
+          "newly_unparseable": 4,
+          "invalid_to_correct": 0,
+          "parsed_wrong_to_correct": 3,
+          "correct_to_invalid": 0,
+          "correct_to_parsed_wrong": 0
+        },
+        "current_parse_transition": {
+          "n": 16,
+          "wrong_to_correct": 1,
+          "correct_to_wrong": 1,
+          "correct_to_correct": 4,
+          "wrong_to_wrong": 10,
+          "gain_pp": 0.0,
+          "before_parsed": 12,
+          "after_parsed": 13,
+          "newly_parsed": 1,
+          "newly_unparseable": 0,
+          "invalid_to_correct": 1,
+          "parsed_wrong_to_correct": 0,
+          "correct_to_invalid": 0,
+          "correct_to_parsed_wrong": 1
+        },
+        "probe": {
+          "initial_correct": 3,
+          "final_correct": 3,
+          "initial_parsed": 13,
+          "final_parsed": 14,
+          "transition": {
+            "n": 16,
+            "wrong_to_correct": 0,
+            "correct_to_wrong": 0,
+            "correct_to_correct": 3,
+            "wrong_to_wrong": 13,
+            "gain_pp": 0.0,
+            "before_parsed": 13,
+            "after_parsed": 14,
+            "newly_parsed": 2,
+            "newly_unparseable": 1,
+            "invalid_to_correct": 0,
+            "parsed_wrong_to_correct": 0,
+            "correct_to_invalid": 0,
+            "correct_to_parsed_wrong": 0
+          }
+        },
+        "reward_direction": {
+          "counts": {
+            "groups": 16,
+            "correct_parsed": 22,
+            "correct_negative": 14,
+            "positive_reward": 67,
+            "wrong_positive": 59,
+            "target_correct": 2,
+            "all_invalid": 0,
+            "zero_advantage": 0
+          },
+          "correct_negative": {
+            "correct": 14,
+            "total": 22,
+            "percent": 63.63636363636363
+          },
+          "wrong_positive": {
+            "correct": 59,
+            "total": 67,
+            "percent": 88.05970149253731
+          },
+          "target_accuracy": {
+            "correct": 2,
+            "total": 16,
+            "percent": 12.5
+          }
+        },
+        "format": {
+          "outputs": 192,
+          "original_invalid": 34,
+          "failure_types": {
+            "parsed_control": 158,
+            "normal_end_missing_final_marker_or_explicit_choice": 23,
+            "token_cap_without_parseable_final_choice": 2,
+            "explicit_choice_unsupported_syntax": 8,
+            "prose_final_payload_without_unambiguous_identifier": 1
+          },
+          "parser_version": "marked_choice_v1_eval_only",
+          "paired_scores": [
+            {
+              "kind": "after",
+              "cursor": null,
+              "n": 16,
+              "original_correct": 5,
+              "eval_only_correct": 5,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 5,
+                "wrong_to_wrong": 11,
+                "gain_pp": 0.0,
+                "before_parsed": 13,
+                "after_parsed": 13,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "before",
+              "cursor": null,
+              "n": 16,
+              "original_correct": 5,
+              "eval_only_correct": 5,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 5,
+                "wrong_to_wrong": 11,
+                "gain_pp": 0.0,
+                "before_parsed": 12,
+                "after_parsed": 12,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "probe",
+              "cursor": 0,
+              "n": 16,
+              "original_correct": 3,
+              "eval_only_correct": 3,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 3,
+                "wrong_to_wrong": 13,
+                "gain_pp": 0.0,
+                "before_parsed": 13,
+                "after_parsed": 13,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "probe",
+              "cursor": 16,
+              "n": 16,
+              "original_correct": 3,
+              "eval_only_correct": 3,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 3,
+                "wrong_to_wrong": 13,
+                "gain_pp": 0.0,
+                "before_parsed": 14,
+                "after_parsed": 14,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "rollout",
+              "cursor": null,
+              "n": 128,
+              "original_correct": 22,
+              "eval_only_correct": 22,
+              "transition": {
+                "n": 128,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 22,
+                "wrong_to_wrong": 106,
+                "gain_pp": 0.0,
+                "before_parsed": 106,
+                "after_parsed": 109,
+                "newly_parsed": 3,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            }
+          ]
+        }
+      },
+      "v": {
+        "n": 16,
+        "greedy_before": {
+          "correct": 4,
+          "total": 16,
+          "percent": 25.0
+        },
+        "greedy_after": {
+          "correct": 2,
+          "total": 16,
+          "percent": 12.5
+        },
+        "consensus": {
+          "correct": 4,
+          "total": 16,
+          "percent": 25.0
+        },
+        "historical_gain_vs_frozen_pp": 12.5,
+        "historical_transitions_vs_frozen": {
+          "wrong_to_correct": 2,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 2,
+          "wrong_to_wrong": 12,
+          "gain_pp": 12.5
+        },
+        "before_parse_rate": {
+          "correct": 14,
+          "total": 16,
+          "percent": 87.5
+        },
+        "current_case_transitions": {
+          "wrong_to_correct": 0,
+          "correct_to_wrong": 2,
+          "correct_to_correct": 2,
+          "wrong_to_wrong": 12,
+          "gain_pp": -12.5
+        },
+        "after_parse_rate": {
+          "correct": 12,
+          "total": 16,
+          "percent": 75.0
+        },
+        "reward_audit": {
+          "parsed_candidates": {
+            "correct": 103,
+            "total": 128,
+            "percent": 80.46875
+          },
+          "ties": {
+            "correct": 2,
+            "total": 16,
+            "percent": 12.5
+          },
+          "all_unparseable": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "zero_advantage_groups": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "top_vote_count": {
+            "count": 16,
+            "mean": 4.125,
+            "minimum": 2,
+            "maximum": 6
+          },
+          "top_vote_margin": {
+            "count": 16,
+            "mean": 2.25,
+            "minimum": 0,
+            "maximum": 6
+          },
+          "correct_candidate_exists": {
+            "correct": 7,
+            "total": 16,
+            "percent": 43.75
+          },
+          "correct_candidate_but_wrong_vote": {
+            "correct": 3,
+            "total": 16,
+            "percent": 18.75
+          },
+          "wrong_vote_given_correct_candidate": {
+            "correct": 3,
+            "total": 7,
+            "percent": 42.857142857142854
+          },
+          "first_half_top_vote_mean": 4.125,
+          "second_half_top_vote_mean": 4.125,
+          "before_matches_vote": {
+            "correct": 8,
+            "total": 16,
+            "percent": 50.0
+          },
+          "after_matches_vote": {
+            "correct": 7,
+            "total": 16,
+            "percent": 43.75
+          }
+        },
+        "optimization": {
+          "updates_in_prefix": 16,
+          "skips_in_prefix": {},
+          "zero_advantage_updates": 0,
+          "selected_token_fraction": 0.36751509922346853,
+          "loss_components": {
+            "policy": {
+              "count": 16,
+              "mean": 0.028769205993739888,
+              "minimum": -0.08960304781794548,
+              "maximum": 0.1397143341600895
+            },
+            "band": {
+              "count": 16,
+              "mean": 0.0012738500448250534,
+              "minimum": 0.0009678626029199222,
+              "maximum": 0.0015658347983844578
+            },
+            "kl": {
+              "count": 16,
+              "mean": 1.4565149651701859e-05,
+              "minimum": 0.0,
+              "maximum": 1.7866665814381122e-05
+            }
+          },
+          "gradient_norms": {
+            "vision": {
+              "count": 16,
+              "mean": 3.2053571582320575,
+              "minimum": 0.4535864646155371,
+              "maximum": 12.661792950384594
+            },
+            "language": {
+              "count": 16,
+              "mean": 4.134034290048384,
+              "minimum": 2.7486026134146133,
+              "maximum": 5.308825149647462
+            }
+          },
+          "masters_persisted_all": true,
+          "moments_persisted_all": true,
+          "ratio_mean_before_step": {
+            "count": 16,
+            "mean": 1.0,
+            "minimum": 1.0,
+            "maximum": 1.0
+          },
+          "clip_fraction_before_step": {
+            "count": 16,
+            "mean": 0.0,
+            "minimum": 0.0,
+            "maximum": 0.0
+          },
+          "exact_full_vocabulary_kl_before_step": {
+            "count": 16,
+            "mean": 0.000772056782594536,
+            "minimum": 0.0,
+            "maximum": 0.001007294823513524
+          },
+          "post_update_drift": [
+            {
+              "cursor": 1,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 79,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0009564744541421533,
+              "sampled_token_log_ratio_to_behavior_mean": 0.00029922722023911774,
+              "sampled_token_log_ratio_abs_max": 0.1506882905960083,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            },
+            {
+              "cursor": 8,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 318,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0008609883370809257,
+              "sampled_token_log_ratio_to_behavior_mean": -0.00019900115148629993,
+              "sampled_token_log_ratio_abs_max": 0.16652989387512207,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            },
+            {
+              "cursor": 16,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 94,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0007353355176746845,
+              "sampled_token_log_ratio_to_behavior_mean": 0.0038152507040649652,
+              "sampled_token_log_ratio_abs_max": 0.14113306999206543,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            }
+          ]
+        },
+        "prefix_generation": {
+          "rollouts": 128,
+          "rollout_tokens": 23180,
+          "rollouts_at_length_cap": {
+            "correct": 0,
+            "total": 128,
+            "percent": 0.0
+          },
+          "greedy_before_tokens": 2831,
+          "greedy_after_tokens": 4625,
+          "case_wall_seconds": 3029.1914054190274
+        },
+        "online_blocks": [
+          {
+            "cursor": 8,
+            "greedy_before_cumulative": {
+              "correct": 3,
+              "total": 8,
+              "percent": 37.5
+            },
+            "greedy_before_block": {
+              "correct": 3,
+              "total": 8,
+              "percent": 37.5
+            },
+            "greedy_after_cumulative": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "greedy_after_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "consensus_cumulative": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "consensus_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            }
+          },
+          {
+            "cursor": 16,
+            "greedy_before_cumulative": {
+              "correct": 4,
+              "total": 16,
+              "percent": 25.0
+            },
+            "greedy_before_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "greedy_after_cumulative": {
+              "correct": 2,
+              "total": 16,
+              "percent": 12.5
+            },
+            "greedy_after_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "consensus_cumulative": {
+              "correct": 4,
+              "total": 16,
+              "percent": 25.0
+            },
+            "consensus_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            }
+          }
+        ],
+        "history_parse_transition": {
+          "n": 16,
+          "wrong_to_correct": 2,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 2,
+          "wrong_to_wrong": 12,
+          "gain_pp": 12.5,
+          "before_parsed": 14,
+          "after_parsed": 14,
+          "newly_parsed": 1,
+          "newly_unparseable": 1,
+          "invalid_to_correct": 0,
+          "parsed_wrong_to_correct": 2,
+          "correct_to_invalid": 0,
+          "correct_to_parsed_wrong": 0
+        },
+        "current_parse_transition": {
+          "n": 16,
+          "wrong_to_correct": 0,
+          "correct_to_wrong": 2,
+          "correct_to_correct": 2,
+          "wrong_to_wrong": 12,
+          "gain_pp": -12.5,
+          "before_parsed": 14,
+          "after_parsed": 12,
+          "newly_parsed": 0,
+          "newly_unparseable": 2,
+          "invalid_to_correct": 0,
+          "parsed_wrong_to_correct": 0,
+          "correct_to_invalid": 1,
+          "correct_to_parsed_wrong": 1
+        },
+        "probe": {
+          "initial_correct": 3,
+          "final_correct": 2,
+          "initial_parsed": 13,
+          "final_parsed": 11,
+          "transition": {
+            "n": 16,
+            "wrong_to_correct": 0,
+            "correct_to_wrong": 1,
+            "correct_to_correct": 2,
+            "wrong_to_wrong": 13,
+            "gain_pp": -6.25,
+            "before_parsed": 13,
+            "after_parsed": 11,
+            "newly_parsed": 0,
+            "newly_unparseable": 2,
+            "invalid_to_correct": 0,
+            "parsed_wrong_to_correct": 0,
+            "correct_to_invalid": 1,
+            "correct_to_parsed_wrong": 0
+          }
+        },
+        "reward_direction": {
+          "counts": {
+            "groups": 16,
+            "correct_parsed": 23,
+            "correct_negative": 8,
+            "positive_reward": 66,
+            "wrong_positive": 51,
+            "target_correct": 4,
+            "all_invalid": 0,
+            "zero_advantage": 0
+          },
+          "correct_negative": {
+            "correct": 8,
+            "total": 23,
+            "percent": 34.78260869565217
+          },
+          "wrong_positive": {
+            "correct": 51,
+            "total": 66,
+            "percent": 77.27272727272727
+          },
+          "target_accuracy": {
+            "correct": 4,
+            "total": 16,
+            "percent": 25.0
+          }
+        },
+        "format": {
+          "outputs": 192,
+          "original_invalid": 39,
+          "failure_types": {
+            "parsed_control": 153,
+            "explicit_choice_unsupported_syntax": 14,
+            "normal_end_missing_final_marker_or_explicit_choice": 23,
+            "prose_final_payload_without_unambiguous_identifier": 1,
+            "token_cap_without_parseable_final_choice": 1
+          },
+          "parser_version": "marked_choice_v1_eval_only",
+          "paired_scores": [
+            {
+              "kind": "after",
+              "cursor": null,
+              "n": 16,
+              "original_correct": 2,
+              "eval_only_correct": 2,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 2,
+                "wrong_to_wrong": 14,
+                "gain_pp": 0.0,
+                "before_parsed": 12,
+                "after_parsed": 13,
+                "newly_parsed": 1,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "before",
+              "cursor": null,
+              "n": 16,
+              "original_correct": 4,
+              "eval_only_correct": 4,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 4,
+                "wrong_to_wrong": 12,
+                "gain_pp": 0.0,
+                "before_parsed": 14,
+                "after_parsed": 15,
+                "newly_parsed": 1,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "probe",
+              "cursor": 0,
+              "n": 16,
+              "original_correct": 3,
+              "eval_only_correct": 3,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 3,
+                "wrong_to_wrong": 13,
+                "gain_pp": 0.0,
+                "before_parsed": 13,
+                "after_parsed": 13,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "probe",
+              "cursor": 16,
+              "n": 16,
+              "original_correct": 2,
+              "eval_only_correct": 2,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 2,
+                "wrong_to_wrong": 14,
+                "gain_pp": 0.0,
+                "before_parsed": 11,
+                "after_parsed": 13,
+                "newly_parsed": 2,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "rollout",
+              "cursor": null,
+              "n": 128,
+              "original_correct": 23,
+              "eval_only_correct": 24,
+              "transition": {
+                "n": 128,
+                "wrong_to_correct": 1,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 23,
+                "wrong_to_wrong": 104,
+                "gain_pp": 0.78125,
+                "before_parsed": 103,
+                "after_parsed": 105,
+                "newly_parsed": 2,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 1,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            }
+          ]
+        }
+      },
+      "paired_candidate_vs_control": {
+        "n": 16,
+        "wrong_to_correct": 0,
+        "correct_to_wrong": 1,
+        "correct_to_correct": 4,
+        "wrong_to_wrong": 11,
+        "gain_pp": -6.25,
+        "before_parsed": 12,
+        "after_parsed": 14,
+        "newly_parsed": 3,
+        "newly_unparseable": 1,
+        "invalid_to_correct": 0,
+        "parsed_wrong_to_correct": 0,
+        "correct_to_invalid": 0,
+        "correct_to_parsed_wrong": 1
+      }
+    },
+    "52": {
+      "m": {
+        "n": 16,
+        "greedy_before": {
+          "correct": 2,
+          "total": 16,
+          "percent": 12.5
+        },
+        "greedy_after": {
+          "correct": 4,
+          "total": 16,
+          "percent": 25.0
+        },
+        "consensus": {
+          "correct": 2,
+          "total": 16,
+          "percent": 12.5
+        },
+        "historical_gain_vs_frozen_pp": 0.0,
+        "historical_transitions_vs_frozen": {
+          "wrong_to_correct": 1,
+          "correct_to_wrong": 1,
+          "correct_to_correct": 1,
+          "wrong_to_wrong": 13,
+          "gain_pp": 0.0
+        },
+        "before_parse_rate": {
+          "correct": 11,
+          "total": 16,
+          "percent": 68.75
+        },
+        "current_case_transitions": {
+          "wrong_to_correct": 2,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 2,
+          "wrong_to_wrong": 12,
+          "gain_pp": 12.5
+        },
+        "after_parse_rate": {
+          "correct": 13,
+          "total": 16,
+          "percent": 81.25
+        },
+        "reward_audit": {
+          "parsed_candidates": {
+            "correct": 113,
+            "total": 128,
+            "percent": 88.28125
+          },
+          "ties": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "all_unparseable": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "zero_advantage_groups": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "top_vote_count": {
+            "count": 16,
+            "mean": 4.75,
+            "minimum": 2,
+            "maximum": 7
+          },
+          "top_vote_margin": {
+            "count": 16,
+            "mean": 3.125,
+            "minimum": 1,
+            "maximum": 7
+          },
+          "correct_candidate_exists": {
+            "correct": 9,
+            "total": 16,
+            "percent": 56.25
+          },
+          "correct_candidate_but_wrong_vote": {
+            "correct": 7,
+            "total": 16,
+            "percent": 43.75
+          },
+          "wrong_vote_given_correct_candidate": {
+            "correct": 7,
+            "total": 9,
+            "percent": 77.77777777777777
+          },
+          "first_half_top_vote_mean": 4.125,
+          "second_half_top_vote_mean": 5.375,
+          "before_matches_vote": {
+            "correct": 7,
+            "total": 16,
+            "percent": 43.75
+          },
+          "after_matches_vote": {
+            "correct": 6,
+            "total": 16,
+            "percent": 37.5
+          }
+        },
+        "optimization": {
+          "updates_in_prefix": 16,
+          "skips_in_prefix": {},
+          "zero_advantage_updates": 0,
+          "selected_token_fraction": 0.36048654625875415,
+          "loss_components": {
+            "policy": {
+              "count": 16,
+              "mean": -0.007742402100120671,
+              "minimum": -0.09635662054643035,
+              "maximum": 0.12721867486834526
+            },
+            "band": {
+              "count": 16,
+              "mean": 0.0012687081025717362,
+              "minimum": 0.0009597784446668811,
+              "maximum": 0.0017585498644621111
+            },
+            "kl": {
+              "count": 16,
+              "mean": 1.9218103355811422e-05,
+              "minimum": 0.0,
+              "maximum": 2.8641643893934088e-05
+            }
+          },
+          "gradient_norms": {
+            "vision": {
+              "count": 16,
+              "mean": 5.122975797268378,
+              "minimum": 0.5032252899425173,
+              "maximum": 15.07393919816254
+            },
+            "language": {
+              "count": 16,
+              "mean": 4.5293816637563635,
+              "minimum": 2.882622315975572,
+              "maximum": 8.787974239419649
+            }
+          },
+          "masters_persisted_all": true,
+          "moments_persisted_all": true,
+          "ratio_mean_before_step": {
+            "count": 16,
+            "mean": 1.0,
+            "minimum": 1.0,
+            "maximum": 1.0
+          },
+          "clip_fraction_before_step": {
+            "count": 16,
+            "mean": 0.0,
+            "minimum": 0.0,
+            "maximum": 0.0
+          },
+          "exact_full_vocabulary_kl_before_step": {
+            "count": 16,
+            "mean": 0.0010064041183367128,
+            "minimum": 0.0,
+            "maximum": 0.0015829628882344795
+          },
+          "post_update_drift": [
+            {
+              "cursor": 1,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 100,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0010391741525381804,
+              "sampled_token_log_ratio_to_behavior_mean": 0.00497001688927412,
+              "sampled_token_log_ratio_abs_max": 0.1553356647491455,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            },
+            {
+              "cursor": 8,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 193,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.001143313362263143,
+              "sampled_token_log_ratio_to_behavior_mean": -0.004802505020052195,
+              "sampled_token_log_ratio_abs_max": 0.20565557479858398,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            },
+            {
+              "cursor": 16,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 386,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.001033854321576655,
+              "sampled_token_log_ratio_to_behavior_mean": -0.00041298160795122385,
+              "sampled_token_log_ratio_abs_max": 0.20915007591247559,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            }
+          ]
+        },
+        "prefix_generation": {
+          "rollouts": 128,
+          "rollout_tokens": 21704,
+          "rollouts_at_length_cap": {
+            "correct": 0,
+            "total": 128,
+            "percent": 0.0
+          },
+          "greedy_before_tokens": 4533,
+          "greedy_after_tokens": 4231,
+          "case_wall_seconds": 3023.1398085015826
+        },
+        "online_blocks": [
+          {
+            "cursor": 8,
+            "greedy_before_cumulative": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "greedy_before_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "greedy_after_cumulative": {
+              "correct": 3,
+              "total": 8,
+              "percent": 37.5
+            },
+            "greedy_after_block": {
+              "correct": 3,
+              "total": 8,
+              "percent": 37.5
+            },
+            "consensus_cumulative": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "consensus_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            }
+          },
+          {
+            "cursor": 16,
+            "greedy_before_cumulative": {
+              "correct": 2,
+              "total": 16,
+              "percent": 12.5
+            },
+            "greedy_before_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "greedy_after_cumulative": {
+              "correct": 4,
+              "total": 16,
+              "percent": 25.0
+            },
+            "greedy_after_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "consensus_cumulative": {
+              "correct": 2,
+              "total": 16,
+              "percent": 12.5
+            },
+            "consensus_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            }
+          }
+        ],
+        "history_parse_transition": {
+          "n": 16,
+          "wrong_to_correct": 1,
+          "correct_to_wrong": 1,
+          "correct_to_correct": 1,
+          "wrong_to_wrong": 13,
+          "gain_pp": 0.0,
+          "before_parsed": 14,
+          "after_parsed": 11,
+          "newly_parsed": 2,
+          "newly_unparseable": 5,
+          "invalid_to_correct": 0,
+          "parsed_wrong_to_correct": 1,
+          "correct_to_invalid": 1,
+          "correct_to_parsed_wrong": 0
+        },
+        "current_parse_transition": {
+          "n": 16,
+          "wrong_to_correct": 2,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 2,
+          "wrong_to_wrong": 12,
+          "gain_pp": 12.5,
+          "before_parsed": 11,
+          "after_parsed": 13,
+          "newly_parsed": 2,
+          "newly_unparseable": 0,
+          "invalid_to_correct": 2,
+          "parsed_wrong_to_correct": 0,
+          "correct_to_invalid": 0,
+          "correct_to_parsed_wrong": 0
+        },
+        "probe": {
+          "initial_correct": 3,
+          "final_correct": 2,
+          "initial_parsed": 13,
+          "final_parsed": 12,
+          "transition": {
+            "n": 16,
+            "wrong_to_correct": 0,
+            "correct_to_wrong": 1,
+            "correct_to_correct": 2,
+            "wrong_to_wrong": 13,
+            "gain_pp": -6.25,
+            "before_parsed": 13,
+            "after_parsed": 12,
+            "newly_parsed": 1,
+            "newly_unparseable": 2,
+            "invalid_to_correct": 0,
+            "parsed_wrong_to_correct": 0,
+            "correct_to_invalid": 1,
+            "correct_to_parsed_wrong": 0
+          }
+        },
+        "reward_direction": {
+          "counts": {
+            "groups": 16,
+            "correct_parsed": 17,
+            "correct_negative": 9,
+            "positive_reward": 76,
+            "wrong_positive": 68,
+            "target_correct": 2,
+            "all_invalid": 0,
+            "zero_advantage": 0
+          },
+          "correct_negative": {
+            "correct": 9,
+            "total": 17,
+            "percent": 52.94117647058823
+          },
+          "wrong_positive": {
+            "correct": 68,
+            "total": 76,
+            "percent": 89.47368421052632
+          },
+          "target_accuracy": {
+            "correct": 2,
+            "total": 16,
+            "percent": 12.5
+          }
+        },
+        "format": {
+          "outputs": 192,
+          "original_invalid": 30,
+          "failure_types": {
+            "parsed_control": 162,
+            "explicit_choice_unsupported_syntax": 12,
+            "normal_end_missing_final_marker_or_explicit_choice": 18
+          },
+          "parser_version": "marked_choice_v1_eval_only",
+          "paired_scores": [
+            {
+              "kind": "after",
+              "cursor": null,
+              "n": 16,
+              "original_correct": 4,
+              "eval_only_correct": 4,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 4,
+                "wrong_to_wrong": 12,
+                "gain_pp": 0.0,
+                "before_parsed": 13,
+                "after_parsed": 13,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "before",
+              "cursor": null,
+              "n": 16,
+              "original_correct": 2,
+              "eval_only_correct": 2,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 2,
+                "wrong_to_wrong": 14,
+                "gain_pp": 0.0,
+                "before_parsed": 11,
+                "after_parsed": 11,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "probe",
+              "cursor": 0,
+              "n": 16,
+              "original_correct": 3,
+              "eval_only_correct": 3,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 3,
+                "wrong_to_wrong": 13,
+                "gain_pp": 0.0,
+                "before_parsed": 13,
+                "after_parsed": 13,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "probe",
+              "cursor": 16,
+              "n": 16,
+              "original_correct": 2,
+              "eval_only_correct": 3,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 1,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 2,
+                "wrong_to_wrong": 13,
+                "gain_pp": 6.25,
+                "before_parsed": 12,
+                "after_parsed": 14,
+                "newly_parsed": 2,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 1,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "rollout",
+              "cursor": null,
+              "n": 128,
+              "original_correct": 17,
+              "eval_only_correct": 17,
+              "transition": {
+                "n": 128,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 17,
+                "wrong_to_wrong": 111,
+                "gain_pp": 0.0,
+                "before_parsed": 113,
+                "after_parsed": 114,
+                "newly_parsed": 1,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            }
+          ]
+        }
+      },
+      "v": {
+        "n": 16,
+        "greedy_before": {
+          "correct": 3,
+          "total": 16,
+          "percent": 18.75
+        },
+        "greedy_after": {
+          "correct": 5,
+          "total": 16,
+          "percent": 31.25
+        },
+        "consensus": {
+          "correct": 3,
+          "total": 16,
+          "percent": 18.75
+        },
+        "historical_gain_vs_frozen_pp": 6.25,
+        "historical_transitions_vs_frozen": {
+          "wrong_to_correct": 1,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 2,
+          "wrong_to_wrong": 13,
+          "gain_pp": 6.25
+        },
+        "before_parse_rate": {
+          "correct": 13,
+          "total": 16,
+          "percent": 81.25
+        },
+        "current_case_transitions": {
+          "wrong_to_correct": 2,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 3,
+          "wrong_to_wrong": 11,
+          "gain_pp": 12.5
+        },
+        "after_parse_rate": {
+          "correct": 14,
+          "total": 16,
+          "percent": 87.5
+        },
+        "reward_audit": {
+          "parsed_candidates": {
+            "correct": 113,
+            "total": 128,
+            "percent": 88.28125
+          },
+          "ties": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "all_unparseable": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "zero_advantage_groups": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "top_vote_count": {
+            "count": 16,
+            "mean": 4.25,
+            "minimum": 3,
+            "maximum": 7
+          },
+          "top_vote_margin": {
+            "count": 16,
+            "mean": 2.375,
+            "minimum": 1,
+            "maximum": 7
+          },
+          "correct_candidate_exists": {
+            "correct": 12,
+            "total": 16,
+            "percent": 75.0
+          },
+          "correct_candidate_but_wrong_vote": {
+            "correct": 9,
+            "total": 16,
+            "percent": 56.25
+          },
+          "wrong_vote_given_correct_candidate": {
+            "correct": 9,
+            "total": 12,
+            "percent": 75.0
+          },
+          "first_half_top_vote_mean": 4.0,
+          "second_half_top_vote_mean": 4.5,
+          "before_matches_vote": {
+            "correct": 7,
+            "total": 16,
+            "percent": 43.75
+          },
+          "after_matches_vote": {
+            "correct": 7,
+            "total": 16,
+            "percent": 43.75
+          }
+        },
+        "optimization": {
+          "updates_in_prefix": 16,
+          "skips_in_prefix": {},
+          "zero_advantage_updates": 0,
+          "selected_token_fraction": 0.3630499884819166,
+          "loss_components": {
+            "policy": {
+              "count": 16,
+              "mean": -0.0036617848891182803,
+              "minimum": -0.07894957612734288,
+              "maximum": 0.13340420462191105
+            },
+            "band": {
+              "count": 16,
+              "mean": 0.0012712151791731685,
+              "minimum": 0.0010392138829047326,
+              "maximum": 0.0016864493445609696
+            },
+            "kl": {
+              "count": 16,
+              "mean": 1.529116697618349e-05,
+              "minimum": 0.0,
+              "maximum": 1.867210227146643e-05
+            }
+          },
+          "gradient_norms": {
+            "vision": {
+              "count": 16,
+              "mean": 10.545398885168396,
+              "minimum": 0.3127736396157114,
+              "maximum": 90.52883145834865
+            },
+            "language": {
+              "count": 16,
+              "mean": 4.239950666238913,
+              "minimum": 3.0999727240110535,
+              "maximum": 7.738136423698654
+            }
+          },
+          "masters_persisted_all": true,
+          "moments_persisted_all": true,
+          "ratio_mean_before_step": {
+            "count": 16,
+            "mean": 1.0,
+            "minimum": 1.0,
+            "maximum": 1.0
+          },
+          "clip_fraction_before_step": {
+            "count": 16,
+            "mean": 0.0,
+            "minimum": 0.0,
+            "maximum": 0.0
+          },
+          "exact_full_vocabulary_kl_before_step": {
+            "count": 16,
+            "mean": 0.0008064831432520881,
+            "minimum": 0.0,
+            "maximum": 0.0010573027403021316
+          },
+          "post_update_drift": [
+            {
+              "cursor": 1,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 100,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0007660462288185954,
+              "sampled_token_log_ratio_to_behavior_mean": 0.003570117289200425,
+              "sampled_token_log_ratio_abs_max": 0.10899341106414795,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            },
+            {
+              "cursor": 8,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 205,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0010820988100022078,
+              "sampled_token_log_ratio_to_behavior_mean": -0.0012007708428427577,
+              "sampled_token_log_ratio_abs_max": 0.1899251937866211,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            },
+            {
+              "cursor": 16,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 152,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.001149703748524189,
+              "sampled_token_log_ratio_to_behavior_mean": -0.0006793175707571208,
+              "sampled_token_log_ratio_abs_max": 0.14192306995391846,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            }
+          ]
+        },
+        "prefix_generation": {
+          "rollouts": 128,
+          "rollout_tokens": 21705,
+          "rollouts_at_length_cap": {
+            "correct": 0,
+            "total": 128,
+            "percent": 0.0
+          },
+          "greedy_before_tokens": 2863,
+          "greedy_after_tokens": 2683,
+          "case_wall_seconds": 2852.6340424779337
+        },
+        "online_blocks": [
+          {
+            "cursor": 8,
+            "greedy_before_cumulative": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "greedy_before_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "greedy_after_cumulative": {
+              "correct": 3,
+              "total": 8,
+              "percent": 37.5
+            },
+            "greedy_after_block": {
+              "correct": 3,
+              "total": 8,
+              "percent": 37.5
+            },
+            "consensus_cumulative": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "consensus_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            }
+          },
+          {
+            "cursor": 16,
+            "greedy_before_cumulative": {
+              "correct": 3,
+              "total": 16,
+              "percent": 18.75
+            },
+            "greedy_before_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "greedy_after_cumulative": {
+              "correct": 5,
+              "total": 16,
+              "percent": 31.25
+            },
+            "greedy_after_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "consensus_cumulative": {
+              "correct": 3,
+              "total": 16,
+              "percent": 18.75
+            },
+            "consensus_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            }
+          }
+        ],
+        "history_parse_transition": {
+          "n": 16,
+          "wrong_to_correct": 1,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 2,
+          "wrong_to_wrong": 13,
+          "gain_pp": 6.25,
+          "before_parsed": 14,
+          "after_parsed": 13,
+          "newly_parsed": 1,
+          "newly_unparseable": 2,
+          "invalid_to_correct": 0,
+          "parsed_wrong_to_correct": 1,
+          "correct_to_invalid": 0,
+          "correct_to_parsed_wrong": 0
+        },
+        "current_parse_transition": {
+          "n": 16,
+          "wrong_to_correct": 2,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 3,
+          "wrong_to_wrong": 11,
+          "gain_pp": 12.5,
+          "before_parsed": 13,
+          "after_parsed": 14,
+          "newly_parsed": 2,
+          "newly_unparseable": 1,
+          "invalid_to_correct": 1,
+          "parsed_wrong_to_correct": 1,
+          "correct_to_invalid": 0,
+          "correct_to_parsed_wrong": 0
+        },
+        "probe": {
+          "initial_correct": 3,
+          "final_correct": 1,
+          "initial_parsed": 13,
+          "final_parsed": 11,
+          "transition": {
+            "n": 16,
+            "wrong_to_correct": 0,
+            "correct_to_wrong": 2,
+            "correct_to_correct": 1,
+            "wrong_to_wrong": 13,
+            "gain_pp": -12.5,
+            "before_parsed": 13,
+            "after_parsed": 11,
+            "newly_parsed": 0,
+            "newly_unparseable": 2,
+            "invalid_to_correct": 0,
+            "parsed_wrong_to_correct": 0,
+            "correct_to_invalid": 1,
+            "correct_to_parsed_wrong": 1
+          }
+        },
+        "reward_direction": {
+          "counts": {
+            "groups": 16,
+            "correct_parsed": 24,
+            "correct_negative": 14,
+            "positive_reward": 68,
+            "wrong_positive": 58,
+            "target_correct": 3,
+            "all_invalid": 0,
+            "zero_advantage": 0
+          },
+          "correct_negative": {
+            "correct": 14,
+            "total": 24,
+            "percent": 58.333333333333336
+          },
+          "wrong_positive": {
+            "correct": 58,
+            "total": 68,
+            "percent": 85.29411764705883
+          },
+          "target_accuracy": {
+            "correct": 3,
+            "total": 16,
+            "percent": 18.75
+          }
+        },
+        "format": {
+          "outputs": 192,
+          "original_invalid": 28,
+          "failure_types": {
+            "parsed_control": 164,
+            "explicit_choice_unsupported_syntax": 12,
+            "normal_end_missing_final_marker_or_explicit_choice": 15,
+            "token_cap_without_parseable_final_choice": 1
+          },
+          "parser_version": "marked_choice_v1_eval_only",
+          "paired_scores": [
+            {
+              "kind": "after",
+              "cursor": null,
+              "n": 16,
+              "original_correct": 5,
+              "eval_only_correct": 5,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 5,
+                "wrong_to_wrong": 11,
+                "gain_pp": 0.0,
+                "before_parsed": 14,
+                "after_parsed": 15,
+                "newly_parsed": 1,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "before",
+              "cursor": null,
+              "n": 16,
+              "original_correct": 3,
+              "eval_only_correct": 3,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 3,
+                "wrong_to_wrong": 13,
+                "gain_pp": 0.0,
+                "before_parsed": 13,
+                "after_parsed": 14,
+                "newly_parsed": 1,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "probe",
+              "cursor": 0,
+              "n": 16,
+              "original_correct": 3,
+              "eval_only_correct": 3,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 3,
+                "wrong_to_wrong": 13,
+                "gain_pp": 0.0,
+                "before_parsed": 13,
+                "after_parsed": 13,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "probe",
+              "cursor": 16,
+              "n": 16,
+              "original_correct": 1,
+              "eval_only_correct": 1,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 1,
+                "wrong_to_wrong": 15,
+                "gain_pp": 0.0,
+                "before_parsed": 11,
+                "after_parsed": 12,
+                "newly_parsed": 1,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "rollout",
+              "cursor": null,
+              "n": 128,
+              "original_correct": 24,
+              "eval_only_correct": 24,
+              "transition": {
+                "n": 128,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 24,
+                "wrong_to_wrong": 104,
+                "gain_pp": 0.0,
+                "before_parsed": 113,
+                "after_parsed": 117,
+                "newly_parsed": 4,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            }
+          ]
+        }
+      },
+      "paired_candidate_vs_control": {
+        "n": 16,
+        "wrong_to_correct": 1,
+        "correct_to_wrong": 0,
+        "correct_to_correct": 2,
+        "wrong_to_wrong": 13,
+        "gain_pp": 6.25,
+        "before_parsed": 11,
+        "after_parsed": 13,
+        "newly_parsed": 3,
+        "newly_unparseable": 1,
+        "invalid_to_correct": 1,
+        "parsed_wrong_to_correct": 0,
+        "correct_to_invalid": 0,
+        "correct_to_parsed_wrong": 0
+      }
+    },
+    "53": {
+      "m": {
+        "n": 16,
+        "greedy_before": {
+          "correct": 3,
+          "total": 16,
+          "percent": 18.75
+        },
+        "greedy_after": {
+          "correct": 3,
+          "total": 16,
+          "percent": 18.75
+        },
+        "consensus": {
+          "correct": 3,
+          "total": 16,
+          "percent": 18.75
+        },
+        "historical_gain_vs_frozen_pp": 6.25,
+        "historical_transitions_vs_frozen": {
+          "wrong_to_correct": 1,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 2,
+          "wrong_to_wrong": 13,
+          "gain_pp": 6.25
+        },
+        "before_parse_rate": {
+          "correct": 12,
+          "total": 16,
+          "percent": 75.0
+        },
+        "current_case_transitions": {
+          "wrong_to_correct": 0,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 3,
+          "wrong_to_wrong": 13,
+          "gain_pp": 0.0
+        },
+        "after_parse_rate": {
+          "correct": 12,
+          "total": 16,
+          "percent": 75.0
+        },
+        "reward_audit": {
+          "parsed_candidates": {
+            "correct": 108,
+            "total": 128,
+            "percent": 84.375
+          },
+          "ties": {
+            "correct": 2,
+            "total": 16,
+            "percent": 12.5
+          },
+          "all_unparseable": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "zero_advantage_groups": {
+            "correct": 1,
+            "total": 16,
+            "percent": 6.25
+          },
+          "top_vote_count": {
+            "count": 16,
+            "mean": 4.625,
+            "minimum": 2,
+            "maximum": 8
+          },
+          "top_vote_margin": {
+            "count": 16,
+            "mean": 3.375,
+            "minimum": 0,
+            "maximum": 8
+          },
+          "correct_candidate_exists": {
+            "correct": 8,
+            "total": 16,
+            "percent": 50.0
+          },
+          "correct_candidate_but_wrong_vote": {
+            "correct": 5,
+            "total": 16,
+            "percent": 31.25
+          },
+          "wrong_vote_given_correct_candidate": {
+            "correct": 5,
+            "total": 8,
+            "percent": 62.5
+          },
+          "first_half_top_vote_mean": 4.25,
+          "second_half_top_vote_mean": 5.0,
+          "before_matches_vote": {
+            "correct": 8,
+            "total": 16,
+            "percent": 50.0
+          },
+          "after_matches_vote": {
+            "correct": 7,
+            "total": 16,
+            "percent": 43.75
+          }
+        },
+        "optimization": {
+          "updates_in_prefix": 16,
+          "skips_in_prefix": {},
+          "zero_advantage_updates": 1,
+          "selected_token_fraction": 0.3614446616401378,
+          "loss_components": {
+            "policy": {
+              "count": 16,
+              "mean": -0.024045464568189345,
+              "minimum": -0.1868713479489088,
+              "maximum": 0.09937399998307228
+            },
+            "band": {
+              "count": 16,
+              "mean": 0.0012430607448834508,
+              "minimum": 0.0010282848452334292,
+              "maximum": 0.0014871212479192764
+            },
+            "kl": {
+              "count": 16,
+              "mean": 2.387345887733261e-05,
+              "minimum": 0.0,
+              "maximum": 3.9242081584234256e-05
+            }
+          },
+          "gradient_norms": {
+            "vision": {
+              "count": 16,
+              "mean": 4.022616338188406,
+              "minimum": 0.06873889742299469,
+              "maximum": 15.473042146774455
+            },
+            "language": {
+              "count": 16,
+              "mean": 3.864238786438775,
+              "minimum": 0.06969226267781847,
+              "maximum": 5.586131844548522
+            }
+          },
+          "masters_persisted_all": true,
+          "moments_persisted_all": true,
+          "ratio_mean_before_step": {
+            "count": 16,
+            "mean": 1.0,
+            "minimum": 1.0,
+            "maximum": 1.0
+          },
+          "clip_fraction_before_step": {
+            "count": 16,
+            "mean": 0.0,
+            "minimum": 0.0,
+            "maximum": 0.0
+          },
+          "exact_full_vocabulary_kl_before_step": {
+            "count": 16,
+            "mean": 0.0012059923781958446,
+            "minimum": 0.0,
+            "maximum": 0.00185927525502906
+          },
+          "post_update_drift": [
+            {
+              "cursor": 1,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 190,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0009396114037372172,
+              "sampled_token_log_ratio_to_behavior_mean": -0.0012789121828973293,
+              "sampled_token_log_ratio_abs_max": 0.1618676483631134,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            },
+            {
+              "cursor": 8,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 136,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0017707220977172256,
+              "sampled_token_log_ratio_to_behavior_mean": -0.0019626847933977842,
+              "sampled_token_log_ratio_abs_max": 0.19676423072814941,
+              "post_update_raw_ratio_clip_fraction": 0.007352941203862429
+            },
+            {
+              "cursor": 16,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 296,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0010935863247141242,
+              "sampled_token_log_ratio_to_behavior_mean": 0.002770638093352318,
+              "sampled_token_log_ratio_abs_max": 0.22297334671020508,
+              "post_update_raw_ratio_clip_fraction": 0.0033783784601837397
+            }
+          ]
+        },
+        "prefix_generation": {
+          "rollouts": 128,
+          "rollout_tokens": 21486,
+          "rollouts_at_length_cap": {
+            "correct": 0,
+            "total": 128,
+            "percent": 0.0
+          },
+          "greedy_before_tokens": 4163,
+          "greedy_after_tokens": 4381,
+          "case_wall_seconds": 2983.9022983519826
+        },
+        "online_blocks": [
+          {
+            "cursor": 8,
+            "greedy_before_cumulative": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "greedy_before_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "greedy_after_cumulative": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "greedy_after_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "consensus_cumulative": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "consensus_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            }
+          },
+          {
+            "cursor": 16,
+            "greedy_before_cumulative": {
+              "correct": 3,
+              "total": 16,
+              "percent": 18.75
+            },
+            "greedy_before_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "greedy_after_cumulative": {
+              "correct": 3,
+              "total": 16,
+              "percent": 18.75
+            },
+            "greedy_after_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "consensus_cumulative": {
+              "correct": 3,
+              "total": 16,
+              "percent": 18.75
+            },
+            "consensus_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            }
+          }
+        ],
+        "history_parse_transition": {
+          "n": 16,
+          "wrong_to_correct": 1,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 2,
+          "wrong_to_wrong": 13,
+          "gain_pp": 6.25,
+          "before_parsed": 14,
+          "after_parsed": 12,
+          "newly_parsed": 0,
+          "newly_unparseable": 2,
+          "invalid_to_correct": 0,
+          "parsed_wrong_to_correct": 1,
+          "correct_to_invalid": 0,
+          "correct_to_parsed_wrong": 0
+        },
+        "current_parse_transition": {
+          "n": 16,
+          "wrong_to_correct": 0,
+          "correct_to_wrong": 0,
+          "correct_to_correct": 3,
+          "wrong_to_wrong": 13,
+          "gain_pp": 0.0,
+          "before_parsed": 12,
+          "after_parsed": 12,
+          "newly_parsed": 1,
+          "newly_unparseable": 1,
+          "invalid_to_correct": 0,
+          "parsed_wrong_to_correct": 0,
+          "correct_to_invalid": 0,
+          "correct_to_parsed_wrong": 0
+        },
+        "probe": {
+          "initial_correct": 3,
+          "final_correct": 1,
+          "initial_parsed": 13,
+          "final_parsed": 10,
+          "transition": {
+            "n": 16,
+            "wrong_to_correct": 0,
+            "correct_to_wrong": 2,
+            "correct_to_correct": 1,
+            "wrong_to_wrong": 13,
+            "gain_pp": -12.5,
+            "before_parsed": 13,
+            "after_parsed": 10,
+            "newly_parsed": 0,
+            "newly_unparseable": 3,
+            "invalid_to_correct": 0,
+            "parsed_wrong_to_correct": 0,
+            "correct_to_invalid": 2,
+            "correct_to_parsed_wrong": 0
+          }
+        },
+        "reward_direction": {
+          "counts": {
+            "groups": 16,
+            "correct_parsed": 17,
+            "correct_negative": 6,
+            "positive_reward": 74,
+            "wrong_positive": 63,
+            "target_correct": 3,
+            "all_invalid": 0,
+            "zero_advantage": 1
+          },
+          "correct_negative": {
+            "correct": 6,
+            "total": 17,
+            "percent": 35.294117647058826
+          },
+          "wrong_positive": {
+            "correct": 63,
+            "total": 74,
+            "percent": 85.13513513513513
+          },
+          "target_accuracy": {
+            "correct": 3,
+            "total": 16,
+            "percent": 18.75
+          }
+        },
+        "format": {
+          "outputs": 192,
+          "original_invalid": 37,
+          "failure_types": {
+            "parsed_control": 155,
+            "normal_end_missing_final_marker_or_explicit_choice": 22,
+            "explicit_choice_unsupported_syntax": 13,
+            "token_cap_without_parseable_final_choice": 2
+          },
+          "parser_version": "marked_choice_v1_eval_only",
+          "paired_scores": [
+            {
+              "kind": "after",
+              "cursor": null,
+              "n": 16,
+              "original_correct": 3,
+              "eval_only_correct": 3,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 3,
+                "wrong_to_wrong": 13,
+                "gain_pp": 0.0,
+                "before_parsed": 12,
+                "after_parsed": 13,
+                "newly_parsed": 1,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "before",
+              "cursor": null,
+              "n": 16,
+              "original_correct": 3,
+              "eval_only_correct": 3,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 3,
+                "wrong_to_wrong": 13,
+                "gain_pp": 0.0,
+                "before_parsed": 12,
+                "after_parsed": 13,
+                "newly_parsed": 1,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "probe",
+              "cursor": 0,
+              "n": 16,
+              "original_correct": 3,
+              "eval_only_correct": 3,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 3,
+                "wrong_to_wrong": 13,
+                "gain_pp": 0.0,
+                "before_parsed": 13,
+                "after_parsed": 13,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "probe",
+              "cursor": 16,
+              "n": 16,
+              "original_correct": 1,
+              "eval_only_correct": 2,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 1,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 1,
+                "wrong_to_wrong": 14,
+                "gain_pp": 6.25,
+                "before_parsed": 10,
+                "after_parsed": 12,
+                "newly_parsed": 2,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 1,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "rollout",
+              "cursor": null,
+              "n": 128,
+              "original_correct": 17,
+              "eval_only_correct": 17,
+              "transition": {
+                "n": 128,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 17,
+                "wrong_to_wrong": 111,
+                "gain_pp": 0.0,
+                "before_parsed": 108,
+                "after_parsed": 110,
+                "newly_parsed": 2,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            }
+          ]
+        }
+      },
+      "v": {
+        "n": 16,
+        "greedy_before": {
+          "correct": 1,
+          "total": 16,
+          "percent": 6.25
+        },
+        "greedy_after": {
+          "correct": 4,
+          "total": 16,
+          "percent": 25.0
+        },
+        "consensus": {
+          "correct": 2,
+          "total": 16,
+          "percent": 12.5
+        },
+        "historical_gain_vs_frozen_pp": -6.25,
+        "historical_transitions_vs_frozen": {
+          "wrong_to_correct": 0,
+          "correct_to_wrong": 1,
+          "correct_to_correct": 1,
+          "wrong_to_wrong": 14,
+          "gain_pp": -6.25
+        },
+        "before_parse_rate": {
+          "correct": 13,
+          "total": 16,
+          "percent": 81.25
+        },
+        "current_case_transitions": {
+          "wrong_to_correct": 4,
+          "correct_to_wrong": 1,
+          "correct_to_correct": 0,
+          "wrong_to_wrong": 11,
+          "gain_pp": 18.75
+        },
+        "after_parse_rate": {
+          "correct": 12,
+          "total": 16,
+          "percent": 75.0
+        },
+        "reward_audit": {
+          "parsed_candidates": {
+            "correct": 104,
+            "total": 128,
+            "percent": 81.25
+          },
+          "ties": {
+            "correct": 2,
+            "total": 16,
+            "percent": 12.5
+          },
+          "all_unparseable": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "zero_advantage_groups": {
+            "correct": 0,
+            "total": 16,
+            "percent": 0.0
+          },
+          "top_vote_count": {
+            "count": 16,
+            "mean": 4.375,
+            "minimum": 3,
+            "maximum": 6
+          },
+          "top_vote_margin": {
+            "count": 16,
+            "mean": 2.8125,
+            "minimum": 0,
+            "maximum": 6
+          },
+          "correct_candidate_exists": {
+            "correct": 8,
+            "total": 16,
+            "percent": 50.0
+          },
+          "correct_candidate_but_wrong_vote": {
+            "correct": 6,
+            "total": 16,
+            "percent": 37.5
+          },
+          "wrong_vote_given_correct_candidate": {
+            "correct": 6,
+            "total": 8,
+            "percent": 75.0
+          },
+          "first_half_top_vote_mean": 4.375,
+          "second_half_top_vote_mean": 4.375,
+          "before_matches_vote": {
+            "correct": 7,
+            "total": 16,
+            "percent": 43.75
+          },
+          "after_matches_vote": {
+            "correct": 7,
+            "total": 16,
+            "percent": 43.75
+          }
+        },
+        "optimization": {
+          "updates_in_prefix": 16,
+          "skips_in_prefix": {},
+          "zero_advantage_updates": 0,
+          "selected_token_fraction": 0.36143656448759026,
+          "loss_components": {
+            "policy": {
+              "count": 16,
+              "mean": 0.0107545125647448,
+              "minimum": -0.1230508778244257,
+              "maximum": 0.10624744184315205
+            },
+            "band": {
+              "count": 16,
+              "mean": 0.0012733021261510657,
+              "minimum": 0.0009741345620568609,
+              "maximum": 0.0015955825801938772
+            },
+            "kl": {
+              "count": 16,
+              "mean": 1.5022277565890363e-05,
+              "minimum": 0.0,
+              "maximum": 1.9992174429717124e-05
+            }
+          },
+          "gradient_norms": {
+            "vision": {
+              "count": 16,
+              "mean": 4.570457066839756,
+              "minimum": 0.36723249726654617,
+              "maximum": 15.629661866190443
+            },
+            "language": {
+              "count": 16,
+              "mean": 4.407929349201509,
+              "minimum": 2.5673945912603746,
+              "maximum": 6.906781698026681
+            }
+          },
+          "masters_persisted_all": true,
+          "moments_persisted_all": true,
+          "ratio_mean_before_step": {
+            "count": 16,
+            "mean": 1.0,
+            "minimum": 1.0,
+            "maximum": 1.0
+          },
+          "clip_fraction_before_step": {
+            "count": 16,
+            "mean": 0.0,
+            "minimum": 0.0,
+            "maximum": 0.0
+          },
+          "exact_full_vocabulary_kl_before_step": {
+            "count": 16,
+            "mean": 0.0007832746263637841,
+            "minimum": 0.0,
+            "maximum": 0.0010858164091541917
+          },
+          "post_update_drift": [
+            {
+              "cursor": 1,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 190,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0007041795179247856,
+              "sampled_token_log_ratio_to_behavior_mean": 0.0006697520148009062,
+              "sampled_token_log_ratio_abs_max": 0.1374514102935791,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            },
+            {
+              "cursor": 8,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 247,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0010192259214818478,
+              "sampled_token_log_ratio_to_behavior_mean": 0.002581027103587985,
+              "sampled_token_log_ratio_abs_max": 0.17163705825805664,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            },
+            {
+              "cursor": 16,
+              "scope": "first rollout, same generated prefixes",
+              "tokens": 93,
+              "exact_full_vocabulary_kl_to_fixed_base": 0.0007844570209272206,
+              "sampled_token_log_ratio_to_behavior_mean": -0.0031920382753014565,
+              "sampled_token_log_ratio_abs_max": 0.08348214626312256,
+              "post_update_raw_ratio_clip_fraction": 0.0
+            }
+          ]
+        },
+        "prefix_generation": {
+          "rollouts": 128,
+          "rollout_tokens": 20911,
+          "rollouts_at_length_cap": {
+            "correct": 0,
+            "total": 128,
+            "percent": 0.0
+          },
+          "greedy_before_tokens": 4312,
+          "greedy_after_tokens": 4606,
+          "case_wall_seconds": 3068.514293113025
+        },
+        "online_blocks": [
+          {
+            "cursor": 8,
+            "greedy_before_cumulative": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "greedy_before_block": {
+              "correct": 1,
+              "total": 8,
+              "percent": 12.5
+            },
+            "greedy_after_cumulative": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "greedy_after_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "consensus_cumulative": {
+              "correct": 0,
+              "total": 8,
+              "percent": 0.0
+            },
+            "consensus_block": {
+              "correct": 0,
+              "total": 8,
+              "percent": 0.0
+            }
+          },
+          {
+            "cursor": 16,
+            "greedy_before_cumulative": {
+              "correct": 1,
+              "total": 16,
+              "percent": 6.25
+            },
+            "greedy_before_block": {
+              "correct": 0,
+              "total": 8,
+              "percent": 0.0
+            },
+            "greedy_after_cumulative": {
+              "correct": 4,
+              "total": 16,
+              "percent": 25.0
+            },
+            "greedy_after_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            },
+            "consensus_cumulative": {
+              "correct": 2,
+              "total": 16,
+              "percent": 12.5
+            },
+            "consensus_block": {
+              "correct": 2,
+              "total": 8,
+              "percent": 25.0
+            }
+          }
+        ],
+        "history_parse_transition": {
+          "n": 16,
+          "wrong_to_correct": 0,
+          "correct_to_wrong": 1,
+          "correct_to_correct": 1,
+          "wrong_to_wrong": 14,
+          "gain_pp": -6.25,
+          "before_parsed": 14,
+          "after_parsed": 13,
+          "newly_parsed": 2,
+          "newly_unparseable": 3,
+          "invalid_to_correct": 0,
+          "parsed_wrong_to_correct": 0,
+          "correct_to_invalid": 0,
+          "correct_to_parsed_wrong": 1
+        },
+        "current_parse_transition": {
+          "n": 16,
+          "wrong_to_correct": 4,
+          "correct_to_wrong": 1,
+          "correct_to_correct": 0,
+          "wrong_to_wrong": 11,
+          "gain_pp": 18.75,
+          "before_parsed": 13,
+          "after_parsed": 12,
+          "newly_parsed": 1,
+          "newly_unparseable": 2,
+          "invalid_to_correct": 1,
+          "parsed_wrong_to_correct": 3,
+          "correct_to_invalid": 1,
+          "correct_to_parsed_wrong": 0
+        },
+        "probe": {
+          "initial_correct": 3,
+          "final_correct": 3,
+          "initial_parsed": 13,
+          "final_parsed": 15,
+          "transition": {
+            "n": 16,
+            "wrong_to_correct": 0,
+            "correct_to_wrong": 0,
+            "correct_to_correct": 3,
+            "wrong_to_wrong": 13,
+            "gain_pp": 0.0,
+            "before_parsed": 13,
+            "after_parsed": 15,
+            "newly_parsed": 2,
+            "newly_unparseable": 0,
+            "invalid_to_correct": 0,
+            "parsed_wrong_to_correct": 0,
+            "correct_to_invalid": 0,
+            "correct_to_parsed_wrong": 0
+          }
+        },
+        "reward_direction": {
+          "counts": {
+            "groups": 16,
+            "correct_parsed": 16,
+            "correct_negative": 8,
+            "positive_reward": 70,
+            "wrong_positive": 62,
+            "target_correct": 2,
+            "all_invalid": 0,
+            "zero_advantage": 0
+          },
+          "correct_negative": {
+            "correct": 8,
+            "total": 16,
+            "percent": 50.0
+          },
+          "wrong_positive": {
+            "correct": 62,
+            "total": 70,
+            "percent": 88.57142857142857
+          },
+          "target_accuracy": {
+            "correct": 2,
+            "total": 16,
+            "percent": 12.5
+          }
+        },
+        "format": {
+          "outputs": 192,
+          "original_invalid": 35,
+          "failure_types": {
+            "parsed_control": 157,
+            "normal_end_missing_final_marker_or_explicit_choice": 23,
+            "explicit_choice_unsupported_syntax": 10,
+            "token_cap_without_parseable_final_choice": 1,
+            "prose_final_payload_without_unambiguous_identifier": 1
+          },
+          "parser_version": "marked_choice_v1_eval_only",
+          "paired_scores": [
+            {
+              "kind": "after",
+              "cursor": null,
+              "n": 16,
+              "original_correct": 4,
+              "eval_only_correct": 4,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 4,
+                "wrong_to_wrong": 12,
+                "gain_pp": 0.0,
+                "before_parsed": 12,
+                "after_parsed": 13,
+                "newly_parsed": 1,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "before",
+              "cursor": null,
+              "n": 16,
+              "original_correct": 1,
+              "eval_only_correct": 1,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 1,
+                "wrong_to_wrong": 15,
+                "gain_pp": 0.0,
+                "before_parsed": 13,
+                "after_parsed": 13,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "probe",
+              "cursor": 0,
+              "n": 16,
+              "original_correct": 3,
+              "eval_only_correct": 3,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 3,
+                "wrong_to_wrong": 13,
+                "gain_pp": 0.0,
+                "before_parsed": 13,
+                "after_parsed": 13,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "probe",
+              "cursor": 16,
+              "n": 16,
+              "original_correct": 3,
+              "eval_only_correct": 3,
+              "transition": {
+                "n": 16,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 3,
+                "wrong_to_wrong": 13,
+                "gain_pp": 0.0,
+                "before_parsed": 15,
+                "after_parsed": 15,
+                "newly_parsed": 0,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            },
+            {
+              "kind": "rollout",
+              "cursor": null,
+              "n": 128,
+              "original_correct": 16,
+              "eval_only_correct": 16,
+              "transition": {
+                "n": 128,
+                "wrong_to_correct": 0,
+                "correct_to_wrong": 0,
+                "correct_to_correct": 16,
+                "wrong_to_wrong": 112,
+                "gain_pp": 0.0,
+                "before_parsed": 104,
+                "after_parsed": 107,
+                "newly_parsed": 3,
+                "newly_unparseable": 0,
+                "invalid_to_correct": 0,
+                "parsed_wrong_to_correct": 0,
+                "correct_to_invalid": 0,
+                "correct_to_parsed_wrong": 0
+              }
+            }
+          ]
+        }
+      },
+      "paired_candidate_vs_control": {
+        "n": 16,
+        "wrong_to_correct": 0,
+        "correct_to_wrong": 2,
+        "correct_to_correct": 1,
+        "wrong_to_wrong": 13,
+        "gain_pp": -12.5,
+        "before_parsed": 12,
+        "after_parsed": 13,
+        "newly_parsed": 2,
+        "newly_unparseable": 1,
+        "invalid_to_correct": 0,
+        "parsed_wrong_to_correct": 0,
+        "correct_to_invalid": 0,
+        "correct_to_parsed_wrong": 2
+      }
+    }
+  },
+  "resources": {
+    "m51": {
+      "actual_completed_cursor": 16,
+      "actual_optimizer_updates": 16,
+      "segment_wall_seconds": 3517.581460967893,
+      "process_wall_seconds": 3525.776570860995,
+      "process_jobs": 1,
+      "process_failures": 0,
+      "process_jobs_missing_final_metadata": 0,
+      "phase_seconds": {
+        "load": 39.32883311691694,
+        "probe": 261.5745481860358,
+        "preprocess": 1.3965183030813932,
+        "greedy_before": 161.6999997990206,
+        "rollout": 937.3765828127507,
+        "behavior_forward": 55.076839006040245,
+        "reference_forward": 55.034012261778116,
+        "backward": 627.0425411274191,
+        "cpu_optimizer": 1002.8688197694719,
+        "post_update_drift": 2.552202475722879,
+        "greedy_after": 165.2497200006619,
+        "reference_integrity": 7.848009364912286,
+        "checkpoint": 198.7611207610462
+      },
+      "peak_allocated_bytes": 29602228224,
+      "peak_reserved_bytes": 47968157696,
+      "whole_device_sampled_peak_used_bytes": 48497950720,
+      "whole_device_memory_includes_other_jobs": true,
+      "peak_cpu_rss_kib": 72387060,
+      "probe_generated_tokens": 6493,
+      "actual_rollouts": 128,
+      "actual_rollout_tokens": 22280,
+      "checkpoint_writes": 1,
+      "checkpoint_bytes_written": 45056482035,
+      "retained_checkpoint_bytes": 45056482035,
+      "reference_unchanged_all_segments": true
+    },
+    "v51": {
+      "actual_completed_cursor": 16,
+      "actual_optimizer_updates": 16,
+      "segment_wall_seconds": 3555.778427304933,
+      "process_wall_seconds": 3563.9199332478456,
+      "process_jobs": 1,
+      "process_failures": 0,
+      "process_jobs_missing_final_metadata": 0,
+      "phase_seconds": {
+        "load": 38.797131662024185,
+        "probe": 272.2774999188259,
+        "preprocess": 1.4195674401707947,
+        "greedy_before": 117.45303505728953,
+        "rollout": 975.6607288669329,
+        "behavior_forward": 55.27271832805127,
+        "reference_forward": 55.13012378150597,
+        "backward": 627.2043839865364,
+        "cpu_optimizer": 1006.1340117445216,
+        "post_update_drift": 2.565655058948323,
+        "greedy_after": 187.13772547384724,
+        "reference_integrity": 7.975504561094567,
+        "checkpoint": 207.13530154386535
+      },
+      "peak_allocated_bytes": 29582348288,
+      "peak_reserved_bytes": 44872761344,
+      "whole_device_sampled_peak_used_bytes": 45402554368,
+      "whole_device_memory_includes_other_jobs": true,
+      "peak_cpu_rss_kib": 72386900,
+      "probe_generated_tokens": 6733,
+      "actual_rollouts": 128,
+      "actual_rollout_tokens": 23180,
+      "checkpoint_writes": 1,
+      "checkpoint_bytes_written": 45056482035,
+      "retained_checkpoint_bytes": 45056482035,
+      "reference_unchanged_all_segments": true
+    },
+    "m52": {
+      "actual_completed_cursor": 16,
+      "actual_optimizer_updates": 16,
+      "segment_wall_seconds": 3469.8621241550427,
+      "process_wall_seconds": 3478.049968832871,
+      "process_jobs": 1,
+      "process_failures": 0,
+      "process_jobs_missing_final_metadata": 0,
+      "phase_seconds": {
+        "load": 38.69843405392021,
+        "probe": 196.64234893699177,
+        "preprocess": 1.4569631721824408,
+        "greedy_before": 184.89098102366552,
+        "rollout": 908.9959975904785,
+        "behavior_forward": 55.15693204035051,
+        "reference_forward": 55.06431730627082,
+        "backward": 626.8758379546925,
+        "cpu_optimizer": 1015.2357393761631,
+        "post_update_drift": 2.5595972596202046,
+        "greedy_after": 171.7412256503012,
+        "reference_integrity": 7.802289149956778,
+        "checkpoint": 202.95208020298742
+      },
+      "peak_allocated_bytes": 29322484736,
+      "peak_reserved_bytes": 39254491136,
+      "whole_device_sampled_peak_used_bytes": 39784284160,
+      "whole_device_memory_includes_other_jobs": true,
+      "peak_cpu_rss_kib": 72632980,
+      "probe_generated_tokens": 4796,
+      "actual_rollouts": 128,
+      "actual_rollout_tokens": 21704,
+      "checkpoint_writes": 1,
+      "checkpoint_bytes_written": 45056481971,
+      "retained_checkpoint_bytes": 45056481971,
+      "reference_unchanged_all_segments": true
+    },
+    "v52": {
+      "actual_completed_cursor": 16,
+      "actual_optimizer_updates": 16,
+      "segment_wall_seconds": 3388.8151780820917,
+      "process_wall_seconds": 3396.676168246893,
+      "process_jobs": 1,
+      "process_failures": 0,
+      "process_jobs_missing_final_metadata": 0,
+      "phase_seconds": {
+        "load": 39.17878919001669,
+        "probe": 273.57881438196637,
+        "preprocess": 1.404374104226008,
+        "greedy_before": 118.34881774056703,
+        "rollout": 912.1245491169393,
+        "behavior_forward": 55.05128184193745,
+        "reference_forward": 55.04910823935643,
+        "backward": 627.2062212601304,
+        "cpu_optimizer": 967.3798575829715,
+        "post_update_drift": 2.5677191216964275,
+        "greedy_after": 112.34312407090329,
+        "reference_integrity": 7.861189447110519,
+        "checkpoint": 215.25768292485736
+      },
+      "peak_allocated_bytes": 29495301632,
+      "peak_reserved_bytes": 43553652736,
+      "whole_device_sampled_peak_used_bytes": 44083511296,
+      "whole_device_memory_includes_other_jobs": true,
+      "peak_cpu_rss_kib": 72301252,
+      "probe_generated_tokens": 6850,
+      "actual_rollouts": 128,
+      "actual_rollout_tokens": 21705,
+      "checkpoint_writes": 1,
+      "checkpoint_bytes_written": 45056481971,
+      "retained_checkpoint_bytes": 45056481971,
+      "reference_unchanged_all_segments": true
+    },
+    "m53": {
+      "actual_completed_cursor": 16,
+      "actual_optimizer_updates": 16,
+      "segment_wall_seconds": 3593.1104091329034,
+      "process_wall_seconds": 3601.3459567851387,
+      "process_jobs": 1,
+      "process_failures": 0,
+      "process_jobs_missing_final_metadata": 0,
+      "phase_seconds": {
+        "load": 40.828328280942515,
+        "probe": 344.8261421099305,
+        "preprocess": 1.366585592040792,
+        "greedy_before": 168.70180864958093,
+        "rollout": 898.2228568051942,
+        "behavior_forward": 55.09736104100011,
+        "reference_forward": 54.87463590828702,
+        "backward": 627.4775832397863,
+        "cpu_optimizer": 997.0972539910581,
+        "post_update_drift": 2.5422037809621543,
+        "greedy_after": 177.26955689163879,
+        "reference_integrity": 7.706831169081852,
+        "checkpoint": 215.62992784101516
+      },
+      "peak_allocated_bytes": 29448768000,
+      "peak_reserved_bytes": 42773512192,
+      "whole_device_sampled_peak_used_bytes": 43303305216,
+      "whole_device_memory_includes_other_jobs": true,
+      "peak_cpu_rss_kib": 72459708,
+      "probe_generated_tokens": 8738,
+      "actual_rollouts": 128,
+      "actual_rollout_tokens": 21486,
+      "checkpoint_writes": 1,
+      "checkpoint_bytes_written": 45056482035,
+      "retained_checkpoint_bytes": 45056482035,
+      "reference_unchanged_all_segments": true
+    },
+    "v53": {
+      "actual_completed_cursor": 16,
+      "actual_optimizer_updates": 16,
+      "segment_wall_seconds": 3574.8839582649525,
+      "process_wall_seconds": 3583.4877109860536,
+      "process_jobs": 1,
+      "process_failures": 0,
+      "process_jobs_missing_final_metadata": 0,
+      "phase_seconds": {
+        "load": 42.32700454792939,
+        "probe": 210.5884073190391,
+        "preprocess": 1.5162622956559062,
+        "greedy_before": 178.12694602133706,
+        "rollout": 891.0628125278745,
+        "behavior_forward": 55.495059254346415,
+        "reference_forward": 55.483677099924535,
+        "backward": 628.2968148656655,
+        "cpu_optimizer": 1064.189504572656,
+        "post_update_drift": 2.5810220681596547,
+        "greedy_after": 190.31852494203486,
+        "reference_integrity": 10.628206299850717,
+        "checkpoint": 242.33278621500358
+      },
+      "peak_allocated_bytes": 29344479744,
+      "peak_reserved_bytes": 47706013696,
+      "whole_device_sampled_peak_used_bytes": 48235937792,
+      "whole_device_memory_includes_other_jobs": true,
+      "peak_cpu_rss_kib": 72375100,
+      "probe_generated_tokens": 5012,
+      "actual_rollouts": 128,
+      "actual_rollout_tokens": 20911,
+      "checkpoint_writes": 1,
+      "checkpoint_bytes_written": 45056482035,
+      "retained_checkpoint_bytes": 45056482035,
+      "reference_unchanged_all_segments": true
+    }
+  },
+  "success_checks": [
+    {
+      "seed": 51,
+      "n": 16,
+      "frozen_before_correct": 2,
+      "control_before_correct": 5,
+      "candidate_before_correct": 4,
+      "candidate_initial_correct_retained": 2
+    },
+    {
+      "seed": 52,
+      "n": 16,
+      "frozen_before_correct": 2,
+      "control_before_correct": 2,
+      "candidate_before_correct": 3,
+      "candidate_initial_correct_retained": 1
+    },
+    {
+      "seed": 53,
+      "n": 16,
+      "frozen_before_correct": 2,
+      "control_before_correct": 3,
+      "candidate_before_correct": 1,
+      "candidate_initial_correct_retained": 3
+    }
+  ],
+  "stable_positive_development_result": false,
+  "independent_generalization_established": false
+}

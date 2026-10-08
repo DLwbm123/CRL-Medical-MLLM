@@ -1,0 +1,42 @@
+{
+  "total_authorized_gpu_process_seconds": 86400,
+  "p4_gpu_process_seconds": 28.726142450002953,
+  "p5_gpu_process_seconds": 21744.03255091561,
+  "p6_gpu_process_seconds": 21149.256308959797,
+  "cumulative_gpu_process_seconds": 42922.01500232541,
+  "remaining_gpu_process_seconds": 43477.98499767459,
+  "whole_worker_lifetime_counted": true,
+  "budget_reset": false,
+  "jobs": [
+    {
+      "arm": "m51",
+      "seconds": 3525.776570860995,
+      "exit_code": 0
+    },
+    {
+      "arm": "v51",
+      "seconds": 3563.9199332478456,
+      "exit_code": 0
+    },
+    {
+      "arm": "m52",
+      "seconds": 3478.049968832871,
+      "exit_code": 0
+    },
+    {
+      "arm": "v52",
+      "seconds": 3396.676168246893,
+      "exit_code": 0
+    },
+    {
+      "arm": "m53",
+      "seconds": 3601.3459567851387,
+      "exit_code": 0
+    },
+    {
+      "arm": "v53",
+      "seconds": 3583.4877109860536,
+      "exit_code": 0
+    }
+  ]
+}
