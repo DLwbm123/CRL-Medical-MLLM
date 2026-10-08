@@ -15,8 +15,9 @@ def main():
     folder = root / "outputs" / os.environ["P2_CAMPAIGN"]
     p5 = os.environ["P2_MODE"] == "p5_prepare"
     p6 = os.environ["P2_MODE"] == "p6_prepare"
-    seeds = [51, 52, 53] if p6 else ([48, 49, 50] if p5 else [45, 46, 47])
-    prefix = "p6_" if p6 else ("p5_" if p5 else "p4_")
+    p7 = os.environ["P2_MODE"] == "p7_prepare"
+    seeds = [54, 55, 56] if p7 else ([51, 52, 53] if p6 else ([48, 49, 50] if p5 else [45, 46, 47]))
+    prefix = "p7_" if p7 else ("p6_" if p6 else ("p5_" if p5 else "p4_"))
     folder.mkdir(parents=True, exist_ok=False)
     (folder / "inputs").mkdir()
     raw = (source / "manifest.json").read_bytes()
@@ -33,7 +34,7 @@ def main():
             load_input(source, entry)
             shutil.copyfile(source / entry["input"], folder / entry["input"])
     manifest = {**old, "p4_version": 1, "rollout_seeds": seeds,
-                "reward_sources": ["majority"] if p5 or p6 else ["majority", "frozen_legal"],
+                "reward_sources": ["majority"] if p5 or p6 or p7 else ["majority", "frozen_legal"],
                 "data_status": "reused observed development groups; new rollout seeds",
                 "probe_cursors": [0, 16], "selected_n": 16,
                 "data_decision": "No new test retirement; prior observed groups only"}
@@ -42,12 +43,15 @@ def main():
                                                        "raw_softmax": {"temperature": 1.0, "top_p": 1.0}})
     if p6:
         manifest.update(p6_version=1, learning_rate_variants={"original": 1e-6, "half": 5e-7})
+    if p7:
+        manifest.update(p7_version=1, kl_variants={"original": 0.01, "strong": 1.0})
     digest = write_manifest(folder / "manifest.json", manifest)
     acceptance = json.loads((source / "acceptance.json").read_text())
     if not acceptance["passed"]:
         raise ValueError("Inherited engineering acceptance did not pass")
     acceptance.update(inherited_for_p4=True,
-                      inheritance_scope=("same reward, objective, optimizer algorithm, state and RNG; declared learning rates checked separately" if p6 else
+                      inheritance_scope=("same reward, KL formula/mask, optimizer, state and RNG; declared KL coefficients checked separately" if p7 else
+                                         "same reward, objective, optimizer algorithm, state and RNG; declared learning rates checked separately" if p6 else
                                          "same reward, objective, optimizer, state and RNG; declared sampler alignment tested separately" if p5 else
                                          "same binary-reward normalization, objective, optimizer, state and RNG; added fixed pseudo-target source tested separately"))
     for kind in ["m", "v"]:

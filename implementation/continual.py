@@ -84,6 +84,12 @@ def validate_development_configuration(cfg, acceptance, manifest):
             raise RuntimeError("Learning rate is outside the locked P6 source")
         current.pop("learning_rate_source")
         current["learning_rate"] = accepted["learning_rate"]
+    if manifest.get("p7_version") == 1 and cfg["method"] != "Frozen greedy":
+        source = cfg.get("kl_source")
+        if cfg["method"] != "SPINE" or source not in manifest["kl_variants"] or cfg["kl_coefficient"] != manifest["kl_variants"][source]:
+            raise RuntimeError("KL anchor is outside the locked P7 source")
+        current.pop("kl_source")
+        current["kl_coefficient"] = accepted["kl_coefficient"]
     allowed = manifest["rollout_seeds"]
     cached_base = cfg["method"] == "Frozen greedy" and cfg["seed"] == accepted["seed"]
     if not cached_base and cfg["seed"] not in allowed:

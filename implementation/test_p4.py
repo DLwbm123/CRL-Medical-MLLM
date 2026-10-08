@@ -6,7 +6,7 @@ import tempfile
 from pathlib import Path
 import torch
 from continual import group_rewards, validate_development_configuration
-from core import consensus_rewards
+from core import consensus_rewards, objective, token_statistics
 from p4_evaluate import reward_audit, gate_passes, stable_development_success
 import p4_pipeline
 
@@ -83,6 +83,36 @@ def main():
             raise AssertionError("Undeclared P6 change accepted")
     p6_good=[dict(s,seed=s["seed"]+6) for s in good]
     assert stable_development_success(p6_good,[51,52,53]) and not stable_development_success(p6_good)
+    anchored=dict(cfg,seed=54,reward_source="majority",kl_source="strong",kl_coefficient=1.0)
+    p7_manifest={"p4_version":1,"p7_version":1,"rollout_seeds":[54,55,56],"reward_sources":["majority"],
+                 "kl_variants":{"original":0.01,"strong":1.0}}
+    validate_development_configuration(anchored,acceptance,p7_manifest)
+    validate_development_configuration(dict(anchored,kl_source="original",kl_coefficient=0.01),acceptance,p7_manifest)
+    for changed in [dict(anchored,kl_coefficient=0.1),dict(anchored,kl_source="original"),
+                    dict(anchored,learning_rate=5e-7),dict(anchored,temperature=1),dict(anchored,seed=53),
+                    dict(anchored,reward_source="frozen_legal"),dict(anchored,method="TTRL")]:
+        try:
+            validate_development_configuration(changed,acceptance,p7_manifest)
+        except RuntimeError:
+            pass
+        else:
+            raise AssertionError("Undeclared P7 change accepted")
+    logits=torch.tensor([[1.,0.],[0.,1.],[0.7,0.2]],requires_grad=True)
+    logp,entropy,kl=token_statistics(logits,torch.tensor([0,1,0]),torch.zeros_like(logits))
+    losses=[];gradients=[];components=[]
+    for coefficient in [0.01,1.0]:
+        loss,detail=objective(logp,logp.detach(),entropy,kl,torch.tensor(0.),
+                              torch.tensor([True,False,True]),torch.tensor(0.),torch.tensor(10.),3,2,
+                              dict(cfg,kl_coefficient=coefficient))
+        losses.append(loss.detach());components.append(detail)
+        gradients.append(torch.autograd.grad(loss,logits,retain_graph=True)[0])
+    assert losses[0]>0 and torch.allclose(losses[1],100*losses[0])
+    assert torch.allclose(gradients[1],100*gradients[0],atol=1e-7) and torch.count_nonzero(gradients[0])>0
+    assert all(c["policy"]==0 and c["band"]==0 for c in components)
+    p7_good=[dict(s,seed=s["seed"]+9) for s in good]
+    assert stable_development_success(p7_good,[54,55,56]) and not stable_development_success(p7_good[:2],[54,55,56])
+    bad=copy.deepcopy(p7_good);bad[1]["candidate_initial_correct_retained"]=2
+    assert not stable_development_success(bad,[54,55,56])
     old_folder=p4_pipeline.FOLDER
     with tempfile.TemporaryDirectory() as temporary:
         p4_pipeline.FOLDER=Path(temporary)
@@ -94,8 +124,11 @@ def main():
                         {'label':'g','started_utc':'2020-01-01T00:00:00+00:00'}]}
         (p4_pipeline.FOLDER/'controllers/plan.json').write_text(json.dumps(ledger))
         assert p4_pipeline.gpu_seconds()==9
+        ledger['jobs'][-1]['wall_seconds']=None
+        (p4_pipeline.FOLDER/'controllers/plan.json').write_text(json.dumps(ledger))
+        assert p4_pipeline.gpu_seconds()==9
     p4_pipeline.FOLDER=old_folder
-    print(json.dumps({"passed":True,"checks":["original rewards identical","reference rewards and original vote separated","all-invalid retained","no illegal target","offline gate denominators","declared scope guard","no best-seed success"],"real_labels_read":False}))
+    print(json.dumps({"passed":True,"checks":["original rewards identical","reference rewards and original vote separated","all-invalid retained","no illegal target","offline gate denominators","declared scope guard","no best-seed success","P7 KL loss and gradient scaling","missing or null GPU lifetime fallback"],"real_labels_read":False}))
 
 
 if __name__ == "__main__":

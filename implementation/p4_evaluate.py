@@ -80,8 +80,9 @@ def main():
     manifest = json.loads(raw)
     p5 = manifest.get("p5_version") == 1
     p6 = manifest.get("p6_version") == 1
-    no_reference = p5 or p6
-    seeds = [51, 52, 53] if p6 else ([48, 49, 50] if p5 else [45, 46, 47])
+    p7 = manifest.get("p7_version") == 1
+    no_reference = p5 or p6 or p7
+    seeds = [54, 55, 56] if p7 else ([51, 52, 53] if p6 else ([48, 49, 50] if p5 else [45, 46, 47]))
     if manifest["rollout_seeds"] != seeds:
         raise ValueError("Unexpected locked seed matrix")
     signal = None if no_reference else checked_signal(folder, manifest, digest)
@@ -122,7 +123,7 @@ def main():
     acceptance = json.loads((folder / "acceptance.json").read_text())
     loaded = {}
     for name in ["a"] + [k + str(seed) for seed in seeds for k in "mv"]:
-        cfgname = "p2_a" if name == "a" else ("p6_" if p6 else ("p5_" if p5 else "p4_")) + name
+        cfgname = "p2_a" if name == "a" else ("p7_" if p7 else ("p6_" if p6 else ("p5_" if p5 else "p4_"))) + name
         cfg = json.loads((root / "configs" / (cfgname + ".json")).read_text())
         run = folder / "runs" / ("main-" + name)
         rows, result, probes = available_run(run, manifest, digest, cfg, acceptance)
@@ -162,6 +163,7 @@ def main():
               "reference_audit": None if no_reference else json.loads((folder / "reference/audit_public.json").read_text()),
               "sampling_variants": manifest.get("sampling_variants"),
               "learning_rate_variants": manifest.get("learning_rate_variants"),
+              "kl_variants": manifest.get("kl_variants"),
               "seeds": {}, "resources": {}}
     criteria = []
     for seed in seeds:

@@ -45,7 +45,7 @@ def gpu_seconds():
             if job["label"] in gpu_labels:
                 end = datetime.fromisoformat(ledger["finished_utc"])
                 fallback = (end - datetime.fromisoformat(job["started_utc"])).total_seconds()
-                total += job.get("wall_seconds", fallback)
+                total += job["wall_seconds"] if job.get("wall_seconds") is not None else fallback
     return total
 
 
@@ -81,7 +81,8 @@ def main():
         manifest = json.loads((FOLDER / "manifest.json").read_text())
         p5 = manifest.get("p5_version") == 1
         p6 = manifest.get("p6_version") == 1
-        if p5 or p6:
+        p7 = manifest.get("p7_version") == 1
+        if p5 or p6 or p7:
             audit = {"go": True}
         else:
             invoke("supervise", "supervisor-reference.log", P2_PLAN="reference-plan.json")
@@ -93,7 +94,7 @@ def main():
             used = gpu_seconds()
             allowance = float(budget["remaining_total_gpu_process_seconds_at_start"]) - used
             remaining = (datetime.fromisoformat(budget["gpu_stop_utc"]) - datetime.now(timezone.utc)).total_seconds()
-            expected = 6 * (3966 if p6 else 3554)
+            expected = 6 * (3966 if p6 or p7 else 3554)
             required = expected * 1.2
             if min(allowance, remaining) < required:
                 raise RuntimeError("Remaining budget cannot cover measured matrix cost plus 20 percent reserve")
@@ -106,7 +107,7 @@ def main():
             if ledger["status"] != "all_planned_jobs_completed" or len(ledger["jobs"]) != 6:
                 raise RuntimeError("Fixed main matrix did not fully close")
             verify_ended(ledger)
-            invoke("p6_score" if p6 else ("p5_score" if p5 else "p4_score"), "offline-score.log")
+            invoke("p7_score" if p7 else ("p6_score" if p6 else ("p5_score" if p5 else "p4_score")), "offline-score.log")
             final["status"] = "scored_awaiting_public_delivery"
             final["stable_positive_development_result"] = json.loads((FOLDER / "scores/public_summary.json").read_text())["stable_positive_development_result"]
     except Exception as exc:
