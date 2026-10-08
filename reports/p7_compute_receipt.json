@@ -1,0 +1,43 @@
+{
+  "total_authorized_gpu_process_seconds": 86400,
+  "p4_gpu_process_seconds": 28.726142450002953,
+  "p5_gpu_process_seconds": 21744.03255091561,
+  "p6_gpu_process_seconds": 21149.256308959797,
+  "p7_gpu_process_seconds": 22583.527223093202,
+  "cumulative_gpu_process_seconds": 65505.54222541861,
+  "remaining_gpu_process_seconds": 20894.457774581388,
+  "whole_worker_lifetime_counted": true,
+  "budget_reset": false,
+  "jobs": [
+    {
+      "arm": "m54",
+      "seconds": 3619.242549685063,
+      "exit_code": 0
+    },
+    {
+      "arm": "v54",
+      "seconds": 3575.745200554142,
+      "exit_code": 0
+    },
+    {
+      "arm": "m55",
+      "seconds": 3587.673493032111,
+      "exit_code": 0
+    },
+    {
+      "arm": "v55",
+      "seconds": 3620.009063075995,
+      "exit_code": 0
+    },
+    {
+      "arm": "m56",
+      "seconds": 4590.984604918864,
+      "exit_code": 0
+    },
+    {
+      "arm": "v56",
+      "seconds": 3589.872311827028,
+      "exit_code": 0
+    }
+  ]
+}

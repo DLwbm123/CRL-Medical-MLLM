@@ -1,0 +1,20 @@
+{
+  "decision_utc": "2026-10-08T11:42:35.819384+00:00",
+  "status": "NOT_LAUNCHED_BUDGET_ADMISSION_FAILED",
+  "total_authorized_gpu_process_seconds": 86400,
+  "cumulative_gpu_process_seconds": 65505.54222541861,
+  "remaining_gpu_process_seconds": 20894.457774581388,
+  "matrix_trajectories": 6,
+  "reserve_fraction": 0.2,
+  "measured_p7_matrix_seconds": 22583.527223093202,
+  "measured_p7_matrix_with_reserve_seconds": 27100.232667711844,
+  "measured_p6_matrix_seconds": 21149.256308959797,
+  "existing_pipeline_forecast_matrix_seconds": 23796,
+  "existing_pipeline_forecast_with_reserve_seconds": 28555.2,
+  "full_matrix_fits_remaining_budget": false,
+  "new_gpu_processes_launched": 0,
+  "budget_reset": false,
+  "prior_round_deadlines_moved": false,
+  "reason": "Remaining authorization is smaller than both the measured P7 and P6 complete matrices even before the frozen20% reserve. No measured cheaper full paired method is available; no partial matrix or unmeasured speedup is admitted.",
+  "stable_positive_development_result": false
+}
