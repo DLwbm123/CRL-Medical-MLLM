@@ -2,6 +2,14 @@
 
 This repository implements resumable, independently scored continual test-time adaptation for Qwen2.5-VL-3B-Instruct. It extends the original single-update SPINE diagnostic with persistent FP32 master weights and AdamW state, a fixed reference model, state/RNG checkpoints, and four methods on the same fixed stream. SPINE and the matched TTRL comparator are independent implementations; author-code equivalence is not established.
 
+## P4–P7 optimization summary (2026-10-08)
+
+**No method met the fixed three-seed stable-positive development criterion.** P4 failed its frozen-reference reward gate and did not launch the main matrix. P5 sampling alignment passed all conditions for one seed out of three; P6 half-step and P7 stronger KL anchor passed none. All 18 P5–P7 trajectories completed, and all negative outcomes and individual probe harms are retained.
+
+Read the [cross-round report](reports/optimization_summary_20261008.md), [all nine paired-seed rows](reports/optimization_summary_20261008.csv), [cumulative compute receipt](reports/p7_compute_receipt.json), and [next-round budget admission](reports/p7_next_admission.json). Detailed protocols and complete results are in [P4](reports/p4_report.md), [P5](reports/p5_report.md), [P6](reports/p6_report.md), and [P7](reports/p7_report.md). The summary indexes executed source versions, trainer, objective, state, pipeline, evaluator, tests and reproduction instructions.
+
+Whole GPU-worker use is18.1960 of24 hours, leaving5.8040 hours. Another complete matrix is not admitted at measured cost plus the frozen20% reserve. The budget is not exhausted or reset; no new computation has launched. Reused observed groups and different rollout seeds do not establish independent clinical generalization.
+
 ## P3: two-seed reward/format replication (2026-10-07)
 
 The completed replication reuses the 16 observed stream groups with rollout seeds 43 and 44. TTRL history gain changes sign (−6.25/+18.75 pp), and the SPINE–TTRL ranking reverses (+6.25/−12.50 pp before). SPINE current-case scores rise in both seeds, but this small reused sample does not establish superiority. Across four RL trajectories, 250/274 positive-reward rollouts are parsed wrong and high-vote groups are correct in 0/13 observations. Old P2 actors preserve the same five correct groups under a separate legal-option protocol, supporting protocol sensitivity without proving knowledge retention.

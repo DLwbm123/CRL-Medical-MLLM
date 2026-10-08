@@ -1,0 +1,10 @@
+round,seed,stream_n,probe_n,frozen_before_correct,control_before_correct,candidate_before_correct,control_after_correct,candidate_after_correct,control_initial_correct_retained,candidate_initial_correct_retained,control_final_probe_correct,candidate_final_probe_correct,candidate_passed_fixed_seed_conditions
+P5,48,16,16,2,3,4,3,2,3,3,4,4,True
+P5,49,16,16,2,3,3,3,4,3,1,3,1,False
+P5,50,16,16,2,5,3,3,2,2,3,3,3,False
+P6,51,16,16,2,5,4,5,2,3,2,3,2,False
+P6,52,16,16,2,2,3,4,5,2,1,2,1,False
+P6,53,16,16,2,3,1,3,4,1,3,1,3,False
+P7,54,16,16,2,3,2,4,3,3,3,3,3,False
+P7,55,16,16,2,3,3,3,4,3,2,3,3,False
+P7,56,16,16,2,5,5,4,5,3,3,5,3,False
