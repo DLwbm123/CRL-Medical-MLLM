@@ -1,0 +1,122 @@
+{
+  "starting_commit": "3ccabb3baf101f574186fcd63abf9c8a6b31d801",
+  "executed_diagnostic_source": "8ce7c6b69e80a9cafa396f09820673579da18e45",
+  "actors": [
+    {
+      "actor": "base",
+      "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+      "source": "pinned_original_base",
+      "cursor": 0,
+      "seed_for_original_cached_greedy": 42
+    },
+    {
+      "actor": "m54",
+      "seed": 54,
+      "arm": "m",
+      "cursor": 16,
+      "training_source": "a7e8531387997fca8d4e15cda36fd6eaf0b98ea5",
+      "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+      "manifest_sha256": "6bd284f1b7f6faee5054e50f66f99f473d17042866d6ce5dd9fb9e8897d02220",
+      "optimizer_created": false
+    },
+    {
+      "actor": "v54",
+      "seed": 54,
+      "arm": "v",
+      "cursor": 16,
+      "training_source": "a7e8531387997fca8d4e15cda36fd6eaf0b98ea5",
+      "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+      "manifest_sha256": "6bd284f1b7f6faee5054e50f66f99f473d17042866d6ce5dd9fb9e8897d02220",
+      "optimizer_created": false
+    },
+    {
+      "actor": "m55",
+      "seed": 55,
+      "arm": "m",
+      "cursor": 16,
+      "training_source": "a7e8531387997fca8d4e15cda36fd6eaf0b98ea5",
+      "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+      "manifest_sha256": "6bd284f1b7f6faee5054e50f66f99f473d17042866d6ce5dd9fb9e8897d02220",
+      "optimizer_created": false
+    },
+    {
+      "actor": "v55",
+      "seed": 55,
+      "arm": "v",
+      "cursor": 16,
+      "training_source": "a7e8531387997fca8d4e15cda36fd6eaf0b98ea5",
+      "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+      "manifest_sha256": "6bd284f1b7f6faee5054e50f66f99f473d17042866d6ce5dd9fb9e8897d02220",
+      "optimizer_created": false
+    },
+    {
+      "actor": "m56",
+      "seed": 56,
+      "arm": "m",
+      "cursor": 16,
+      "training_source": "a7e8531387997fca8d4e15cda36fd6eaf0b98ea5",
+      "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+      "manifest_sha256": "6bd284f1b7f6faee5054e50f66f99f473d17042866d6ce5dd9fb9e8897d02220",
+      "optimizer_created": false
+    },
+    {
+      "actor": "v56",
+      "seed": 56,
+      "arm": "v",
+      "cursor": 16,
+      "training_source": "a7e8531387997fca8d4e15cda36fd6eaf0b98ea5",
+      "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+      "manifest_sha256": "6bd284f1b7f6faee5054e50f66f99f473d17042866d6ce5dd9fb9e8897d02220",
+      "optimizer_created": false
+    }
+  ],
+  "offline_evaluator_sources": {
+    "P5": "e844f23e840b5f7decdd891b696637fc155c204e",
+    "P6": "b8c4c63b851a7eb901cbd8873c5fd310b786ce51",
+    "P7": "a7e8531387997fca8d4e15cda36fd6eaf0b98ea5"
+  },
+  "pool": {
+    "source_commit": "0d3f87831e0d195534715f9eddb8edbe2f46ace0",
+    "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+    "manifest_sha256": "6076bd13e6c36d0fa12ef88530f5688633d74762e069b9038f8db971dd8b1306",
+    "method": "Frozen SC-8",
+    "seed": 43,
+    "groups": [
+      "S01",
+      "S02"
+    ],
+    "selection": "first_two_original_manifest_stream_groups",
+    "responses_per_group": 8,
+    "stored_token_ids_and_decode_verified": true,
+    "lengths": [
+      {
+        "index": 0,
+        "lengths": [
+          185,
+          168,
+          157,
+          26,
+          71,
+          145,
+          130,
+          219
+        ]
+      },
+      {
+        "index": 1,
+        "lengths": [
+          63,
+          50,
+          53,
+          288,
+          78,
+          46,
+          100,
+          62
+        ]
+      }
+    ]
+  },
+  "all_original_scores_match": true,
+  "stable_alias_mapping_same_across_rounds_verified": true
+}

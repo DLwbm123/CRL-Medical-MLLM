@@ -2,13 +2,19 @@
 
 This repository implements resumable, independently scored continual test-time adaptation for Qwen2.5-VL-3B-Instruct. It extends the original single-update SPINE diagnostic with persistent FP32 master weights and AdamW state, a fixed reference model, state/RNG checkpoints, and four methods on the same fixed stream. SPINE and the matched TTRL comparator are independent implementations; author-code equivalence is not established.
 
+## P8: completed read-only mechanism diagnosis (2026-10-08)
+
+All18 old trajectories matched their sealed scores. Seven actors completed16 common-input probe readouts each, and seven actors completed two fixed old response groups of component-gradient diagnostics, without optimizer updates. Protocol-sensitive failures, recurring wrong consensus and local gradient cancellation coexist; the data do not identify one causal mechanism. P8 used 24.74 whole GPU-worker minutes, leaving 5.3916 of the original24 GPU-process hours.
+
+Read the [P8 report](reports/p8_report.md), [frozen protocol](reports/p8_protocol.md), [case map](reports/p8_case_level_audit.csv), [format audit](reports/p8_format_audit.md), [matched readout](reports/p8_matched_readout.csv), [common-prefix KL](reports/p8_matched_prefix_kl.csv), [gradient components](reports/p8_gradient_components.csv), [compute receipt](reports/p8_compute_receipt.json) and [reproduction guide](reports/p8_reproduce.md). The [P9 draft](reports/p9_proposal.md) prioritizes independently authorized development groups with fixed original methods; it is not launched and has no data/compute admission. Old stable-positive criteria and all P4–P7 negative conclusions remain unchanged.
+
 ## P4–P7 optimization summary (2026-10-08)
 
 **No method met the fixed three-seed stable-positive development criterion.** P4 failed its frozen-reference reward gate and did not launch the main matrix. P5 sampling alignment passed all conditions for one seed out of three; P6 half-step and P7 stronger KL anchor passed none. All 18 P5–P7 trajectories completed, and all negative outcomes and individual probe harms are retained.
 
 Read the [cross-round report](reports/optimization_summary_20261008.md), [all nine paired-seed rows](reports/optimization_summary_20261008.csv), [cumulative compute receipt](reports/p7_compute_receipt.json), and [next-round budget admission](reports/p7_next_admission.json). Detailed protocols and complete results are in [P4](reports/p4_report.md), [P5](reports/p5_report.md), [P6](reports/p6_report.md), and [P7](reports/p7_report.md). The summary indexes executed source versions, trainer, objective, state, pipeline, evaluator, tests and reproduction instructions.
 
-Whole GPU-worker use is18.1960 of24 hours, leaving5.8040 hours. Another complete matrix is not admitted at measured cost plus the frozen20% reserve. The budget is not exhausted or reset; no new computation has launched. Reused observed groups and different rollout seeds do not establish independent clinical generalization.
+At the P7 close, whole GPU-worker use was18.1960 of24 hours, leaving5.8040 hours. Another complete training matrix was not admitted at measured cost plus the frozen20% reserve. The budget was not exhausted or reset; current P8 diagnostic use is recorded above. Reused observed groups and different rollout seeds do not establish independent clinical generalization.
 
 ## P3: two-seed reward/format replication (2026-10-07)
 

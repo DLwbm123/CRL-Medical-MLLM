@@ -1,0 +1,8 @@
+actor,n,strict_correct,strict_parsed,strict_initial_n,strict_initial_retained,legal_correct,legal_initial_n,legal_initial_retained,strict_fail_legal_correct,strict_initial_loss_legal_correct,mean_kl
+base,16,3,13,3,3,5,5,5,2,0,0.0
+m54,16,3,14,3,3,5,5,5,2,0,0.0011354780008332455
+v54,16,3,11,3,3,5,5,5,2,0,0.0010996538144354417
+m55,16,3,12,3,3,5,5,5,2,0,0.0016416734277413525
+v55,16,3,11,3,2,5,5,5,2,1,0.0014900661768706414
+m56,16,5,15,3,3,4,5,4,0,0,0.0011126690016851626
+v56,16,3,13,3,3,5,5,5,2,0,0.0012903043279948179

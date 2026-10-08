@@ -1,0 +1,18 @@
+{
+  "p9_status": "NOT_LAUNCHED_DATA_AND_BUDGET_ADMISSION_MISSING",
+  "latest_cumulative_gpu_process_seconds": 66990.15299156541,
+  "latest_remaining_gpu_process_seconds": 19409.84700843459,
+  "p9_draft_seconds_before_reserve": 116807.39809076581,
+  "reserve_fraction": 0.2,
+  "new_data_authorized": false,
+  "new_training_authorized": false,
+  "full_matrix_admitted": false,
+  "unused_seeds_at_p8_freeze": [
+    57,
+    58,
+    59
+  ],
+  "budget_reset": false,
+  "prior_stable_positive_criterion_unchanged": true,
+  "p9_draft_seconds_with_reserve": 140168.87770891897
+}
