@@ -2,6 +2,10 @@
 
 This repository implements resumable, independently scored continual test-time adaptation for Qwen2.5-VL-3B-Instruct. It extends the original single-update SPINE diagnostic with persistent FP32 master weights and AdamW state, a fixed reference model, state/RNG checkpoints, and four methods on the same fixed stream. SPINE and the matched TTRL comparator are independent implementations; author-code equivalence is not established.
 
+## P10: new frozen visual reward route (2026-10-09)
+
+The [P10 protocol](reports/p10_protocol.md) locks a frozen 7B visual teacher with two option orders and abstention, followed only on reward-gate success by three seeds of original SPINE, matched majority-reward TTRL and matched visual-reward TTRL. New reward/skip checks, legacy behavior checks and tiny state recovery passed on CPU; actual-backbone acceptance and scientific outcomes remain pending. The user added48 GPU-process hours and selected physical GPUs0/1. Old budgets and findings remain recorded; this uses the same retired development groups and does not establish independent generalization. See the [2026 paper review](reports/2026_crl_literature_review.md) and [P10 reproduction guide](reports/p10_reproduce.md).
+
 ## P8: completed read-only mechanism diagnosis (2026-10-08)
 
 All18 old trajectories matched their sealed scores. Seven actors completed16 common-input probe readouts each, and seven actors completed two fixed old response groups of component-gradient diagnostics, without optimizer updates. Protocol-sensitive failures, recurring wrong consensus and local gradient cancellation coexist; the data do not identify one causal mechanism. P8 used 24.74 whole GPU-worker minutes, leaving 5.3916 of the original24 GPU-process hours.

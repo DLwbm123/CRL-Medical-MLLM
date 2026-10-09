@@ -59,6 +59,11 @@ def load_input(folder, entry):
 
 def validate_development_configuration(cfg, acceptance, manifest):
     """P3 varies only its declared rollout seed; P2 keeps its exact check."""
+    if manifest.get("p10_version") == 1:
+        expected = manifest["configurations"].get(cfg.get("p10_arm"), {}).get(str(cfg["seed"]))
+        if expected is None or cfg != expected:
+            raise RuntimeError("Configuration differs from the complete locked P10 matrix")
+        return
     current = {name: value for name, value in cfg.items() if name != "method"}
     accepted = acceptance["validated_configuration_without_method"]
     if "rollout_seeds" not in manifest:
@@ -145,6 +150,17 @@ class Engine:
                 if json.loads(snapshot.read_text()) != signal:
                     raise ValueError("Frozen reward signal changed during resume")
             else:
+                atomic_json(snapshot, signal)
+        if cfg.get("reward_source") == "frozen_visual":
+            from verified_reward import checked_targets
+            folder = out.parent.parent
+            raw = (folder / os.environ.get("P2_MANIFEST", "manifest.json")).read_bytes()
+            signal = json.loads((folder / "reference/targets.json").read_text())
+            self.reward_targets = checked_targets(signal, json.loads(raw), hashlib.sha256(raw).hexdigest())
+            snapshot = out / "reference_signal_snapshot.json"
+            if snapshot.exists() and json.loads(snapshot.read_text()) != signal:
+                raise ValueError("Frozen visual reward signal changed during resume")
+            if not snapshot.exists():
                 atomic_json(snapshot, signal)
         self.method = cfg["method"]
         self.training = self.method in {"TTRL", "SPINE"}
@@ -361,6 +377,16 @@ class Engine:
                 }
         return diagnostics
 
+    def reward_group(self, row, completions):
+        if self.cfg.get("reward_source") == "frozen_visual":
+            from verified_reward import verified_group_rewards
+            return verified_group_rewards(completions, row["options"], self.reward_targets[row["id"]])
+        target = None if self.reward_targets is None else self.reward_targets[row["id"]]
+        rewards, advantages, detail = group_rewards(completions, row["options"], target)
+        if target is not None:
+            detail.update(reward_source="frozen_legal", reward_target=target)
+        return rewards, advantages, detail
+
     def case(self, row, index, drift):
         start, phase_start = time.monotonic(), dict(self.timings)
         with self.phase("preprocess"):
@@ -382,10 +408,7 @@ class Engine:
                     token_sequences.append(response.tolist())
                     self.event("rollout_complete", index=index, response_index=response_index, tokens=len(response),
                                hit_length_cap=len(response) == self.cfg["max_new_tokens"])
-            target = None if self.reward_targets is None else self.reward_targets[row["id"]]
-            rewards, advantages, vote = group_rewards(completions, row["options"], target)
-            if target is not None:
-                vote.update(reward_source="frozen_legal", reward_target=target)
+            rewards, advantages, vote = self.reward_group(row, completions)
             record.update(vote=vote, completions=completions, response_token_ids=token_sequences,
                           response_lengths=[len(response) for response in responses],
                           hit_length_cap=[len(response) == self.cfg["max_new_tokens"] for response in responses],
@@ -394,6 +417,8 @@ class Engine:
             if self.training:
                 if vote["all_unparseable"]:
                     record.update(update_applied=False, skip_reason="all_unparseable")
+                elif vote.get("skip_update_reason") or (self.cfg.get("zero_advantage_policy") == "skip" and vote["zero_advantage_group"]):
+                    record.update(update_applied=False, skip_reason=vote.get("skip_update_reason") or "zero_advantage")
                 else:
                     record["optimization"] = self.update(encoded, responses, advantages, drift)
                     record.update(update_applied=True, skip_reason=None,
@@ -454,6 +479,12 @@ def main():
         if not acceptance["passed"]:
             raise RuntimeError("Engineering acceptance has not passed")
         validate_development_configuration(cfg, acceptance, manifest)
+    if manifest.get("p10_version") == 1:
+        if not json.loads((folder / "scores/qualification.json").read_text())["go"]:
+            raise RuntimeError("Frozen visual reward qualification must pass before any P10 main run")
+        lock = json.loads((folder / "main_budget_lock.json").read_text())
+        if lock["complete_seeds"] != [57, 58, 59] or lock["complete_arms"] != ["s", "t", "v"]:
+            raise RuntimeError("Full P10 matrix compute admission is missing")
     visible = os.environ.get("CUDA_VISIBLE_DEVICES")
     if visible not in {str(cfg["gpu_index"]), os.environ.get("P2_GPU_UUID")} or torch.cuda.device_count() != 1:
         raise RuntimeError("Only the configured authorized GPU may be visible")

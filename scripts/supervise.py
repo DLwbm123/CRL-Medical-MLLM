@@ -124,12 +124,13 @@ def main():
             label = job["label"]
             log_path = FOLDER / "logs" / (label + ".log")
             log_path.parent.mkdir(exist_ok=True)
+            started = time.monotonic()
+            started_utc = datetime.now(timezone.utc).isoformat()
             with log_path.open("x") as log:
                 child = subprocess.Popen([sys.executable, "-u", os.environ["P2_ENTRY"]], env=environment,
                                          stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
             pid = child.pid
-            started = time.monotonic()
-            job_record = {"label": label, "pid": pid, "started_utc": datetime.now(timezone.utc).isoformat(),
+            job_record = {"label": label, "pid": pid, "started_utc": started_utc,
                           "max_seconds": limit, "identity": process_info(pid), "log": str(log_path.relative_to(FOLDER))}
             ledger["jobs"].append(job_record)
             (FOLDER / "controller.json").write_text(json.dumps(ledger, indent=2))

@@ -212,6 +212,7 @@ def test_invalid_and_label_boundaries(folder):
     engine = object.__new__(Engine)
     engine.cfg = {"rollouts": 8, "max_new_tokens": 2048}
     engine.method, engine.training, engine.out = "SPINE", True, folder
+    engine.reward_targets = None
     engine.state, engine.timings = SimpleNamespace(updates=4), {}
     engine.event = lambda *args, **kwargs: None
     engine.phase = lambda _: contextlib.nullcontext()
