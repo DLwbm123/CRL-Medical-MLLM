@@ -1,0 +1,7 @@
+seed,sampler,cached_max_logp_difference,uncached_max_logp_difference,cached_within_original_tolerance,absolute_tolerance,same_sampled_tokens,training_loss_validated
+87,s,0.0,0.09016227722167969,True,0.1,True,False
+87,t,0.0,0.09016227722167969,True,0.1,True,False
+88,s,0.0,0.05329883098602295,True,0.1,True,False
+88,t,0.0,0.05329883098602295,True,0.1,True,False
+89,s,0.0,0.05329883098602295,True,0.1,True,False
+89,t,0.0,0.05329883098602295,True,0.1,True,False

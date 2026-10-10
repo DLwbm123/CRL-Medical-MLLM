@@ -1,0 +1,69 @@
+{
+  "total_authorized_seconds": 259200.0,
+  "prior_used_seconds": 84021.01047639032,
+  "p20_used_seconds": 12804.17689027499,
+  "cumulative_seconds": 96825.18736666531,
+  "remaining_seconds": 162374.81263333472,
+  "budget_reset": false,
+  "whole_worker_lifetime_counted": true,
+  "gpu_jobs": [
+    {
+      "stage": "qualification",
+      "job": "frozen-verifier",
+      "seconds": 775.5709883399977,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-s87",
+      "seconds": 1948.8486745769987,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-t87",
+      "seconds": 2027.0551822429989,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-s88",
+      "seconds": 1973.520125308998,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-t88",
+      "seconds": 1915.1966754530004,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-s89",
+      "seconds": 1952.0382311479989,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-t89",
+      "seconds": 2211.9470132049973,
+      "return_code": 0,
+      "timeout": false
+    }
+  ],
+  "cpu_resource_jobs": [
+    {
+      "stage": "resources",
+      "job": "resource",
+      "seconds": 0.06480474999989383,
+      "return_code": 0,
+      "timeout": false
+    }
+  ]
+}

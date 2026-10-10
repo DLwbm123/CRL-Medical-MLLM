@@ -1,0 +1,8 @@
+stage,job,seconds,return_code,timeout
+qualification,frozen-verifier,775.5709883399977,0,False
+main,pool-s87,1948.8486745769987,0,False
+main,pool-t87,2027.0551822429989,0,False
+main,pool-s88,1973.520125308998,0,False
+main,pool-t88,1915.1966754530004,0,False
+main,pool-s89,1952.0382311479989,0,False
+main,pool-t89,2211.9470132049973,0,False
