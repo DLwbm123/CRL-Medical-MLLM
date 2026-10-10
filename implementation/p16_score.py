@@ -26,7 +26,7 @@ def block_gate(majority, verified, correct, accepted):
     return {"go": all(values), "checks": checks}
 
 
-def main():
+def main(reference="reference", score_directory="scores", teacher=None):
     root = Path(os.environ["P0_ROOT"]); folder = root / "outputs" / os.environ["P2_CAMPAIGN"]
     for name in ["qualifier_owned_ended.json", "owned_cleanup_before_score.json"]:
         if not json.loads((folder / name).read_text())["owned_main_processes_ended"]:
@@ -39,8 +39,10 @@ def main():
     manifest = json.loads(raw); entries = manifest["stream"] + manifest["probe"]
     if len(manifest["stream"]) != 32 or len(manifest["probe"]) != 32 or len({e["id"] for e in entries}) != 64:
         raise ValueError("Fixed 32+32 image-group scope differs")
-    signal = json.loads((folder / "reference/targets.json").read_text())
-    targets = checked_targets({**signal, "stream": signal["stream"] + signal["probe"]}, {**manifest, "stream": entries}, digest)
+    scores = folder / score_directory
+    scores.mkdir(exist_ok=True)
+    signal = json.loads((folder / reference / "targets.json").read_text())
+    targets = checked_targets({**signal, "stream": signal["stream"] + signal["probe"]}, {**manifest, "stream": entries, "teacher": teacher or manifest["teacher"]}, digest)
     if signal["code_commit"] != os.environ["P2_CODE_COMMIT"]: raise ValueError("Teacher source differs")
     choices = {e["id"]: load_input(folder, e)["options"] for e in entries}
     loaded = {}
@@ -60,7 +62,7 @@ def main():
             if row["vote"]["answers"] != [extract_answer(t, choices[row["id"]]) for t in row["completions"]] or row["vote"]["winner"] != vote["winner"] or row["rewards"] != (None if rewards is None else rewards.tolist()):
                 raise ValueError("Original strict parse or majority rewards differ")
         loaded[name] = rows
-    atomic_json(folder / "scores/prediction_seal.json", {"manifest_sha256": digest, "coverage": {k: len(v) for k, v in loaded.items()}, "labels_read_before_seal": False})
+    atomic_json(scores / "prediction_seal.json", {"manifest_sha256": digest, "coverage": {k: len(v) for k, v in loaded.items()}, "labels_read_before_seal": False})
     labels = {}
     source = Path(os.environ["P10_SOURCE_ROOT"]) / "views/evaluation_labels/SLAKE/train.jsonl"
     for line in source.open():
@@ -106,9 +108,9 @@ def main():
         "unique_groups": 64, "repeated_group_observations": 384, "candidate_count": 3072, "teacher_readouts": 128,
         "optimizer_updates": 0, "training_performed": False, "stable_positive_development_result": False,
         "independent_clinical_generalization_established": False, "labels_used_only_after_all_workers_sealed_and_ended": True}
-    atomic_json(folder / "scores/qualification.json", public)
-    atomic_json(folder / "scores/anonymous_teacher_cases.json", teacher_rows)
-    atomic_json(folder / "scores/anonymous_pool_cases.json", cases)
+    atomic_json(scores / "qualification.json", public)
+    atomic_json(scores / "anonymous_teacher_cases.json", teacher_rows)
+    atomic_json(scores / "anonymous_pool_cases.json", cases)
     print(json.dumps({"go": public["go"], "groups": 64, "optimizer_updates": 0}), flush=True)
 
 

@@ -15,7 +15,7 @@ from state import atomic_json
 from verified_reward import agreed_target, judge_messages, parse_judgment
 
 
-def main():
+def main(teacher_key=None):
     root = Path(os.environ["P0_ROOT"])
     folder = root / "outputs" / os.environ["P2_CAMPAIGN"]
     raw = (folder / "manifest.json").read_bytes()
@@ -23,7 +23,9 @@ def main():
     if digest != (folder / "manifest.sha256").read_text().strip():
         raise ValueError("Locked manifest changed")
     manifest = json.loads(raw)
-    spec = manifest["teacher"]
+    spec = manifest["teacher"] if teacher_key is None else manifest["teachers"][teacher_key]
+    reference = folder / "reference" if teacher_key is None else folder / "reference" / teacher_key
+    reference.mkdir(exist_ok=True)
     if torch.cuda.device_count() != 1 or os.environ["CUDA_VISIBLE_DEVICES"] != os.environ["P2_GPU_UUID"]:
         raise ValueError("Verifier must see exactly the authorized UUID")
     deadline = Deadline(time.monotonic() + float(os.environ["P2_MAX_JOB_SECONDS"]))
@@ -43,7 +45,7 @@ def main():
     generation = GenerationConfig(bos_token_id=actor.config.bos_token_id, pad_token_id=actor.generation_config.pad_token_id,
         eos_token_id=actor.generation_config.eos_token_id, do_sample=False, max_new_tokens=spec["max_new_tokens"], use_cache=True)
     output = {"teacher_revision": spec["revision"], "manifest_sha256": digest, "labels_read": False, "stream": [], "probe": []}
-    destination = folder / "reference/targets.json"
+    destination = reference / "targets.json"
     if destination.exists():
         raise RuntimeError("Frozen target worker cannot replace an existing signal")
     with torch.inference_mode():
@@ -70,14 +72,14 @@ def main():
                     record["readouts"].append({"reverse": reverse, "text": answer, "tokens": len(tokens), "hit_length_cap": len(tokens) == spec["max_new_tokens"]})
                 record["target"] = agreed_target(record["judgments"])
                 output[section].append(record)
-                atomic_json(folder / "reference/progress.json", output)
+                atomic_json(reference / "progress.json", output)
                 print(json.dumps({"stage": "verifier_case", "section": section, "cursor": index + 1, "accepted": record["target"] is not None}), flush=True)
     if versions != {n: p._version for n, p in actor.named_parameters()} or any(p.requires_grad or p.grad is not None for p in actor.parameters()):
         raise ValueError("Frozen teacher parameter versions or gradient state changed")
     output.update(weights_unchanged=True, parameter_version_check=True, full_weight_byte_comparison=False, sealed=True,
                   code_commit=os.environ["P2_CODE_COMMIT"], model_family_independence=False, distinct_size_checkpoint=True)
     atomic_json(destination, output)
-    atomic_json(folder / "reference/completion.json", {"sealed": True, "stream": len(output["stream"]), "probe": len(output["probe"]), "labels_read": False})
+    atomic_json(reference / "completion.json", {"sealed": True, "stream": len(output["stream"]), "probe": len(output["probe"]), "labels_read": False})
 
 
 if __name__ == "__main__":

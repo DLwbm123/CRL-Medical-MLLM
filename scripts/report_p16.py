@@ -7,7 +7,7 @@ from report_p10 import write_csv
 from p16_score import CHECKS
 
 
-def export(folder, output, prefix="p16", seeds=(75, 76, 77)):
+def export(folder, output, prefix="p16", seeds=(75, 76, 77), score_directory="scores"):
     final = json.loads((folder / "FINAL.json").read_text())
     if "finished_utc" not in final: raise ValueError("Campaign has not ended")
     jobs, cpu = [], []
@@ -26,12 +26,13 @@ def export(folder, output, prefix="p16", seeds=(75, 76, 77)):
         prefix + "_used_seconds": used, "cumulative_seconds": final["cumulative_gpu_process_seconds"],
         "remaining_seconds": final["remaining_gpu_process_seconds"], "budget_reset": False,
         "whole_worker_lifetime_counted": True, "gpu_jobs": jobs, "cpu_resource_jobs": cpu}
-    path = folder / "scores/qualification.json"; gate = json.loads(path.read_text()) if path.exists() else None
+    scores = folder / score_directory
+    path = scores / "qualification.json"; gate = json.loads(path.read_text()) if path.exists() else None
     audit_path = folder / "offline_failure_audit.json"
     failure_audit = json.loads(audit_path.read_text()) if audit_path.exists() else None
     engineering_path = folder / "engineering_failure_audit.json"
     engineering = json.loads(engineering_path.read_text()) if engineering_path.exists() else None
-    teacher_path = folder / "scores/anonymous_teacher_cases.json"; pool_path = folder / "scores/anonymous_pool_cases.json"
+    teacher_path = scores / "anonymous_teacher_cases.json"; pool_path = scores / "anonymous_pool_cases.json"
     if not teacher_path.exists(): teacher_path = folder / "scores/anonymous_label_free_teacher_cases.json"
     if not pool_path.exists(): pool_path = folder / "scores/anonymous_label_free_pool_cases.json"
     teachers = json.loads(teacher_path.read_text()) if teacher_path.exists() else [
