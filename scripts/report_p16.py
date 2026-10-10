@@ -29,6 +29,8 @@ def export(folder, output, prefix="p16", seeds=(75, 76, 77)):
     path = folder / "scores/qualification.json"; gate = json.loads(path.read_text()) if path.exists() else None
     audit_path = folder / "offline_failure_audit.json"
     failure_audit = json.loads(audit_path.read_text()) if audit_path.exists() else None
+    engineering_path = folder / "engineering_failure_audit.json"
+    engineering = json.loads(engineering_path.read_text()) if engineering_path.exists() else None
     teacher_path = folder / "scores/anonymous_teacher_cases.json"; pool_path = folder / "scores/anonymous_pool_cases.json"
     if not teacher_path.exists(): teacher_path = folder / "scores/anonymous_label_free_teacher_cases.json"
     if not pool_path.exists(): pool_path = folder / "scores/anonymous_label_free_pool_cases.json"
@@ -43,6 +45,8 @@ def export(folder, output, prefix="p16", seeds=(75, 76, 77)):
         for arm in ["s", "t"]:
             metric = next((p for p in gate["pool_metrics"] if p["seed"] == seed and p["sampler"] == arm), None) if gate else None
             row = {"seed": seed, "sampler": arm, "groups": 64, "optimizer_updates": 0, "retention_harm": "NA_no_update"}
+            job = next((j for j in jobs if j["job"] == f"pool-{arm}{seed}"), None)
+            row["execution_status"] = "completed" if job and job["return_code"] == 0 else "failed" if job else "not_started"
             observed = [c for c in cases if c["seed"] == seed and c["sampler"] == arm]
             row["invalid_candidates"] = sum(8 - c["valid_candidates"] for c in observed) if all("valid_candidates" in c for c in observed) else "NA"
             row["groups_with_length_cap"] = sum(c["any_length_cap"] for c in observed) if all("any_length_cap" in c for c in observed) else "NA"
@@ -57,8 +61,8 @@ def export(folder, output, prefix="p16", seeds=(75, 76, 77)):
     for name, rows in [("teacher_cases", teachers), ("pool_results", pools), ("all_pool_cases", cases), ("qualification_checks", checks), ("gpu_jobs", jobs)]:
         write_csv(output / (prefix + "_" + name + ".csv"), rows)
     for name, value in [("results", {"status": final["status"], "source_commit": final["code_commit"], "qualification": gate,
-        "failure_type": failure_audit["failure_type"] if failure_audit else final.get("error", "").split(":", 1)[0] or None,
-        "offline_failure_audit": failure_audit, "stable_positive_development_result": False,
+        "failure_type": engineering["failure_type"] if engineering else failure_audit["failure_type"] if failure_audit else final.get("error", "").split(":", 1)[0] or None,
+        "offline_failure_audit": failure_audit, "engineering_failure_audit": engineering, "stable_positive_development_result": False,
         "training_performed": False, "compute": receipt}), ("compute_receipt", receipt)]:
         (output / (prefix + "_" + name + ".json")).write_text(json.dumps(value, indent=2) + "\n")
     table = "\n".join(["| Block / sampler | Accepted /32 | Correct accepted /32 | Six checks passed |", "| --- | --- | --- | --- |"] +
@@ -67,11 +71,13 @@ def export(folder, output, prefix="p16", seeds=(75, 76, 77)):
         f"64 SLAKE English training image groups selected for an intended yes/no task, fixed32 calibration +32 verification; six frozen SC-8 pools at seeds{'/'.join(map(str, seeds))} and two sampling distributions. Validation/test image-reference overlaps and conservative thumbnail duplicates were excluded. Patient independence and absence of pretraining overlap remain unverified.",
         "This new binary development task differs from retired MedXpertQA and cannot reverse its negative results or establish independent clinical generalization. Teacher self-reported visual support is a fallible proxy.", table,
         "Reward qualified: " + (str(gate["go"]) if gate else "NA") + ". No optimizer/backward/training was performed; actor retention transitions are NA. This qualification does not establish stable RL improvement, causality or success on the original task.",
-        "All64 teacher rows, six pool summaries,384 repeated case observations and24 checks are retained, including negative/invalid/NA outcomes. Repeated group observations are not384 independent images. No truth entered the reward signal; scoring occurred only after every frozen worker sealed and ended.",
+        "All64 teacher rows, six planned pool summaries,384 planned case observations and24 checks are retained, including negative/invalid/NA outcomes. Planned rows are not completed observations or384 independent images. No truth entered the reward signal; accuracy scoring requires the complete scope to seal and every worker to end.",
         f"Complete GPU-worker lifetime: {used / 3600:.6f}h this round; {receipt['cumulative_seconds'] / 3600:.6f}/72h cumulative; {receipt['remaining_seconds'] / 3600:.6f}h remaining. CPU resource cost is separate; no budget reset or archive double counting.",
         "Private identifiers, medical text/options/labels/images, teacher targets/readout text, checkpoints/full logs and private paths are omitted. Future training requires a separately frozen complete protocol and budget admission. Public delivery requires effective-proxy push and final remote SHA/anonymous access verification."]
     if failure_audit:
         text.insert(2, f"Input contract failure: {failure_audit['nonbinary_label_count']}/{failure_audit['selected_groups']} selected official answers were outside the fixed yes/no domain. All seven GPU workers completed and sealed before this was discovered during offline scoring. The frozen protocol correctly stopped without dropping a question, coercing its label or changing the scorer. Reward accuracy, all24 qualification checks and scientific reward status remain NA; this is not evidence that the reward source passed or failed. The original failed FINAL is preserved.")
+    if engineering:
+        text.insert(2, f"Engineering failure: {engineering['teacher_readouts']} teacher readouts completed and sealed; the first candidate pool stopped at its probability check before case collection. Generation/recomputation maximum absolute log-probability difference was {engineering['max_logp_difference']}, above the unchanged {engineering['absolute_tolerance']} limit. Five remaining pools never started. All owned sessions ended. No accuracy or reward qualification was scored; all scientific outcomes remain NA. The original failed FINAL is preserved. BF16 numerical sensitivity is a hypothesis for a separate precision diagnostic, not a demonstrated cause or a reason to relax the threshold.")
     if prefix == "p17":
         text.insert(2, "Before generation, training annotations were screened solely for membership in the fixed yes/no answer vocabulary; this task admission is not label-blind. Selection did not use which binary class was correct, model accuracy or previous reward outcomes. All64 P16 image references were excluded. Class labels were removed before GPU inputs; accuracy scoring remained gated by complete worker closure. P16's failed FINAL and NA scientific result remain unchanged.")
     (output / (prefix + "_report.md")).write_text("\n\n".join(text) + "\n")

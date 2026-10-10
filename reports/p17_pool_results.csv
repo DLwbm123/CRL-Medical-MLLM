@@ -1,0 +1,7 @@
+seed,sampler,groups,optimizer_updates,retention_harm,execution_status,invalid_candidates,groups_with_length_cap,majority_correct_negative_percent,majority_wrong_positive_percent,verified_correct_negative_percent,verified_wrong_positive_percent
+78,s,64,0,NA_no_update,failed,NA,NA,NA,NA,NA,NA
+78,t,64,0,NA_no_update,not_started,NA,NA,NA,NA,NA,NA
+79,s,64,0,NA_no_update,not_started,NA,NA,NA,NA,NA,NA
+79,t,64,0,NA_no_update,not_started,NA,NA,NA,NA,NA,NA
+80,s,64,0,NA_no_update,not_started,NA,NA,NA,NA,NA,NA
+80,t,64,0,NA_no_update,not_started,NA,NA,NA,NA,NA,NA

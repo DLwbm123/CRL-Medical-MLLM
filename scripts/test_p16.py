@@ -52,6 +52,13 @@ def main():
         import csv
         with (root / "new_public/p17_all_pool_cases.csv").open() as stream:
             assert {int(r["seed"]) for r in csv.DictReader(stream)} == {78, 79, 80}
+        (folder / "offline_failure_audit.json").unlink()
+        (folder / "engineering_failure_audit.json").write_text(json.dumps({"failure_type": "probability_check_failure", "teacher_readouts": 128,
+            "max_logp_difference": .13839125633239746, "absolute_tolerance": .1}))
+        export(folder, root / "new_public", "p17", (78, 79, 80))
+        engineering = json.loads((root / "new_public/p17_results.json").read_text())
+        assert engineering["failure_type"] == "probability_check_failure" and engineering["qualification"] is None
+        assert "Five remaining pools never started" in (root / "new_public/p17_report.md").read_text()
         folder = root / "outputs" / "fixture"; folder.mkdir(parents=True)
         for part in ["inputs", "reference", "scores", "controllers"]: (folder / part).mkdir()
         entries = []

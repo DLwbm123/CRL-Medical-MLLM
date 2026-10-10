@@ -1,0 +1,3 @@
+stage,job,seconds,return_code,timeout
+qualification,frozen-verifier,569.6888638419987,0,False
+main,pool-s78,16.958547540998552,1,False

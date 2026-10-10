@@ -1,0 +1,34 @@
+{
+  "total_authorized_seconds": 259200.0,
+  "prior_used_seconds": 82555.79422453532,
+  "p17_used_seconds": 586.6474113829972,
+  "cumulative_seconds": 83142.44163591831,
+  "remaining_seconds": 176057.5583640817,
+  "budget_reset": false,
+  "whole_worker_lifetime_counted": true,
+  "gpu_jobs": [
+    {
+      "stage": "qualification",
+      "job": "frozen-verifier",
+      "seconds": 569.6888638419987,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-s78",
+      "seconds": 16.958547540998552,
+      "return_code": 1,
+      "timeout": false
+    }
+  ],
+  "cpu_resource_jobs": [
+    {
+      "stage": "resources",
+      "job": "resource",
+      "seconds": 0.11473784099507611,
+      "return_code": 0,
+      "timeout": false
+    }
+  ]
+}
