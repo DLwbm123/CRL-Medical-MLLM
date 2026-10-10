@@ -58,6 +58,15 @@ def supervise(plan_name, gpu_index, gpu_uuid):
         atomic_json(FOLDER / "qualifier_owned_ended.json", json.loads((FOLDER / "owned_cleanup_before_score.json").read_text()))
 
 
+def check_resource_closure(ledger, download, spec, expected_boot, current_boot):
+    if ledger.get("status") != "all_planned_jobs_completed" or len(ledger.get("jobs", [])) != 1 or ledger["jobs"][0].get("return_code") != 0 or ledger["jobs"][0].get("timeout_or_stop"):
+        raise ValueError("CPU resource worker did not fully complete")
+    if download.get("repo") != spec["repo"] or download.get("revision") != spec["revision"] or download.get("publisher_size_check") is not True:
+        raise ValueError("Pinned teacher resource receipt differs")
+    if not expected_boot or expected_boot != current_boot:
+        raise ValueError("Host boot changed after recovery preparation")
+
+
 def main():
     for signum in [signal.SIGTERM, signal.SIGINT]: signal.signal(signum, stop)
     if (FOLDER / "PIPELINE_STARTED.json").exists() or (FOLDER / "FINAL.json").exists():
@@ -66,7 +75,23 @@ def main():
              "status": "resource_preparation", "public_delivery_complete": False}
     atomic_json(FOLDER / "PIPELINE_STARTED.json", final)
     try:
-        invoke("download", "teacher-download.log")
+        budget = json.loads((ROOT / "metadata/campaign_budget.json").read_text())
+        if "recovery_boot_id" in budget:
+            round_remaining = (datetime.fromisoformat(budget["gpu_stop_utc"]) - datetime.now(timezone.utc)).total_seconds()
+            if not admitted_seconds(budget["remaining_total_gpu_process_seconds_at_start"], round_remaining,
+                                    budget["complete_scope_estimated_gpu_process_seconds"], budget["reserve_fraction"]):
+                raise ValueError("Complete recovery scope plus reserve no longer fits")
+            supervise("resources", 0, os.environ["P10_GPU0_UUID"])
+            spec = json.loads((FOLDER / "manifest.json").read_text())["teacher"]
+            download = json.loads((Path(spec["model_path"]) / "download_receipt.json").read_text())
+            ledger = json.loads((FOLDER / "controllers/resources-plan.json").read_text())
+            boot = Path("/proc/sys/kernel/random/boot_id").read_text().strip()
+            check_resource_closure(ledger, download, spec, budget["recovery_boot_id"], boot)
+            atomic_json(FOLDER / "resource_ready.json", {"sealed": True, "boot_id": boot,
+                "code_commit": os.environ["P2_CODE_COMMIT"], "teacher_revision": spec["revision"],
+                "cpu_worker_ended": True, "gpu_process_seconds": 0})
+        else:
+            invoke("download", "teacher-download.log")
         atomic_json(FOLDER / "STATUS.json", {"stage": "reward_qualification"})
         supervise("qualification", 1, os.environ["P10_GPU1_UUID"])
         invoke("gate", "qualification-score.log")

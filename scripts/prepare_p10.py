@@ -21,7 +21,7 @@ def prepare(prefix="p10", seeds=(57, 58, 59), prior=66990.15299156541,
     manifest = json.loads((old_folder / "manifest.json").read_text())
     for key in ["p3_version", "p4_version", "p5_version", "p6_version", "p7_version"]:
         manifest.pop(key, None)
-    if prefix not in {"p10", "p11"} or len(seeds) != 3 or len(set(seeds)) != 3 or not 0 <= prior < 259200:
+    if prefix not in {"p10", "p11", "p12"} or len(seeds) != 3 or len(set(seeds)) != 3 or not 0 <= prior < 259200:
         raise ValueError("Invalid complete campaign or continuous cost")
     seeds = list(seeds)
     manifest.update(p10_version=1, campaign_prefix=prefix, rollout_seeds=seeds, probe_cursors=[0, 16], drift_cursors=[16],

@@ -1,0 +1,53 @@
+{
+  "campaign": "p12-20261010T064959",
+  "stage": "prepared_not_started",
+  "teacher_repo": "lingshu-medical-mllm/Lingshu-7B",
+  "teacher_revision": "b98aecd41dfd9d7545a6b8e2f4743ae8471bd7a9",
+  "reserved_seeds": [
+    63,
+    64,
+    65
+  ],
+  "arms": [
+    "s",
+    "t",
+    "v"
+  ],
+  "budget": {
+    "total_gpu_process_seconds": 259200.0,
+    "prior_gpu_process_seconds": 67363.9203985543,
+    "remaining_total_gpu_process_seconds_at_start": 191836.0796014457,
+    "added_authorization_gpu_process_seconds": 172800.0,
+    "budget_reset": false,
+    "gpu_stop_utc": "2026-10-12T04:50:35.285383+00:00",
+    "hard_deadline_utc": "2026-10-12T06:50:35.285383+00:00",
+    "qualification_gpu_limit_seconds": 7200.0,
+    "acceptance_gpu_limit_seconds": 1800.0,
+    "main_estimated_gpu_process_seconds": 43118.86144426977,
+    "reserve_fraction": 0.2,
+    "main_seeds": [
+      63,
+      64,
+      65
+    ],
+    "main_arms": [
+      "s",
+      "t",
+      "v"
+    ],
+    "authorized_physical_gpus": [
+      0,
+      1
+    ],
+    "completed_controller_archives_counted_again": false,
+    "resource_preparation_cpu_limit_seconds": 7200,
+    "complete_scope_estimated_gpu_process_seconds": 52118.86144426977,
+    "complete_scope_required_with_reserve": 62542.63373312372
+  },
+  "cpu_checks_passed": true,
+  "qualification_result": null,
+  "training_admitted": false,
+  "stable_positive_development_result": null,
+  "previous_failure_preserved": true,
+  "independent_generalization_established": false
+}

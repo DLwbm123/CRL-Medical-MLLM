@@ -74,15 +74,17 @@ def export(prefix="p10"):
     table = "\n".join(["| Seed | Arm | Before /16 | After /16 | Same correct probes retained /3 |", "| --- | --- | --- | --- | --- |"] +
         [f"| {r['seed']} | {r['arm']} | {r['before_correct']} | {r['after_correct']} | {r['retained_initial_correct']} |" for r in main_rows]) if main_rows else "No complete training matrix was scored."
     precision = f"{100 * gate['correct_targets'] / gate['accepted']:.1f}%" if gate and gate["accepted"] else "NA"
+    def percent(value):
+        return f"{value:.4f}%" if value is not None else "NA"
     text = [f"# {prefix.upper()} completed frozen visual reward campaign", f"Final status: {final['status']}. Executed source: {final['code_commit']}.",
-            "Qualification used all18 old candidate trajectories, but only16 unique already observed stream groups. Frozen7B self-reported evidence/consistency and two-order agreement are fallible proxies. No independent medical or domain-shift generalization is established.",
+            ("Qualification used all18 old candidate trajectories, but only16 unique already observed stream groups." if gate else "No sealed qualification result; the planned18 old candidate trajectories have not been scored.") + " Frozen7B self-reported evidence/consistency and two-order agreement are fallible proxies. No independent medical or domain-shift generalization is established.",
             (f"Teacher accepted {gate['accepted']}/16 stream groups; {gate['correct_targets']} accepted targets were correct "
              f"({precision} accepted precision). "
-             f"Correct candidates with negative advantage: majority {gate['majority']['correct_negative']['percent']:.4f}% versus teacher {gate['verified']['correct_negative']['percent']:.4f}%. "
-             f"Wrong candidates among positive rewards: majority {gate['majority']['wrong_positive']['percent']:.4f}% versus teacher {gate['verified']['wrong_positive']['percent']:.4f}%. "
+             f"Correct candidates with negative advantage: majority {percent(gate['majority']['correct_negative']['percent'])} versus teacher {percent(gate['verified']['correct_negative']['percent'])}. "
+             f"Wrong candidates among positive rewards: majority {percent(gate['majority']['wrong_positive']['percent'])} versus teacher {percent(gate['verified']['wrong_positive']['percent'])}. "
              f"Legacy probe teacher accepted {gate['teacher_probe_accepted']}/16; {gate['teacher_probe_correct']} accepted targets were correct."
              if gate else "NA; no sealed gate outcome."), gate_table, table,
-            "This is a scientific reward-qualification rejection, not a runtime failure, when the qualifier exits0 and go is false. No actor update, actual-backbone acceptance or seed-arm training was launched after rejection; actor retention and training harms are therefore not applicable. The anonymous case table reports all32 teacher outcomes, including abstentions and parsing failures; it does not measure an actor before/after transition.",
+            ("The sealed reward gate rejected this source. No actor update, actual-backbone acceptance or seed-arm training followed; actor retention and training harms are not applicable." if gate and not gate["go"] else "Runtime failure or incomplete admission is not evidence of a scientific negative; unscored outcomes remain NA.") + " The anonymous case table covers teacher outcomes and does not measure an actor before/after transition.",
             "All nine seed-arm outcomes and every anonymous probe correctness/parse harm are retained when the matrix closes. No checkpoint/seed/format selection substitutes for the original strict prequential primary metric.",
             "Stable-positive development: " + (str(matrix["stable_positive_development_result"]) if matrix else "NA; training not completed."),
             f"Whole GPU-worker lifetime: {used / 3600:.6f}h this campaign; {receipt['cumulative_seconds'] / 3600:.6f}h cumulative of72h; {receipt['remaining_seconds'] / 3600:.6f}h remaining. Old costs were not reset or counted twice.",
