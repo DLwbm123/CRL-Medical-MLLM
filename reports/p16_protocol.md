@@ -1,0 +1,35 @@
+# P16: independent SLAKE medical reward validation (frozen before readouts)
+
+The user delegated selection of suitable new medical development data on 2026-10-10. P15's medical teacher accepted5/16 retired MedXpertQA groups with2 correct; its six gates failed. Repairing the remaining parse failures could not meet its fixed coverage gate. P16 changes the development scope to new SLAKE training image groups rather than searching prompts on those retired cases. This is a new, easier binary task; it does not overturn P4–P15 or demonstrate improvement on MedXpertQA.
+
+## Data and exclusions
+
+Use the official re-cleaned SLAKE1.0 mirror BoKelvin/SLAKE at revision a9083ce6c34ac3ffb17671a605962924d8a8f9e9. Author information: https://www.med-vqa.com/slake/ and https://huggingface.co/datasets/BoKelvin/SLAKE/blob/main/README.md . The released split images overlap: train/validation130, train/test142, validation/test26. Therefore exclude every validation/test image reference before selecting training questions. Those held-out views are accessed solely to extract image-reference metadata; no held-out labels, model outputs or scoring are accessed.
+
+Only English CLOSED, non-KG training questions starting with a yes/no auxiliary are eligible. Options are always A=yes and B=no, constructed from the question type, never from its answer. Strip all answer fields before selection; choose one question per eligible image reference with selection seed20261010, shuffle deterministically, then take64 groups after conservative32×32 RGB thumbnail equality exclusions within the new selection and against the previous32 observed images. No question is selected by correctness. First32 are calibration, last32 verification. Both are fixed before outputs and are fully evaluated without intervening tuning. Labels are read only after all teacher and six candidate-pool workers have sealed and ended. A nonbinary selected label fails validation; no dropping or reselection is allowed.
+
+Image references are grouped, but patient/study independence, broad content equivalence and absence of foundation-model pretraining overlap are unverified. Small thumbnail equality is a conservative duplicate exclusion, not full image equality or clinical deidentification proof. This is prospective development validation in this workflow, not an independent clinical generalization or final-test claim.
+
+## Fixed methods and scope
+
+Keep P15's Lingshu-7B teacher at b98aecd41dfd9d7545a6b8e2f4743ae8471bd7a9, evidence-first prompt, unchanged strict JSON-suffix schema, greedy1024 tokens, original processor/images and two fixed option orders with canonical remapping. Accept only supported+consistent and agreeing choices; otherwise abstain. Generate128 fresh readouts (64×2); do not reuse P15 targets or adjust teacher prompt/parser/thresholds.
+
+Frozen actor Qwen2.5-VL-3B-Instruct at66285546d2b821cf421d4f5eb2576359d3770cd3 generates SC-8 pools for reserved new seeds75/76/77. Sampler s uses original0.7/0.95; sampler t uses1/1. Other settings, actor prompt and original strict answer parser remain fixed, including2048-token cap, top-k0 and repetition penalty1. Six workers cover all64 questions, giving3072 sampled candidates and384 repeated group observations, still only64 unique image groups. Each worker performs an actual unwarped generation/recompute probability check. Parameter-version and gradient guards verify no update; no optimizer, backward, weight checkpoint rewrite or actor training occurs. The original sampler is not claimed to match a raw on-policy loss. P16 diagnoses sampling and reward direction, not SPINE/TTRL training objectives or causal RL improvement.
+
+## Qualification and stopping
+
+For each fixed32-group block and each sampler, pool all three seeds and require all six checks: accepted≥16/32; correct accepted≥12/32; precision≥75%; correct-candidate negative-advantage rate strictly lower than matched majority; wrong-candidate positive-reward rate at least10 percentage points lower; at least one correct minority response rescued. All four block×sampler decisions (24 checks) must pass. Undefined rates fail. Keep all per-seed metrics, invalid answers, token caps, failures and NA outcomes. Repeated minority rescues are rollout observations, not additional patients. No choosing a seed/checkpoint, partial matrix, prompt search or scoring change after outputs.
+
+Qualification alone is not experimental success. P16 has no automatic training path. A future training round must separately freeze original SPINE and matched TTRL controls, three unused seeds, actual model acceptance, full scope/cost+20% reserve, independent deadlines and unchanged strict prequential primary/retention conditions before launch. No final-test access or extra resources is authorized by P16.
+
+## Continuous budget and execution
+
+Total authorization remains72 GPU-process hours (259200s). Prior complete-worker cost68746.33746506431s is retained; remaining190453.6625349357s. Use measured old slowest16-case full trajectory4590.984604918864s as a conservative cost proxy: six64-case pools cost6×4×that, plus7200s teacher allowance; require20% reserve on the complete scope. This is a prior measured full-worker proxy, not a measured new SLAKE speed or assumed acceleration. Each pool cap21600s, teacher7200s, CPU resources7200s. One GPU worker at a time: teacher physicalGPU1, frozen poolsGPU0. CPU preparation/download is recorded separately and hides CUDA. New GPU stop is46h and hard deadline48h after preparation; exact immutable UTC clocks are written before launch. All prior deadlines remain unchanged.
+
+Use existing supervisor, neutral parent/child entry and visible argv/env mapping, same-host-boot resource closure, immutable manifest seal, full session-end verification before labels, complete lifetime ledger including loading/CPU work/saving/failed exits, and hourly bounded monitoring. Large resources remain on the data filesystem. On interruption preserve missing seals and separate external audit; do not fabricate FINAL. Do not restart unchanged failed workers or reset/double-count budget.
+
+After actual completion, publish code, complete64 anonymous teacher rows, six pool summaries,384 anonymous case observations,24 checks, failures/NA, aggregate report and continuous compute receipt through the effective GitHub proxy. Verify final remote SHA and anonymous access, preserving all previous branches. Medical identifiers, questions/options/answers, images, teacher targets/readout text, checkpoints, full logs, signed URLs and private paths are excluded.
+
+## Exact preparation lock
+
+Campaign p16-20261010T105716. Selected64/64 distinct image groups from310 eligible training image groups; excluded328 held-out image references and skipped0 conservative thumbnail duplicate groups. Modalities: {'CT': 36, 'MRI': 15, 'X-Ray': 13}. Frozen GPU stop 2026-10-12T09:08:52.338175+00:00; hard deadline 2026-10-12T11:08:52.338175+00:00. Full cost proxy 117383.630518053s; with20% reserve 140860.356621663s. No GPU outputs or labels used for this lock.
