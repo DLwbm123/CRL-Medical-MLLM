@@ -17,7 +17,8 @@ def main():
     raw = (folder / "manifest.json").read_bytes(); digest = hashlib.sha256(raw).hexdigest()
     if digest != (folder / "manifest.sha256").read_text().strip(): raise ValueError("Manifest changed")
     manifest = json.loads(raw); name = os.environ["P2_RUN"]; cfg = manifest["configurations"][name]
-    if cfg["method"] != "Frozen SC-8" or cfg["evaluation_labels_allowed"] or cfg["seed"] not in [75, 76, 77]:
+    seeds = manifest["rollout_seeds"]
+    if len(seeds) != 3 or len(set(seeds)) != 3 or cfg["method"] != "Frozen SC-8" or cfg["evaluation_labels_allowed"] or cfg["seed"] not in seeds:
         raise ValueError("Only frozen label-free candidate collection is authorized")
     if torch.cuda.device_count() != 1 or os.environ["CUDA_VISIBLE_DEVICES"] != os.environ["P2_GPU_UUID"]:
         raise ValueError("Unauthorized GPU mapping")

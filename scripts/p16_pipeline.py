@@ -19,6 +19,11 @@ def main():
     atomic_json(folder / "PIPELINE_STARTED.json", final)
     try:
         budget = json.loads((root / "metadata/campaign_budget.json").read_text())
+        manifest = json.loads((folder / "manifest.json").read_text())
+        if manifest.get("p17_version") == 1:
+            domain = json.loads((folder / "binary_domain_admission.json").read_text())
+            if not domain["admitted"] or domain["groups"] != 64 or domain["class_labels_exported"] or domain["manifest_sha256"] != (folder / "manifest.sha256").read_text().strip():
+                raise ValueError("Pre-generation binary-domain admission differs")
         remaining = (datetime.fromisoformat(budget["gpu_stop_utc"]) - datetime.now(timezone.utc)).total_seconds()
         if not admitted_seconds(budget["remaining_total_gpu_process_seconds_at_start"], remaining, budget["complete_scope_estimated_gpu_process_seconds"]):
             raise ValueError("Complete frozen-pool scope plus20% no longer fits")
@@ -37,7 +42,7 @@ def main():
             raise ValueError("Whole six-pool scope plus20% cannot fit after teacher")
         atomic_json(folder / "main_budget_lock.json", {"used_seconds": used, "required_with_reserve": estimate * 1.2,
             "remaining_total_seconds": budget["remaining_total_gpu_process_seconds_at_start"] - used, "remaining_round_seconds": remaining,
-            "complete_seeds": [75, 76, 77], "complete_samplers": ["s", "t"], "training_authorized": False})
+            "complete_seeds": json.loads((folder / "manifest.json").read_text())["rollout_seeds"], "complete_samplers": ["s", "t"], "training_authorized": False})
         atomic_json(folder / "STATUS.json", {"stage": "complete_frozen_candidate_pools"})
         stages.supervise("main", 0, os.environ["P10_GPU0_UUID"])
         stages.invoke("p16_score", "offline-score.log")

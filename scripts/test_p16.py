@@ -3,7 +3,7 @@ import json
 import os
 import tempfile
 from pathlib import Path
-from prepare_p16 import select_rows, heldout_image_references
+from prepare_p16 import select_rows, heldout_image_references, binary_domain_metadata, validate_binary_domain
 from p16_score import block_gate, main as score
 from continual import group_rewards
 from prepare_campaign import write_manifest
@@ -15,6 +15,10 @@ def main():
     first, count = select_rows(rows, {"0"})
     assert count == 79 and len({r["img_name"] for r in first}) == 79 and all(r["img_name"] != "0" for r in first)
     assert first == select_rows(list(reversed(rows)), {"0"})[0]
+    annotations = [{**r, "answer": " YES " if r["qid"] % 2 else "neither"} for r in rows]
+    domain = binary_domain_metadata(annotations)
+    assert len(domain) == 80 and all("answer" not in r for r in domain)
+    assert domain == binary_domain_metadata([{**r, "answer": "no" if r["answer"] == " YES " else r["answer"]} for r in annotations])
     try: select_rows([{**r, "answer": "secret"} for r in rows], set())
     except ValueError: pass
     else: raise AssertionError("Selector accepted labels")
@@ -22,6 +26,12 @@ def main():
         root = Path(name); refs = root / "identities.jsonl"
         refs.write_text(json.dumps({"images": ["overlap"], "question": "not returned", "answer": "not returned"}) + "\n")
         assert heldout_image_references(refs) == {"overlap"}
+        refs.write_text(json.dumps({"id": "chosen", "answer": "yes"}) + "\n")
+        assert validate_binary_domain(refs, {"chosen"})["groups"] == 1
+        refs.write_text(json.dumps({"id": "chosen", "answer": "neither"}) + "\n")
+        try: validate_binary_domain(refs, {"chosen"})
+        except ValueError: pass
+        else: raise AssertionError("Domain admission accepted a nonbinary scoring view")
         m = {"correct_negative": {"percent": 30}, "wrong_positive": {"percent": 40}}
         v = {"correct_negative": {"percent": 20}, "wrong_positive": {"percent": 30}, "counts": {"minority_rescued": 1}}
         assert block_gate(m, v, 12, 16)["go"]
@@ -38,6 +48,10 @@ def main():
         export(folder, root / "public")
         failure = json.loads((root / "public/p16_results.json").read_text())
         assert failure["failure_type"] == "input_label_contract_failure" and failure["qualification"] is None
+        export(folder, root / "new_public", "p17", (78, 79, 80))
+        import csv
+        with (root / "new_public/p17_all_pool_cases.csv").open() as stream:
+            assert {int(r["seed"]) for r in csv.DictReader(stream)} == {78, 79, 80}
         folder = root / "outputs" / "fixture"; folder.mkdir(parents=True)
         for part in ["inputs", "reference", "scores", "controllers"]: (folder / part).mkdir()
         entries = []

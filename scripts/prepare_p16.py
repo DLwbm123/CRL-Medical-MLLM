@@ -31,6 +31,25 @@ def select_rows(rows, excluded, seed=20261010):
     return selected, len(groups)
 
 
+def binary_domain_metadata(rows):
+    """Use annotation vocabulary only to define the new binary task, not correctness."""
+    if any(not isinstance(r.get("answer"), str) for r in rows):
+        raise ValueError("Training annotation has no string answer")
+    return [{k: r[k] for k in META_KEYS} for r in rows if r["answer"].strip().lower() in {"yes", "no"}]
+
+
+def validate_binary_domain(path, selected_ids):
+    seen = set()
+    for line in path.open():
+        r = json.loads(line)
+        if r["id"] not in selected_ids: continue
+        if r["id"] in seen or not isinstance(r["answer"], str) or r["answer"].strip().lower() not in {"yes", "no"}:
+            raise ValueError("Selected scoring-view annotation violates the binary domain")
+        seen.add(r["id"])
+    if seen != set(selected_ids): raise ValueError("Selected scoring-view annotations are incomplete")
+    return {"admitted": True, "groups": len(seen), "annotation_domain_only": True, "class_labels_exported": False}
+
+
 def heldout_image_references(path):
     # The exclusion reader extracts only image-reference arrays, never questions or labels.
     result = set()
@@ -50,12 +69,18 @@ def thumbnail(path):
 def main():
     root = Path(os.environ["P0_ROOT"]); source = Path(os.environ["P10_SOURCE_ROOT"])
     folder = root / "outputs" / os.environ["P2_CAMPAIGN"]
-    previous = source / "workspaces/p15-20261010T095303/outputs/p15-20261010T095303"
+    recovery = os.environ.get("P2_MODE") == "p17_prepare"
+    previous_name = "p16-20261010T105716" if recovery else "p15-20261010T095303"
+    previous = source / "workspaces" / previous_name / "outputs" / previous_name
+    prefix = "p17" if recovery else "p16"; seeds = [78, 79, 80] if recovery else SEEDS
     end = json.loads((previous / "FINAL.json").read_text())
     delivery = json.loads((previous / "public_delivery_receipt.json").read_text())
     closure = json.loads((previous / "completion_audit.json").read_text())
-    if end["status"] != "reward_qualification_negative" or not closure["owned_processes_ended"] or not delivery["remote_sha_verified"] or not delivery["anonymous_access_verified"]:
+    expected_status = "failed" if recovery else "reward_qualification_negative"
+    if end["status"] != expected_status or not closure["owned_processes_ended"] or not delivery["remote_sha_verified"] or not delivery["anonymous_access_verified"]:
         raise ValueError("Previous result must close and be publicly delivered")
+    if recovery and json.loads((previous / "offline_failure_audit.json").read_text())["failure_type"] != "input_label_contract_failure":
+        raise ValueError("Recovery requires the documented input-domain failure")
     if folder.exists():
         raise FileExistsError("No duplicate data preparation")
     folder.mkdir(parents=True)
@@ -64,15 +89,21 @@ def main():
     if receipt["status"] != "complete" or receipt["revision"] != "a9083ce6c34ac3ffb17671a605962924d8a8f9e9":
         raise ValueError("Pinned SLAKE resources differ")
     raw = json.loads((source / "data/SLAKE/raw/train.json").read_text())
-    metadata = [{k: r[k] for k in META_KEYS} for r in raw]
+    metadata = binary_domain_metadata(raw) if recovery else [{k: r[k] for k in META_KEYS} for r in raw]
     del raw
     excluded = set.union(*(heldout_image_references(source / "views/adaptation_inputs/SLAKE" / (split + ".jsonl")) for split in ["validation", "test"]))
-    selected, eligible = select_rows(metadata, excluded)
+    heldout_exclusions = len(excluded)
     old_manifest = json.loads((previous / "manifest.json").read_text())
+    if recovery: excluded.update(image for e in old_manifest["stream"] + old_manifest["probe"] for image in e["images"])
+    selected, eligible = select_rows(metadata, excluded)
     old_prints = set()
-    for entry in old_manifest["stream"] + old_manifest["probe"]:
-        row = json.loads((previous / entry["input"]).read_text())
-        old_prints.update(thumbnail(Path(p)) for p in row["image_paths"])
+    old_folders = [previous]
+    if recovery: old_folders.append(source / "workspaces/p15-20261010T095303/outputs/p15-20261010T095303")
+    for old in old_folders:
+        old_scope = json.loads((old / "manifest.json").read_text())
+        for entry in old_scope["stream"] + old_scope["probe"]:
+            row = json.loads((old / entry["input"]).read_text())
+            old_prints.update(thumbnail(Path(p)) for p in row["image_paths"])
     seen = set(old_prints); clean = []
     image_root = (source / "data/SLAKE/extracted/imgs").resolve()
     duplicate_groups = 0
@@ -95,20 +126,23 @@ def main():
     teacher = copy.deepcopy(old_manifest["teacher"])
     configs = {}
     base = json.loads((source / "configs/p2_c.json").read_text())
-    for seed in SEEDS:
+    for seed in seeds:
         for arm, temperature, top_p in [("s", .7, .95), ("t", 1., 1.)]:
             cfg = {**base, "method": "Frozen SC-8", "seed": seed, "gpu_index": 0, "temperature": temperature, "top_p": top_p, "reward_source": "majority"}
             name = f"pool-{arm}{seed}"; configs[name] = cfg
-            atomic_json(root / "configs" / f"p16_{arm}{seed}.json", cfg)
-    manifest = {"p16_version": 1, "stream": entries[:32], "probe": entries[32:], "rollout_seeds": SEEDS,
+            atomic_json(root / "configs" / f"{prefix}_{arm}{seed}.json", cfg)
+    manifest = {prefix + "_version": 1, "stream": entries[:32], "probe": entries[32:], "rollout_seeds": seeds,
         "teacher": teacher, "configurations": configs, "source_revision": receipt["revision"],
-        "selection_seed": 20261010, "selection_receives_labels": False, "correctness_used_for_selection": False,
+        "selection_seed": 20261010, "selection_receives_labels": recovery, "annotation_domain_only": recovery, "correctness_used_for_selection": False,
         "heldout_access": "image-reference metadata solely for exclusions; no labels or model evaluation",
         "patient_disjointness_verified": False, "grouping": "unique image references and conservative32x32 RGB thumbnail exclusions",
         "broad_content_or_patient_duplicate_equivalence_verified": False, "pretraining_overlap_excluded": False,
         "training_authorized_in_this_round": False, "selected_n": 64,
         "gate": {"minimum_accepted": 16, "minimum_correct": 12, "minimum_precision": .75, "wrong_positive_drop_pp": 10}}
-    write_manifest(folder / "manifest.json", manifest)
+    digest = write_manifest(folder / "manifest.json", manifest)
+    if recovery:
+        domain = validate_binary_domain(source / "views/evaluation_labels/SLAKE/train.jsonl", {e["id"] for e in entries})
+        atomic_json(folder / "binary_domain_admission.json", {**domain, "manifest_sha256": digest})
     now = datetime.now(timezone.utc); estimate = 6 * 4 * 4590.984604918864 + 7200
     budget = {"total_gpu_process_seconds": 259200., "prior_gpu_process_seconds": end["cumulative_gpu_process_seconds"],
         "remaining_total_gpu_process_seconds_at_start": end["remaining_gpu_process_seconds"], "budget_reset": False,
@@ -126,8 +160,8 @@ def main():
     audit = {"admitted": True, "training_admitted": False, "data_authorized_by_direct_user_delegation": True,
         "source": "BoKelvin/SLAKE pinned official re-cleaned1.0", "split": "train only", "new_groups": 64,
         "calibration_groups": 32, "verification_groups": 32, "eligible_image_groups": eligible,
-        "heldout_image_refs_excluded": len(excluded), "thumbnail_duplicate_groups_skipped": duplicate_groups,
-        "selection_receives_labels": False, "no_final_test_generation_or_scoring": True,
+        "heldout_image_refs_excluded": heldout_exclusions, "previous_image_refs_excluded": 64 if recovery else 0, "thumbnail_duplicate_groups_skipped": duplicate_groups,
+        "selection_receives_labels": recovery, "annotation_domain_only": recovery, "correctness_used_for_selection": False, "no_final_test_generation_or_scoring": True,
         "patient_disjointness_verified": False, "pretraining_overlap_excluded": False,
         "modalities": dict(Counter(r["modality"] for r, _ in clean)), "budget": budget}
     atomic_json(folder / "budget_admission.json", audit); atomic_json(folder / "preparation.json", audit)
