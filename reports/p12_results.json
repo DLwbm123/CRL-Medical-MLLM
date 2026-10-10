@@ -1,0 +1,43 @@
+{
+  "status": "failed",
+  "source_commit": "66934041ca5dc74f023f5494decf4b474e7bb0cd",
+  "qualification": null,
+  "matrix": null,
+  "independent_generalization_established": false,
+  "compute": {
+    "original_authorized_seconds": 86400.0,
+    "new_authorized_seconds": 172800.0,
+    "total_authorized_seconds": 259200.0,
+    "prior_used_seconds": 67363.9203985543,
+    "p12_used_seconds": 0,
+    "cumulative_seconds": 67363.9203985543,
+    "remaining_seconds": 191836.0796014457,
+    "budget_reset": false,
+    "whole_worker_lifetime_counted": true,
+    "jobs": []
+  },
+  "failure_type": "resource_download_tls_eof",
+  "resource_preparation": {
+    "status": "stopped_after_job_failure",
+    "cpu_only": true,
+    "gpu_process_seconds": 0,
+    "same_boot_completion_fence_passed": false,
+    "jobs": [
+      {
+        "return_code": 1,
+        "wall_seconds": 1117.8421360820003,
+        "timeout_or_stop": null
+      }
+    ]
+  },
+  "scientific_result": null,
+  "completion": {
+    "owned_processes_ended": true,
+    "qualification_readouts_generated": 0,
+    "actor_updates": 0,
+    "training_trajectories_started": 0,
+    "resource_size_receipt_present": false,
+    "partial_weight_bytes_preserved": 13360568328,
+    "failure_observed_utc": "2026-10-10T07:37:23.780309+00:00"
+  }
+}

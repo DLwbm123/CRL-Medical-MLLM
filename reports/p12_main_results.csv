@@ -1,0 +1,10 @@
+seed,arm,before_correct,after_correct,worker_started,return_code,reason
+63,s,NA,NA,False,NA,no sealed complete matrix scoring
+63,t,NA,NA,False,NA,no sealed complete matrix scoring
+63,v,NA,NA,False,NA,no sealed complete matrix scoring
+64,s,NA,NA,False,NA,no sealed complete matrix scoring
+64,t,NA,NA,False,NA,no sealed complete matrix scoring
+64,v,NA,NA,False,NA,no sealed complete matrix scoring
+65,s,NA,NA,False,NA,no sealed complete matrix scoring
+65,t,NA,NA,False,NA,no sealed complete matrix scoring
+65,v,NA,NA,False,NA,no sealed complete matrix scoring
