@@ -164,6 +164,7 @@ class Engine:
                 atomic_json(snapshot, signal)
         self.method = cfg["method"]
         self.training = self.method in {"TTRL", "SPINE"}
+        dtype = {"bfloat16": torch.bfloat16, "float32": torch.float32}[cfg.get("model_dtype", "bfloat16")]
         self.timings = {}
         self.started = time.monotonic()
         self.stop_sampler = threading.Event()
@@ -174,14 +175,14 @@ class Engine:
             path = root / cfg["model_path"]
             self.processor = AutoProcessor.from_pretrained(path, local_files_only=True, trust_remote_code=False, use_fast=False)
             self.actor = Qwen2_5_VLForConditionalGeneration.from_pretrained(
-                path, torch_dtype=torch.bfloat16, attn_implementation="sdpa",
+                path, torch_dtype=dtype, attn_implementation="sdpa",
                 local_files_only=True, trust_remote_code=False,
             ).to("cuda:0")
             if getattr(self.actor, "is_quantized", False):
                 raise ValueError("Quantization is outside this protocol")
             if self.training:
                 self.reference = Qwen2_5_VLForConditionalGeneration.from_pretrained(
-                    path, torch_dtype=torch.bfloat16, attn_implementation="sdpa",
+                    path, torch_dtype=dtype, attn_implementation="sdpa",
                     local_files_only=True, trust_remote_code=False,
                 ).to("cuda:0").eval().requires_grad_(False)
                 self.reference_initial = {name: p.detach().cpu().clone() for name, p in self.reference.named_parameters()}
@@ -267,6 +268,13 @@ class Engine:
         return response, text
 
     def probability_check(self, row):
+        result = self.probability_measurement(row)
+        if not result["within_tolerance"]:
+            raise RuntimeError(f"Unwarped generation/recompute log-prob mismatch: {result['max_logp_difference']}")
+        return result
+
+    def probability_measurement(self, row):
+        """Record the unchanged check; diagnostic callers may retain failed measurements."""
         with inference_without_state_change(self.actor):
             encoded = self.encode(row)
             output = self.actor.generate(**encoded, generation_config=self.generation_config(True, True),
@@ -276,11 +284,11 @@ class Engine:
             logits = forward_response(self.actor, encoded, response)
             recomputed_logp, _, _ = token_statistics(logits, response, chunk_tokens=self.cfg["statistics_chunk_tokens"])
             error = float((generated_logp - recomputed_logp).abs().max())
-            # BF16 cached decoding and full-prefix kernels need not be bitwise equal.
-            if error > self.cfg["probability_check_bf16_atol"]:
-                raise RuntimeError(f"Unwarped generation/recompute log-prob mismatch: {error}")
+            if not math.isfinite(error): raise RuntimeError("Non-finite generation/recompute log-probability difference")
         return {"tokens": len(response), "temperature": 1, "top_p": 1, "top_k": 0,
                 "max_logp_difference": error, "atol": self.cfg["probability_check_bf16_atol"],
+                "within_tolerance": math.isfinite(error) and error <= self.cfg["probability_check_bf16_atol"],
+                "model_dtype": self.cfg.get("model_dtype", "bfloat16"),
                 "production_sampling": f'temperature {self.cfg["temperature"]}/top-p {self.cfg["top_p"]}; loss uses raw untempered model softmax',
                 "raw_sampler_configuration_matches_check": self.cfg["temperature"] == 1.0 and self.cfg["top_p"] == 1.0 and self.cfg["top_k"] == 0 and self.cfg["repetition_penalty"] == 1.0,
                 "strict_on_policy_consistency_claimed": False}
