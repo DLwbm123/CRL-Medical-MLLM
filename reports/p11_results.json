@@ -1,0 +1,30 @@
+{
+  "status": "interrupted_before_reward_qualification",
+  "source_commit": "0f7b0750b15585ef790826371c699a1e7b0218a6",
+  "receipt_kind": "external_observer_audit_not_pipeline_final",
+  "observed_utc": "2026-10-10T03:37:38.275822+00:00",
+  "approximate_host_boot_utc": "2026-10-10T03:10:26.155822+00:00",
+  "failure_type": "host_reboot_and_gpu_driver_unavailable",
+  "nvidia_smi_exit_code": 9,
+  "partial_weight_bytes": 5976883200,
+  "qualification": null,
+  "matrix": null,
+  "stable_positive_development_result": null,
+  "independent_generalization_established": false,
+  "original_gpu_stop_utc": "2026-10-11T23:42:28.207126+00:00",
+  "original_hard_deadline_utc": "2026-10-12T01:42:28.207126+00:00",
+  "compute": {
+    "original_authorized_seconds": 86400.0,
+    "new_authorized_seconds": 172800.0,
+    "total_authorized_seconds": 259200.0,
+    "prior_used_seconds": 67363.9203985543,
+    "p11_used_seconds": 0.0,
+    "cumulative_seconds": 67363.9203985543,
+    "remaining_seconds": 191836.0796014457,
+    "budget_reset": false,
+    "whole_worker_lifetime_counted": true,
+    "jobs": [],
+    "cpu_download_excluded": true,
+    "evidence": "download did not seal; pipeline orders GPU stages strictly after successful download; no GPU controllers, reference output, acceptance or main run exists"
+  }
+}

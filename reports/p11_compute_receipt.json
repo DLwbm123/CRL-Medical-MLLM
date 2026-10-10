@@ -1,0 +1,14 @@
+{
+  "original_authorized_seconds": 86400.0,
+  "new_authorized_seconds": 172800.0,
+  "total_authorized_seconds": 259200.0,
+  "prior_used_seconds": 67363.9203985543,
+  "p11_used_seconds": 0.0,
+  "cumulative_seconds": 67363.9203985543,
+  "remaining_seconds": 191836.0796014457,
+  "budget_reset": false,
+  "whole_worker_lifetime_counted": true,
+  "jobs": [],
+  "cpu_download_excluded": true,
+  "evidence": "download did not seal; pipeline orders GPU stages strictly after successful download; no GPU controllers, reference output, acceptance or main run exists"
+}
