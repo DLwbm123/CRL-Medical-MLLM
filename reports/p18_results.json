@@ -1,0 +1,59 @@
+{
+  "source_commit": "8a480647b206a2d7b1a7569d31dcfcc52a976080",
+  "status": "numerical_checks_negative",
+  "numerical_summary": {
+    "complete_workers": 6,
+    "measurements": 384,
+    "fp32_checks_passed": 55,
+    "fp32_all_checks_passed": false,
+    "absolute_tolerance": 0.1,
+    "numerical_diagnostic_only": true,
+    "reward_qualification": null,
+    "training_performed": false,
+    "stable_positive_development_result": false
+  },
+  "training_performed": false,
+  "reward_qualification": null,
+  "stable_positive_development_result": false,
+  "compute": {
+    "total_authorized_seconds": 259200.0,
+    "prior_used_seconds": 83142.44163591831,
+    "p18_used_seconds": 673.4472112630028,
+    "cumulative_seconds": 83815.88884718131,
+    "remaining_seconds": 175384.1111528187,
+    "budget_reset": false,
+    "whole_worker_lifetime_counted": true,
+    "gpu_jobs": [
+      {
+        "job": "numeric-b81",
+        "return_code": 0,
+        "seconds": 74.6003181979977
+      },
+      {
+        "job": "numeric-f81",
+        "return_code": 0,
+        "seconds": 152.4806514390002
+      },
+      {
+        "job": "numeric-b82",
+        "return_code": 0,
+        "seconds": 73.69292945300549
+      },
+      {
+        "job": "numeric-f82",
+        "return_code": 0,
+        "seconds": 149.89688567999838
+      },
+      {
+        "job": "numeric-b83",
+        "return_code": 0,
+        "seconds": 73.75797002999752
+      },
+      {
+        "job": "numeric-f83",
+        "return_code": 0,
+        "seconds": 149.01845646300353
+      }
+    ]
+  }
+}

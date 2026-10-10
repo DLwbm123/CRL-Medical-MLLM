@@ -1,0 +1,7 @@
+seed,precision,execution_status,measurements,checks_passed,max_logp_difference,optimizer_updates,retention_harm
+81,bfloat16,completed,64,57,0.1586611270904541,0,NA_no_update
+81,float32,completed,64,19,4.438588619232178,0,NA_no_update
+82,bfloat16,completed,64,58,0.15638303756713867,0,NA_no_update
+82,float32,completed,64,17,1.1205940246582031,0,NA_no_update
+83,bfloat16,completed,64,54,0.1255779266357422,0,NA_no_update
+83,float32,completed,64,19,1.4544124603271484,0,NA_no_update
