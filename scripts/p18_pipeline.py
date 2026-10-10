@@ -33,13 +33,14 @@ def aggregate(folder):
     fp32 = [r for r in rows if r["precision"] == "float32"]
     summary = {"complete_workers": 6, "measurements": len(rows), "fp32_checks_passed": sum(r["within_tolerance"] for r in fp32),
         "fp32_all_checks_passed": all(r["within_tolerance"] for r in fp32), "absolute_tolerance": .1,
+        "diagnostic_passed": all(r["within_tolerance"] for r in fp32),
         "numerical_diagnostic_only": True, "reward_qualification": None, "training_performed": False,
         "stable_positive_development_result": False}
     atomic_json(folder / "scores/numerical_summary.json", summary)
     return summary
 
 
-def main():
+def main(aggregate_results=aggregate):
     folder, root = stages.FOLDER, stages.ROOT
     if (folder / "PIPELINE_STARTED.json").exists() or (folder / "FINAL.json").exists(): raise RuntimeError("Duplicate diagnostic forbidden")
     for sig in [signal.SIGTERM, signal.SIGINT]: signal.signal(sig, stages.stop)
@@ -55,8 +56,8 @@ def main():
             raise ValueError("Whole bounded matrix and reserve do not fit")
         atomic_json(folder / "STATUS.json", {"stage": "complete_numerical_matrix"})
         stages.supervise("main", 0, os.environ["P10_GPU0_UUID"])
-        summary = aggregate(folder)
-        final["status"] = "numerical_checks_passed" if summary["fp32_all_checks_passed"] else "numerical_checks_negative"
+        summary = aggregate_results(folder)
+        final["status"] = "numerical_checks_passed" if summary["diagnostic_passed"] else "numerical_checks_negative"
     except Exception as exc:
         final.update(status="failed", error=f"{type(exc).__name__}: {exc}")
         raise
