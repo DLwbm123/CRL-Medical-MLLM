@@ -31,6 +31,17 @@ def main():
     a = parse_judgment(text, mapping)
     b = parse_judgment(text.replace('"B"', '"A"'), reversed_mapping)
     assert agreed_target([a, b]) == "B"
+    inline = text.replace("reasoning\n", "Evidence. Decision: ")
+    assert parse_judgment(inline, mapping) is None and parse_judgment(inline, mapping, True) == a
+    assert parse_judgment(inline + "  \n", mapping, True) == a
+    for bad in [inline + "\nextra", inline + "\n```", text + text, '{}\n' + inline,
+                inline.replace('"choice":"B"', '"choice":"A","choice":"B"'),
+                inline.replace('"B"', '"C"'), inline.replace('"supported"', 'true'),
+                inline.replace('"supported"', '"yes"'), inline[:-1]]:
+        assert parse_judgment(bad, mapping, True) is None
+    assert agreed_target([parse_judgment(inline, mapping, True), b]) == "B"
+    uncertain = parse_judgment(inline.replace('"supported"', '"uncertain"'), mapping, True)
+    assert agreed_target([uncertain, b]) is None
     for bad in ['{"choice":[],"visual_support":"supported","clinical_consistency":"consistent"}', text+'\nextra', text.replace('"B"','"C"'), '{}']:
         assert parse_judgment(bad, mapping) is None
     assert agreed_target([a, None]) is None
@@ -95,7 +106,7 @@ def main():
         try: validate_development_configuration(changed, {}, locked)
         except RuntimeError: pass
         else: raise AssertionError("Undeclared training change accepted")
-    result = {"passed": True, "labels_read": False, "checks": ["two_order_mapping", "explicit_visual_evidence_prompt", "strict_json_and_label_boundary", "correct_minority_reward",
+    result = {"passed": True, "labels_read": False, "checks": ["two_order_mapping", "explicit_visual_evidence_prompt", "strict_json_suffix_adapter", "strict_json_and_label_boundary", "correct_minority_reward",
               "abstention_never_falls_back", "zero_signal_never_steps_optimizer", "legacy_SPINE_behavior", "frozen_source_and_matrix", "full_cost_and_reserve"]}
     destination = Path(os.environ["P0_ROOT"]) / "outputs" / os.environ["P2_CAMPAIGN"] / "reward_acceptance.json"
     atomic_json(destination, result)

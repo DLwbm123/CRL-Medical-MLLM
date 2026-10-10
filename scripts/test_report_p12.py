@@ -13,7 +13,7 @@ def main():
     with tempfile.TemporaryDirectory() as directory:
         root = Path(directory); folder = root / "private"; reports = root / "reports"
         folder.mkdir(); reports.mkdir(); (root / "scripts").mkdir()
-        for name in ["report_p10.py", "report_p12.py", "report_p13.py", "report_p14.py"]:
+        for name in ["report_p10.py", "report_p12.py", "report_p13.py", "report_p14.py", "report_p15.py"]:
             shutil.copyfile(source / name, root / "scripts" / name)
         (folder / "FINAL.json").write_text(json.dumps({"finished_utc": "fixed", "public_delivery_complete": False,
             "status": "failed", "code_commit": "0" * 40, "gpu_process_seconds_used": 0,
@@ -44,6 +44,10 @@ def main():
         with (reports / "p14_main_results.csv").open() as stream:
             rows = list(csv.DictReader(stream))
         assert len(rows) == 9 and {int(row["seed"]) for row in rows} == {69, 70, 71}
+        runpy.run_path(str(root / "scripts/report_p15.py"), run_name="__main__")
+        with (reports / "p15_main_results.csv").open() as stream:
+            rows = list(csv.DictReader(stream))
+        assert len(rows) == 9 and {int(row["seed"]) for row in rows} == {72, 73, 74}
     print("NA scope and undefined reward-rate export passed")
 
 

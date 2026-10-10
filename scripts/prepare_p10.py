@@ -10,7 +10,7 @@ from state import atomic_json
 
 
 def prepare(prefix="p10", seeds=(57, 58, 59), prior=66990.15299156541,
-            teacher_repo="Qwen/Qwen2.5-VL-7B-Instruct", teacher_revision="cc594898137f460bfe9f0759e9844b3ce807cfb5", evidence_first=False):
+            teacher_repo="Qwen/Qwen2.5-VL-7B-Instruct", teacher_revision="cc594898137f460bfe9f0759e9844b3ce807cfb5", evidence_first=False, json_suffix=False):
     root = Path(os.environ["P0_ROOT"])
     source = Path(os.environ["P10_SOURCE_ROOT"])
     folder = root / "outputs" / os.environ["P2_CAMPAIGN"]
@@ -21,7 +21,7 @@ def prepare(prefix="p10", seeds=(57, 58, 59), prior=66990.15299156541,
     manifest = json.loads((old_folder / "manifest.json").read_text())
     for key in ["p3_version", "p4_version", "p5_version", "p6_version", "p7_version"]:
         manifest.pop(key, None)
-    if prefix not in {"p10", "p11", "p12", "p13", "p14"} or len(seeds) != 3 or len(set(seeds)) != 3 or not 0 <= prior < 259200 or evidence_first != (prefix == "p14"):
+    if prefix not in {"p10", "p11", "p12", "p13", "p14", "p15"} or len(seeds) != 3 or len(set(seeds)) != 3 or not 0 <= prior < 259200 or evidence_first != (prefix in {"p14", "p15"}) or json_suffix != (prefix == "p15"):
         raise ValueError("Invalid complete campaign or continuous cost")
     seeds = list(seeds)
     manifest.update(p10_version=1, campaign_prefix=prefix, rollout_seeds=seeds, probe_cursors=[0, 16], drift_cursors=[16],
@@ -35,6 +35,8 @@ def prepare(prefix="p10", seeds=(57, 58, 59), prior=66990.15299156541,
         raise ValueError("The authorized legacy scope must be exactly 16+16")
     if evidence_first:
         manifest["teacher"]["evidence_first"] = True
+    if json_suffix:
+        manifest["teacher"]["json_suffix"] = True
     for entry in manifest["stream"] + manifest["probe"]:
         shutil.copyfile(old_folder / entry["input"], folder / entry["input"])
     base = json.loads((source / "configs/p2_c.json").read_text())

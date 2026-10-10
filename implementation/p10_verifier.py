@@ -66,7 +66,7 @@ def main():
                     tokens = actor.generate(**encoded, generation_config=generation, stopping_criteria=[deadline])[0, encoded["input_ids"].shape[-1]:]
                     deadline.check()
                     answer = processor.tokenizer.decode(tokens, skip_special_tokens=True, clean_up_tokenization_spaces=False)
-                    record["judgments"].append(parse_judgment(answer, mapping))
+                    record["judgments"].append(parse_judgment(answer, mapping, spec.get("json_suffix", False)))
                     record["readouts"].append({"reverse": reverse, "text": answer, "tokens": len(tokens), "hit_length_cap": len(tokens) == spec["max_new_tokens"]})
                 record["target"] = agreed_target(record["judgments"])
                 output[section].append(record)

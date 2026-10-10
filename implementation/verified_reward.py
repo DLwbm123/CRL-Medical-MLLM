@@ -24,12 +24,33 @@ def judge_messages(row, reverse=False, evidence_first=False):
     return [{"role": "user", "content": [{"type": "image", "image": p} for p in row["image_paths"]] + [{"type": "text", "text": text}]}], mapping
 
 
-def parse_judgment(text, mapping):
-    lines = [line.strip() for line in text.splitlines() if line.strip()]
-    try:
-        value = json.loads(lines[-1])
-    except (ValueError, IndexError):
-        return None
+def parse_judgment(text, mapping, json_suffix=False):
+    if json_suffix:
+        def unique_object(pairs):
+            value = dict(pairs)
+            if len(value) != len(pairs):
+                raise ValueError("Duplicate JSON keys")
+            return value
+        decoder = json.JSONDecoder(object_pairs_hook=unique_object)
+        objects = []
+        for index, char in enumerate(text):
+            if char != "{":
+                continue
+            try:
+                value, end = decoder.raw_decode(text[index:])
+            except ValueError:
+                continue
+            if isinstance(value, dict):
+                objects.append((value, text[index + end:].strip()))
+        if len(objects) != 1 or objects[0][1]:
+            return None
+        value = objects[0][0]
+    else:
+        lines = [line.strip() for line in text.splitlines() if line.strip()]
+        try:
+            value = json.loads(lines[-1])
+        except (ValueError, IndexError):
+            return None
     if not isinstance(value, dict) or set(value) != {"choice", "visual_support", "clinical_consistency"}:
         return None
     if not all(isinstance(v, str) for v in value.values()) or value["choice"] not in mapping or value["visual_support"] not in {"supported", "uncertain"} or value["clinical_consistency"] not in {"consistent", "uncertain"}:
