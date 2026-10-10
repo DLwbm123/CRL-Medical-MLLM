@@ -1,0 +1,26 @@
+{
+  "total_authorized_seconds": 259200.0,
+  "prior_used_seconds": 83815.88884718131,
+  "p19_used_seconds": 205.12162920901028,
+  "cumulative_seconds": 84021.01047639032,
+  "remaining_seconds": 175178.9895236097,
+  "budget_reset": false,
+  "whole_worker_lifetime_counted": true,
+  "gpu_jobs": [
+    {
+      "job": "numeric-k84",
+      "return_code": 0,
+      "seconds": 67.33864508400438
+    },
+    {
+      "job": "numeric-k85",
+      "return_code": 0,
+      "seconds": 65.91993601000286
+    },
+    {
+      "job": "numeric-k86",
+      "return_code": 0,
+      "seconds": 71.86304811500304
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+seed,path,execution_status,checks_passed,max_logp_difference,optimizer_updates,retention_harm
+84,uncached,completed,59,0.2313539981842041,0,NA_no_update
+84,cached,completed,64,0.0,0,NA_no_update
+85,uncached,completed,57,0.17197704315185547,0,NA_no_update
+85,cached,completed,64,0.0,0,NA_no_update
+86,uncached,completed,56,0.23172378540039062,0,NA_no_update
+86,cached,completed,64,0.0,0,NA_no_update
