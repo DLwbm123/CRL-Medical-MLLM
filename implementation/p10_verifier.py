@@ -53,7 +53,7 @@ def main():
                 record = {"id": row["id"], "option_keys": sorted(row["options"]), "judgments": [], "readouts": []}
                 for reverse in [False, True]:
                     deadline.check()
-                    messages, mapping = judge_messages(row, reverse)
+                    messages, mapping = judge_messages(row, reverse, spec.get("evidence_first", False))
                     text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
                     if text.count("<|image_pad|>") != len(row["images"]):
                         raise ValueError("Verifier image placeholder count differs")

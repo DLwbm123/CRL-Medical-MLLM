@@ -20,6 +20,10 @@ def main():
     backward, reversed_mapping = judge_messages(row, True)
     assert mapping == {"A": "A", "B": "B"} and reversed_mapping == {"A": "B", "B": "A"}
     assert [x["image"] for x in forward[0]["content"][:-1]] == row["image_paths"]
+    evidence, evidence_mapping = judge_messages(row, evidence_first=True)
+    assert evidence_mapping == mapping and evidence[0]["content"][:-1] == forward[0]["content"][:-1]
+    assert evidence[0]["content"][-1]["text"].startswith(forward[0]["content"][-1]["text"])
+    assert "actually visible" in evidence[0]["content"][-1]["text"] and "keep the corresponding judgment uncertain" in evidence[0]["content"][-1]["text"]
     try: judge_messages(dict(row, label="B"))
     except ValueError: pass
     else: raise AssertionError("Verifier accepted a clinical label")
@@ -91,7 +95,7 @@ def main():
         try: validate_development_configuration(changed, {}, locked)
         except RuntimeError: pass
         else: raise AssertionError("Undeclared training change accepted")
-    result = {"passed": True, "labels_read": False, "checks": ["two_order_mapping", "strict_json_and_label_boundary", "correct_minority_reward",
+    result = {"passed": True, "labels_read": False, "checks": ["two_order_mapping", "explicit_visual_evidence_prompt", "strict_json_and_label_boundary", "correct_minority_reward",
               "abstention_never_falls_back", "zero_signal_never_steps_optimizer", "legacy_SPINE_behavior", "frozen_source_and_matrix", "full_cost_and_reserve"]}
     destination = Path(os.environ["P0_ROOT"]) / "outputs" / os.environ["P2_CAMPAIGN"] / "reward_acceptance.json"
     atomic_json(destination, result)

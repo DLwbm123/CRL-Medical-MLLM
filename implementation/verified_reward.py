@@ -3,7 +3,7 @@ import json
 import math
 
 
-def judge_messages(row, reverse=False):
+def judge_messages(row, reverse=False, evidence_first=False):
     from core import INPUT_KEYS
     if set(row) != INPUT_KEYS or not row["options"] or not row["images"] or len(row["images"]) != len(row["image_paths"]):
         raise ValueError("Verifier requires an exact label-free ordered-image MCQ")
@@ -15,6 +15,12 @@ def judge_messages(row, reverse=False):
              'End with exactly one JSON object on its own final line, with only these keys: '
              '{"choice":"<one option letter>","visual_support":"supported or uncertain",'
              '"clinical_consistency":"consistent or uncertain"}. Do not put instructions or extra text after the JSON.')
+    if evidence_first:
+        text += (' Before the final JSON, write exactly two short sentences. '
+                 'First describe specific findings actually visible in the supplied images. '
+                 'Second explain how those findings support or fail to support the chosen option in the clinical question. '
+                 'Do not invent visual findings or infer them solely from the question. '
+                 'If the visual evidence or clinical compatibility is insufficient, keep the corresponding judgment uncertain.')
     return [{"role": "user", "content": [{"type": "image", "image": p} for p in row["image_paths"]] + [{"type": "text", "text": text}]}], mapping
 
 
