@@ -1,0 +1,167 @@
+{
+  "status": "reward_qualification_negative",
+  "source_commit": "8bfbdc9fa22db21d913ed61be110eb3bbd5fde32",
+  "qualification": {
+    "go": false,
+    "checks": {
+      "coverage_at_least_half": false,
+      "at_least_four_correct_targets": false,
+      "accepted_precision_at_least_half": true,
+      "correct_negative_rate_lower": true,
+      "wrong_positive_rate_ten_pp_lower": true,
+      "correct_minority_rescued": true
+    },
+    "accepted": 1,
+    "correct_targets": 1,
+    "stream_n": 16,
+    "candidate_trajectory_count": 18,
+    "repeated_group_observations": 288,
+    "unique_group_count": 16,
+    "majority": {
+      "counts": {
+        "groups": 288,
+        "correct_parsed": 345,
+        "correct_negative": 197,
+        "positive_reward": 1219,
+        "wrong_positive": 1071,
+        "target_correct": 36,
+        "all_invalid": 0,
+        "zero_advantage": 4
+      },
+      "correct_negative": {
+        "correct": 197,
+        "total": 345,
+        "percent": 57.10144927536232
+      },
+      "wrong_positive": {
+        "correct": 1071,
+        "total": 1219,
+        "percent": 87.85890073831008
+      },
+      "target_accuracy": {
+        "correct": 36,
+        "total": 288,
+        "percent": 12.5
+      }
+    },
+    "verified": {
+      "counts": {
+        "groups": 288,
+        "correct_parsed": 345,
+        "correct_negative": 0,
+        "positive_reward": 39,
+        "wrong_positive": 0,
+        "abstained": 270,
+        "zero_advantage": 273,
+        "minority_rescued": 9,
+        "minority_available": 121
+      },
+      "correct_negative": {
+        "correct": 0,
+        "total": 345,
+        "percent": 0.0
+      },
+      "wrong_positive": {
+        "correct": 0,
+        "total": 39,
+        "percent": 0.0
+      }
+    },
+    "independent_generalization_established": false,
+    "labels_used_only_after_teacher_closed": true,
+    "clinical_labels_enter_reward_targets": false,
+    "teacher_probe_accepted": 2,
+    "teacher_probe_correct": 0
+  },
+  "matrix": null,
+  "independent_generalization_established": false,
+  "compute": {
+    "original_authorized_seconds": 86400.0,
+    "new_authorized_seconds": 172800.0,
+    "total_authorized_seconds": 259200.0,
+    "prior_used_seconds": 67363.9203985543,
+    "p13_used_seconds": 168.47211448500093,
+    "cumulative_seconds": 67532.3925130393,
+    "remaining_seconds": 191667.6074869607,
+    "budget_reset": false,
+    "whole_worker_lifetime_counted": true,
+    "jobs": [
+      {
+        "stage": "qualification-plan",
+        "job": "frozen-verifier",
+        "seconds": 168.47211448500093,
+        "return_code": 0,
+        "timeout": false
+      }
+    ]
+  },
+  "failure_type": null,
+  "resource_preparation": {
+    "status": "all_planned_jobs_completed",
+    "cpu_only": true,
+    "gpu_process_seconds": 0,
+    "same_boot_completion_fence_passed": true,
+    "jobs": [
+      {
+        "return_code": 0,
+        "wall_seconds": 509.23509982699943,
+        "timeout_or_stop": null
+      }
+    ]
+  },
+  "closed_readout_diagnostic": {
+    "sealed": true,
+    "labels_used": false,
+    "same_frozen_parser_results": true,
+    "aggregate_only": true,
+    "counts": {
+      "stream": {
+        "case_reasons": {
+          "self_reported_uncertainty": 14,
+          "strict_parse_failure": 1,
+          "accepted": 1
+        },
+        "readout_counts": {
+          "total": 32,
+          "strict_parsed": 31,
+          "length_cap": 0,
+          "final_code_fence": 0,
+          "contains_code_fence": 0,
+          "multiline_json_suffix": 1,
+          "parsed_visual_uncertain": 29,
+          "parsed_clinical_uncertain": 1
+        },
+        "tokens_min": 17,
+        "tokens_max": 28,
+        "tokens_mean": 20.3125
+      },
+      "probe": {
+        "case_reasons": {
+          "self_reported_uncertainty": 13,
+          "accepted": 2,
+          "strict_parse_failure": 1
+        },
+        "readout_counts": {
+          "total": 32,
+          "strict_parsed": 30,
+          "length_cap": 0,
+          "final_code_fence": 0,
+          "contains_code_fence": 0,
+          "multiline_json_suffix": 0,
+          "parsed_visual_uncertain": 23,
+          "parsed_clinical_uncertain": 1
+        },
+        "tokens_min": 17,
+        "tokens_max": 185,
+        "tokens_mean": 30.375
+      }
+    }
+  },
+  "resource_size_receipt": {
+    "revision": "b98aecd41dfd9d7545a6b8e2f4743ae8471bd7a9",
+    "publisher_size_check": true,
+    "file_count": 15,
+    "weight_bytes": 16584414544,
+    "full_hash_verified": false
+  }
+}
