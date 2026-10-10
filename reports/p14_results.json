@@ -1,0 +1,167 @@
+{
+  "status": "reward_qualification_negative",
+  "source_commit": "e89910171d71dc0695a4f5167d165004acd0ed89",
+  "qualification": {
+    "go": false,
+    "checks": {
+      "coverage_at_least_half": false,
+      "at_least_four_correct_targets": false,
+      "accepted_precision_at_least_half": false,
+      "correct_negative_rate_lower": true,
+      "wrong_positive_rate_ten_pp_lower": false,
+      "correct_minority_rescued": false
+    },
+    "accepted": 0,
+    "correct_targets": 0,
+    "stream_n": 16,
+    "candidate_trajectory_count": 18,
+    "repeated_group_observations": 288,
+    "unique_group_count": 16,
+    "majority": {
+      "counts": {
+        "groups": 288,
+        "correct_parsed": 345,
+        "correct_negative": 197,
+        "positive_reward": 1219,
+        "wrong_positive": 1071,
+        "target_correct": 36,
+        "all_invalid": 0,
+        "zero_advantage": 4
+      },
+      "correct_negative": {
+        "correct": 197,
+        "total": 345,
+        "percent": 57.10144927536232
+      },
+      "wrong_positive": {
+        "correct": 1071,
+        "total": 1219,
+        "percent": 87.85890073831008
+      },
+      "target_accuracy": {
+        "correct": 36,
+        "total": 288,
+        "percent": 12.5
+      }
+    },
+    "verified": {
+      "counts": {
+        "groups": 288,
+        "correct_parsed": 345,
+        "correct_negative": 0,
+        "positive_reward": 0,
+        "wrong_positive": 0,
+        "abstained": 288,
+        "zero_advantage": 288,
+        "minority_rescued": 0,
+        "minority_available": 121
+      },
+      "correct_negative": {
+        "correct": 0,
+        "total": 345,
+        "percent": 0.0
+      },
+      "wrong_positive": {
+        "correct": 0,
+        "total": 0,
+        "percent": null
+      }
+    },
+    "independent_generalization_established": false,
+    "labels_used_only_after_teacher_closed": true,
+    "clinical_labels_enter_reward_targets": false,
+    "teacher_probe_accepted": 0,
+    "teacher_probe_correct": 0
+  },
+  "matrix": null,
+  "independent_generalization_established": false,
+  "compute": {
+    "original_authorized_seconds": 86400.0,
+    "new_authorized_seconds": 172800.0,
+    "total_authorized_seconds": 259200.0,
+    "prior_used_seconds": 67532.3925130393,
+    "p14_used_seconds": 624.8526629090011,
+    "cumulative_seconds": 68157.24517594831,
+    "remaining_seconds": 191042.75482405172,
+    "budget_reset": false,
+    "whole_worker_lifetime_counted": true,
+    "jobs": [
+      {
+        "stage": "qualification-plan",
+        "job": "frozen-verifier",
+        "seconds": 624.8526629090011,
+        "return_code": 0,
+        "timeout": false
+      }
+    ]
+  },
+  "failure_type": null,
+  "resource_preparation": {
+    "status": "all_planned_jobs_completed",
+    "cpu_only": true,
+    "gpu_process_seconds": 0,
+    "same_boot_completion_fence_passed": true,
+    "jobs": [
+      {
+        "return_code": 0,
+        "wall_seconds": 0.11490148699886049,
+        "timeout_or_stop": null
+      }
+    ]
+  },
+  "closed_readout_diagnostic": {
+    "sealed": true,
+    "labels_used": false,
+    "aggregate_only": true,
+    "no_alternate_reward_or_scoring": true,
+    "counts": {
+      "stream": {
+        "case_reasons": {
+          "strict_parse_failure": 15,
+          "self_reported_uncertainty": 1
+        },
+        "readout_counts": {
+          "total": 32,
+          "strict_parsed": 4,
+          "length_cap": 0,
+          "final_code_fence": 0,
+          "contains_code_fence": 0,
+          "multiline_json_suffix": 0,
+          "text_before_json": 32,
+          "parsed_visual_uncertain": 1,
+          "parsed_clinical_uncertain": 2,
+          "contains_exact_schema_object": 30,
+          "exact_schema_object_with_clean_or_fence_suffix": 30,
+          "exact_schema_visual_uncertain": 9,
+          "explicit_image_unavailability_phrase": 0
+        },
+        "tokens_min": 61,
+        "tokens_max": 303,
+        "tokens_mean": 151.21875
+      },
+      "probe": {
+        "case_reasons": {
+          "strict_parse_failure": 16
+        },
+        "readout_counts": {
+          "total": 32,
+          "strict_parsed": 0,
+          "length_cap": 0,
+          "final_code_fence": 1,
+          "contains_code_fence": 1,
+          "multiline_json_suffix": 0,
+          "text_before_json": 32,
+          "parsed_visual_uncertain": 0,
+          "parsed_clinical_uncertain": 0,
+          "contains_exact_schema_object": 32,
+          "exact_schema_object_with_clean_or_fence_suffix": 32,
+          "exact_schema_visual_uncertain": 8,
+          "explicit_image_unavailability_phrase": 0
+        },
+        "tokens_min": 82,
+        "tokens_max": 219,
+        "tokens_mean": 143.90625
+      }
+    }
+  }
+}

@@ -1,0 +1,2 @@
+stage,job,seconds,return_code,timeout
+qualification-plan,frozen-verifier,624.8526629090011,0,False

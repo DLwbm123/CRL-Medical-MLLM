@@ -1,0 +1,20 @@
+{
+  "original_authorized_seconds": 86400.0,
+  "new_authorized_seconds": 172800.0,
+  "total_authorized_seconds": 259200.0,
+  "prior_used_seconds": 67532.3925130393,
+  "p14_used_seconds": 624.8526629090011,
+  "cumulative_seconds": 68157.24517594831,
+  "remaining_seconds": 191042.75482405172,
+  "budget_reset": false,
+  "whole_worker_lifetime_counted": true,
+  "jobs": [
+    {
+      "stage": "qualification-plan",
+      "job": "frozen-verifier",
+      "seconds": 624.8526629090011,
+      "return_code": 0,
+      "timeout": false
+    }
+  ]
+}
