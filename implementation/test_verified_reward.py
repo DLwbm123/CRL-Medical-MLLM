@@ -84,6 +84,9 @@ def main():
     cfg = {"seed": 57, "p10_arm": "v", "reward_source": "frozen_visual", "method": "TTRL"}
     locked = {"p10_version": 1, "configurations": {"v": {"57": cfg}}}
     validate_development_configuration(cfg, {}, locked)
+    medical_cfg = dict(cfg, seed=60)
+    validate_development_configuration(medical_cfg, {}, {"p10_version": 1, "rollout_seeds": [60, 61, 62],
+                                                        "configurations": {"v": {"60": medical_cfg}}})
     for changed in [dict(cfg, seed=58), dict(cfg, reward_source="labels"), dict(cfg, method="SPINE")]:
         try: validate_development_configuration(changed, {}, locked)
         except RuntimeError: pass

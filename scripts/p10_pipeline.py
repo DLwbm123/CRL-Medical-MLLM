@@ -84,7 +84,7 @@ def main():
             else:
                 atomic_json(FOLDER / "main_budget_lock.json", {"gpu_seconds_already_used": used, "remaining_gpu_seconds": remaining,
                     "round_remaining_seconds": round_remaining, "estimated_seconds": estimated, "required_with_reserve": estimated * 1.2,
-                    "complete_arms": ["s", "t", "v"], "complete_seeds": [57, 58, 59]})
+                    "complete_arms": ["s", "t", "v"], "complete_seeds": budget["main_seeds"]})
                 atomic_json(FOLDER / "STATUS.json", {"stage": "actual_model_acceptance"})
                 supervise("acceptance", 0, os.environ["P10_GPU0_UUID"])
                 atomic_json(FOLDER / "STATUS.json", {"stage": "full_matrix"})

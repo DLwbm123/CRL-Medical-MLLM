@@ -29,7 +29,8 @@ def main():
     deadline = Deadline(time.monotonic() + float(os.environ["P2_MAX_JOB_SECONDS"]))
     for signum in [signal.SIGTERM, signal.SIGINT]:
         signal.signal(signum, lambda *_: setattr(deadline, "requested", True))
-    random.seed(57); np.random.seed(57); torch.manual_seed(57); torch.cuda.manual_seed_all(57)
+    seed = manifest["rollout_seeds"][0]
+    random.seed(seed); np.random.seed(seed); torch.manual_seed(seed); torch.cuda.manual_seed_all(seed)
     torch.set_num_threads(1)
     torch.use_deterministic_algorithms(True)
     path = Path(spec["model_path"])

@@ -14,7 +14,7 @@ def write_csv(path, rows):
         writer.writeheader(); writer.writerows(rows)
 
 
-def main():
+def export(prefix="p10"):
     folder = Path(os.environ["P10_LOCAL_FOLDER"])
     root = Path(__file__).resolve().parents[1]
     final = json.loads((folder / "FINAL.json").read_text())
@@ -34,9 +34,10 @@ def main():
     used = sum(j["seconds"] for j in jobs)
     if abs(used - final["gpu_process_seconds_used"]) > 1e-5:
         raise ValueError("Unique whole-worker costs differ from FINAL")
+    prior = final["cumulative_gpu_process_seconds"] - used
     receipt = {"original_authorized_seconds": 86400., "new_authorized_seconds": 172800., "total_authorized_seconds": 259200.,
-               "prior_used_seconds": 66990.15299156541, "p10_used_seconds": used,
-               "cumulative_seconds": 66990.15299156541 + used, "remaining_seconds": 259200. - 66990.15299156541 - used,
+               "prior_used_seconds": prior, prefix + "_used_seconds": used,
+               "cumulative_seconds": prior + used, "remaining_seconds": 259200. - prior - used,
                "budget_reset": False, "whole_worker_lifetime_counted": True, "jobs": jobs}
     gate_path = folder / "scores/qualification.json"
     main_path = folder / "scores/public_summary.json"
@@ -46,11 +47,11 @@ def main():
               "independent_generalization_established": False, "compute": receipt,
               "failure_type": final.get("error", "").split(":", 1)[0] or None}
     output = root / "reports"
-    for name, value in [("p10_results.json", public), ("p10_compute_receipt.json", receipt)]:
+    for name, value in [(prefix + "_results.json", public), (prefix + "_compute_receipt.json", receipt)]:
         (output / name).write_text(json.dumps(value, indent=2) + "\n")
     main_rows = []
     if matrix:
-        for seed in [57, 58, 59]:
+        for seed in sorted(map(int, matrix["seeds"])):
             for arm in ["s", "t", "v"]:
                 metric = matrix["seeds"][str(seed)][arm]
                 main_rows.append({"seed": seed, "arm": arm, "n": metric["n"],
@@ -58,24 +59,25 @@ def main():
                     "retained_initial_correct": metric["probe_transition"]["correct_to_correct"],
                     "correct_probe_to_invalid": metric["probe_transition"]["correct_to_invalid"],
                     "correct_probe_to_parsed_wrong": metric["probe_transition"]["correct_to_parsed_wrong"]})
-        write_csv(output / "p10_main_results.csv", main_rows)
-        write_csv(output / "p10_all_probes.csv", matrix["probe_rows"])
-    write_csv(output / "p10_gpu_jobs.csv", jobs)
+        write_csv(output / (prefix + "_main_results.csv"), main_rows)
+        write_csv(output / (prefix + "_all_probes.csv"), matrix["probe_rows"])
+    write_csv(output / (prefix + "_gpu_jobs.csv"), jobs)
     cases_path = folder / "scores/anonymous_teacher_cases.json"
     if cases_path.exists():
-        write_csv(output / "p10_teacher_cases.csv", json.loads(cases_path.read_text()))
+        write_csv(output / (prefix + "_teacher_cases.csv"), json.loads(cases_path.read_text()))
     gate_table = "No sealed qualification result."
     if gate:
         check_rows = [{"check": key, "passed": value} for key, value in gate["checks"].items()]
-        write_csv(output / "p10_qualification_checks.csv", check_rows)
+        write_csv(output / (prefix + "_qualification_checks.csv"), check_rows)
         gate_table = "\n".join(["| Frozen check | Passed |", "| --- | --- |"] +
                               [f"| {r['check']} | {r['passed']} |" for r in check_rows])
     table = "\n".join(["| Seed | Arm | Before /16 | After /16 | Same correct probes retained /3 |", "| --- | --- | --- | --- | --- |"] +
         [f"| {r['seed']} | {r['arm']} | {r['before_correct']} | {r['after_correct']} | {r['retained_initial_correct']} |" for r in main_rows]) if main_rows else "No complete training matrix was scored."
-    text = ["# P10 completed frozen visual reward campaign", f"Final status: {final['status']}. Executed source: {final['code_commit']}.",
+    precision = f"{100 * gate['correct_targets'] / gate['accepted']:.1f}%" if gate and gate["accepted"] else "NA"
+    text = [f"# {prefix.upper()} completed frozen visual reward campaign", f"Final status: {final['status']}. Executed source: {final['code_commit']}.",
             "Qualification used all18 old candidate trajectories, but only16 unique already observed stream groups. Frozen7B self-reported evidence/consistency and two-order agreement are fallible proxies. No independent medical or domain-shift generalization is established.",
             (f"Teacher accepted {gate['accepted']}/16 stream groups; {gate['correct_targets']} accepted targets were correct "
-             f"({100 * gate['correct_targets'] / gate['accepted']:.1f}% accepted precision). "
+             f"({precision} accepted precision). "
              f"Correct candidates with negative advantage: majority {gate['majority']['correct_negative']['percent']:.4f}% versus teacher {gate['verified']['correct_negative']['percent']:.4f}%. "
              f"Wrong candidates among positive rewards: majority {gate['majority']['wrong_positive']['percent']:.4f}% versus teacher {gate['verified']['wrong_positive']['percent']:.4f}%. "
              f"Legacy probe teacher accepted {gate['teacher_probe_accepted']}/16; {gate['teacher_probe_correct']} accepted targets were correct."
@@ -85,9 +87,9 @@ def main():
             "Stable-positive development: " + (str(matrix["stable_positive_development_result"]) if matrix else "NA; training not completed."),
             f"Whole GPU-worker lifetime: {used / 3600:.6f}h this campaign; {receipt['cumulative_seconds'] / 3600:.6f}h cumulative of72h; {receipt['remaining_seconds'] / 3600:.6f}h remaining. Old costs were not reset or counted twice.",
             "New actual-backbone probability acceptance is separate from reused original full-model optimizer recovery. Raw medical material, target/readout text, checkpoints, full logs and private paths are excluded. Public delivery still requires proxy push, remote SHA and anonymous final-commit verification."]
-    (output / "p10_report.md").write_text("\n\n".join(text) + "\n")
+    (output / (prefix + "_report.md")).write_text("\n\n".join(text) + "\n")
     print(json.dumps({"exported": True, "status": final["status"], "main_rows": len(main_rows), "jobs": len(jobs)}))
 
 
 if __name__ == "__main__":
-    main()
+    export()

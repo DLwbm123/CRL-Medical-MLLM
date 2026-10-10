@@ -15,8 +15,9 @@ def main():
     manifest = json.loads((folder / "manifest.json").read_text())
     if not json.loads((folder / "scores/qualification.json").read_text())["go"] or not (folder / "main_budget_lock.json").exists():
         raise RuntimeError("Reward and compute admission must precede actual-model acceptance")
-    cfg = manifest["configurations"]["t"]["57"]
-    torch.set_num_threads(1); random.seed(57); np.random.seed(57); torch.manual_seed(57); torch.cuda.manual_seed_all(57)
+    seed = manifest["rollout_seeds"][0]
+    cfg = manifest["configurations"]["t"][str(seed)]
+    torch.set_num_threads(1); random.seed(seed); np.random.seed(seed); torch.manual_seed(seed); torch.cuda.manual_seed_all(seed)
     torch.use_deterministic_algorithms(True)
     deadline = Deadline(time.monotonic() + float(os.environ["P2_MAX_JOB_SECONDS"]))
     out = folder / "actual_acceptance"; out.mkdir(exist_ok=False)

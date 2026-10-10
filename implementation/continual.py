@@ -483,7 +483,7 @@ def main():
         if not json.loads((folder / "scores/qualification.json").read_text())["go"]:
             raise RuntimeError("Frozen visual reward qualification must pass before any P10 main run")
         lock = json.loads((folder / "main_budget_lock.json").read_text())
-        if lock["complete_seeds"] != [57, 58, 59] or lock["complete_arms"] != ["s", "t", "v"]:
+        if lock["complete_seeds"] != manifest["rollout_seeds"] or len(set(lock["complete_seeds"])) != 3 or lock["complete_arms"] != ["s", "t", "v"]:
             raise RuntimeError("Full P10 matrix compute admission is missing")
     visible = os.environ.get("CUDA_VISIBLE_DEVICES")
     if visible not in {str(cfg["gpu_index"]), os.environ.get("P2_GPU_UUID")} or torch.cuda.device_count() != 1:

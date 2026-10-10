@@ -85,6 +85,18 @@ def main():
                   "teacher_probe_accepted": sum(p["target"] is not None for p in signal["probe"]),
                   "teacher_probe_correct": sum(is_correct(p["target"], labels[p["id"]]) for p in signal["probe"])}
         atomic_json(folder / "scores/qualification.json", public)
+        teacher_rows = []
+        for section in ["stream", "probe"]:
+            for index, row in enumerate(signal[section]):
+                teacher_rows.append({"section": section, "anonymous_index": index,
+                    "accepted": row["target"] is not None,
+                    "accepted_target_correct": bool(row["target"] is not None and is_correct(row["target"], labels[row["id"]])),
+                    "first_order_parsed": row["judgments"][0] is not None, "reverse_order_parsed": row["judgments"][1] is not None,
+                    "same_canonical_choice": bool(all(j is not None for j in row["judgments"]) and row["judgments"][0]["choice"] == row["judgments"][1]["choice"]),
+                    "first_tokens": row["readouts"][0]["tokens"], "reverse_tokens": row["readouts"][1]["tokens"],
+                    "any_length_cap": any(r["hit_length_cap"] for r in row["readouts"]),
+                    "actor_update_harm": "not_applicable_no_actor_update"})
+        atomic_json(folder / "scores/anonymous_teacher_cases.json", teacher_rows)
         print(json.dumps(public), flush=True)
         return
     ledger = json.loads((folder / "controllers/main-plan.json").read_text())

@@ -1,5 +1,6 @@
 """Pinned public teacher resources; no CUDA context or medical uploads."""
 import json
+import hashlib
 import os
 import urllib.request
 from pathlib import Path
@@ -8,8 +9,15 @@ from huggingface_hub import snapshot_download
 
 def main():
     root = Path(os.environ["P10_SOURCE_ROOT"])
-    repo, revision = "Qwen/Qwen2.5-VL-7B-Instruct", "cc594898137f460bfe9f0759e9844b3ce807cfb5"
-    destination = root / "models/Qwen2.5-VL-7B-Instruct"
+    folder = Path(os.environ["P0_ROOT"]) / "outputs" / os.environ["P2_CAMPAIGN"]
+    raw = (folder / "manifest.json").read_bytes()
+    if hashlib.sha256(raw).hexdigest() != (folder / "manifest.sha256").read_text().strip():
+        raise ValueError("Locked download specification differs")
+    spec = json.loads(raw)["teacher"]
+    repo, revision = spec["repo"], spec["revision"]
+    destination = Path(spec["model_path"])
+    if destination.resolve() != (root / "models" / repo.split("/")[-1]).resolve():
+        raise ValueError("Teacher download escapes allocated storage")
     receipt = destination / "download_receipt.json"
     if receipt.exists():
         record = json.loads(receipt.read_text())
