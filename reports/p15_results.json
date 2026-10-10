@@ -1,0 +1,185 @@
+{
+  "status": "reward_qualification_negative",
+  "source_commit": "0c70f5f77a7f701d8f4a43eef5228e0111d9d9d7",
+  "qualification": {
+    "go": false,
+    "checks": {
+      "coverage_at_least_half": false,
+      "at_least_four_correct_targets": false,
+      "accepted_precision_at_least_half": false,
+      "correct_negative_rate_lower": true,
+      "wrong_positive_rate_ten_pp_lower": false,
+      "correct_minority_rescued": true
+    },
+    "accepted": 5,
+    "correct_targets": 2,
+    "stream_n": 16,
+    "candidate_trajectory_count": 18,
+    "repeated_group_observations": 288,
+    "unique_group_count": 16,
+    "majority": {
+      "counts": {
+        "groups": 288,
+        "correct_parsed": 345,
+        "correct_negative": 197,
+        "positive_reward": 1219,
+        "wrong_positive": 1071,
+        "target_correct": 36,
+        "all_invalid": 0,
+        "zero_advantage": 4
+      },
+      "correct_negative": {
+        "correct": 197,
+        "total": 345,
+        "percent": 57.10144927536232
+      },
+      "wrong_positive": {
+        "correct": 1071,
+        "total": 1219,
+        "percent": 87.85890073831008
+      },
+      "target_accuracy": {
+        "correct": 36,
+        "total": 288,
+        "percent": 12.5
+      }
+    },
+    "verified": {
+      "counts": {
+        "groups": 288,
+        "correct_parsed": 345,
+        "correct_negative": 86,
+        "positive_reward": 262,
+        "wrong_positive": 213,
+        "abstained": 198,
+        "zero_advantage": 211,
+        "minority_rescued": 18,
+        "minority_available": 121
+      },
+      "correct_negative": {
+        "correct": 86,
+        "total": 345,
+        "percent": 24.92753623188406
+      },
+      "wrong_positive": {
+        "correct": 213,
+        "total": 262,
+        "percent": 81.29770992366412
+      }
+    },
+    "independent_generalization_established": false,
+    "labels_used_only_after_teacher_closed": true,
+    "clinical_labels_enter_reward_targets": false,
+    "teacher_probe_accepted": 6,
+    "teacher_probe_correct": 1
+  },
+  "matrix": null,
+  "independent_generalization_established": false,
+  "compute": {
+    "original_authorized_seconds": 86400.0,
+    "new_authorized_seconds": 172800.0,
+    "total_authorized_seconds": 259200.0,
+    "prior_used_seconds": 68157.24517594831,
+    "p15_used_seconds": 589.0922891160008,
+    "cumulative_seconds": 68746.33746506431,
+    "remaining_seconds": 190453.6625349357,
+    "budget_reset": false,
+    "whole_worker_lifetime_counted": true,
+    "jobs": [
+      {
+        "stage": "qualification-plan",
+        "job": "frozen-verifier",
+        "seconds": 589.0922891160008,
+        "return_code": 0,
+        "timeout": false
+      }
+    ]
+  },
+  "failure_type": null,
+  "resource_preparation": {
+    "status": "all_planned_jobs_completed",
+    "cpu_only": true,
+    "gpu_process_seconds": 0,
+    "same_boot_completion_fence_passed": true,
+    "jobs": [
+      {
+        "return_code": 0,
+        "wall_seconds": 0.11502609099989058,
+        "timeout_or_stop": null
+      }
+    ]
+  },
+  "closed_output_diagnostic": {
+    "label_free": true,
+    "no_alternate_targets_or_scoring": true,
+    "no_new_gpu_process": true,
+    "signal_sealed": true,
+    "teacher_weight_versions_unchanged": true,
+    "sections": {
+      "stream": {
+        "case_reasons": {
+          "self_reported_uncertainty": 6,
+          "accepted": 5,
+          "strict_schema_parse_failure": 2,
+          "canonical_order_disagreement": 3
+        },
+        "readout_counts": {
+          "parse_valid": 30,
+          "token_caps": 0,
+          "visual_uncertain": 9,
+          "clinical_uncertain": 3
+        },
+        "readout_n": 32,
+        "token_min": 61,
+        "token_max": 303,
+        "token_mean": 151.21875
+      },
+      "probe": {
+        "case_reasons": {
+          "accepted": 6,
+          "self_reported_uncertainty": 4,
+          "canonical_order_disagreement": 5,
+          "strict_schema_parse_failure": 1
+        },
+        "readout_counts": {
+          "parse_valid": 31,
+          "token_caps": 0,
+          "visual_uncertain": 7,
+          "clinical_uncertain": 0
+        },
+        "readout_n": 32,
+        "token_min": 82,
+        "token_max": 219,
+        "token_mean": 143.90625
+      }
+    }
+  },
+  "completion_audit": {
+    "owned_processes_ended": true,
+    "resource_preparation_completed": true,
+    "same_boot_fence_passed": true,
+    "teacher_sealed": true,
+    "teacher_readouts": 64,
+    "unique_stream_cases": 16,
+    "legacy_probe_cases": 16,
+    "all_candidate_trajectories_audited": 18,
+    "reward_gate_go": false,
+    "failure_type": "reward_qualification_negative",
+    "actor_updates": 0,
+    "actual_model_acceptance_executed": false,
+    "matrix_workers_started": 0,
+    "gpu_process_seconds_used": 589.0922891160008,
+    "cumulative_gpu_process_seconds": 68746.33746506431,
+    "remaining_gpu_process_seconds": 190453.6625349357,
+    "budget_reset": false
+  },
+  "next_route_admission": {
+    "admitted": false,
+    "reason": "no_evidenced_qualified_reward_source_within_current_data_scope",
+    "remaining_gpu_process_seconds": 190453.6625349357,
+    "budget_exhausted": false,
+    "new_data_authorized": false,
+    "next_round_started": false,
+    "automatic_prompt_or_parser_search": false
+  }
+}
