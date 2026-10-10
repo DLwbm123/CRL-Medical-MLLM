@@ -1,0 +1,7 @@
+seed,sampler,groups,optimizer_updates,retention_harm,invalid_candidates,groups_with_length_cap,majority_correct_negative_percent,majority_wrong_positive_percent,verified_correct_negative_percent,verified_wrong_positive_percent
+75,s,64,0,NA_no_update,93,0,NA,NA,NA,NA
+75,t,64,0,NA_no_update,115,0,NA,NA,NA,NA
+76,s,64,0,NA_no_update,73,0,NA,NA,NA,NA
+76,t,64,0,NA_no_update,132,0,NA,NA,NA,NA
+77,s,64,0,NA_no_update,87,0,NA,NA,NA,NA
+77,t,64,0,NA_no_update,122,0,NA,NA,NA,NA

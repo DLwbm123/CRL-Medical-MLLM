@@ -1,0 +1,98 @@
+{
+  "status": "failed",
+  "source_commit": "b0f2cae6d22dff9d7a75cf0a6ce965843103a8a9",
+  "qualification": null,
+  "failure_type": "input_label_contract_failure",
+  "offline_failure_audit": {
+    "failure_type": "input_label_contract_failure",
+    "exception": "Selected binary question has a nonbinary label; no reselection permitted",
+    "selected_groups": 64,
+    "binary_label_count": 63,
+    "nonbinary_label_count": 1,
+    "section_counts": {
+      "calibration": {
+        "binary": 31,
+        "nonbinary": 1
+      },
+      "verification": {
+        "binary": 32
+      }
+    },
+    "labels_examined_after_all_workers_ended": true,
+    "no_labels_or_ids_exported": true,
+    "no_reselection_or_coercion": true,
+    "qualification_unavailable": true,
+    "scientific_reward_result": null
+  },
+  "stable_positive_development_result": false,
+  "training_performed": false,
+  "compute": {
+    "total_authorized_seconds": 259200.0,
+    "prior_used_seconds": 68746.33746506431,
+    "p16_used_seconds": 13809.456759471006,
+    "cumulative_seconds": 82555.79422453532,
+    "remaining_seconds": 176644.20577546468,
+    "budget_reset": false,
+    "whole_worker_lifetime_counted": true,
+    "gpu_jobs": [
+      {
+        "stage": "qualification",
+        "job": "frozen-verifier",
+        "seconds": 623.2003990690027,
+        "return_code": 0,
+        "timeout": false
+      },
+      {
+        "stage": "main",
+        "job": "pool-s75",
+        "seconds": 2151.0904175180003,
+        "return_code": 0,
+        "timeout": false
+      },
+      {
+        "stage": "main",
+        "job": "pool-t75",
+        "seconds": 2149.4079416669992,
+        "return_code": 0,
+        "timeout": false
+      },
+      {
+        "stage": "main",
+        "job": "pool-s76",
+        "seconds": 2162.9141557250005,
+        "return_code": 0,
+        "timeout": false
+      },
+      {
+        "stage": "main",
+        "job": "pool-t76",
+        "seconds": 2257.3921294440006,
+        "return_code": 0,
+        "timeout": false
+      },
+      {
+        "stage": "main",
+        "job": "pool-s77",
+        "seconds": 2172.369031317001,
+        "return_code": 0,
+        "timeout": false
+      },
+      {
+        "stage": "main",
+        "job": "pool-t77",
+        "seconds": 2293.082684731002,
+        "return_code": 0,
+        "timeout": false
+      }
+    ],
+    "cpu_resource_jobs": [
+      {
+        "stage": "resources",
+        "job": "resource",
+        "seconds": 0.11502727699917159,
+        "return_code": 0,
+        "timeout": false
+      }
+    ]
+  }
+}

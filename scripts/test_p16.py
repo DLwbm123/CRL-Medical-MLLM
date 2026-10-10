@@ -34,6 +34,10 @@ def main():
         counts = export(folder, root / "public")
         assert counts == {"teacher_rows": 64, "pool_rows": 6, "case_rows": 384, "check_rows": 24}
         assert not any(word in p.read_text() for p in (root / "public").iterdir() for word in ["secret", "image_paths", "SLAKE/train/"])
+        (folder / "offline_failure_audit.json").write_text(json.dumps({"failure_type": "input_label_contract_failure", "nonbinary_label_count": 1, "selected_groups": 64}))
+        export(folder, root / "public")
+        failure = json.loads((root / "public/p16_results.json").read_text())
+        assert failure["failure_type"] == "input_label_contract_failure" and failure["qualification"] is None
         folder = root / "outputs" / "fixture"; folder.mkdir(parents=True)
         for part in ["inputs", "reference", "scores", "controllers"]: (folder / part).mkdir()
         entries = []
@@ -73,6 +77,11 @@ def main():
             else: raise AssertionError("Scorer ignored a live worker")
             closure.write_text(json.dumps({"owned_main_processes_ended": True}))
             labels = root / "views/evaluation_labels/SLAKE/train.jsonl"; labels.parent.mkdir(parents=True)
+            labels.write_text("".join(json.dumps({"id": str(i), "answer": "neither" if i == 0 else "no"}) + "\n" for i in range(64)))
+            try: score()
+            except ValueError as exc: assert "nonbinary label" in str(exc)
+            else: raise AssertionError("Scorer accepted a nonbinary label")
+            assert not (folder / "scores/qualification.json").exists()
             labels.write_text("".join(json.dumps({"id": str(i), "answer": "no"}) + "\n" for i in range(64)))
             score()
             decision = json.loads((folder / "scores/qualification.json").read_text())
