@@ -19,6 +19,8 @@ paths = {"prepare": "scripts/prepare_p10.py", "download": "scripts/p10_download.
          "p18_numeric": "implementation/p18_numeric.py", "p18_test": "scripts/test_p18.py",
          "p19_prepare": "scripts/prepare_p18.py", "p19_pipeline": "scripts/p19_pipeline.py",
          "p19_cache": "implementation/p19_cache.py", "p19_test": "scripts/test_p19.py",
+         "p20_prepare": "scripts/prepare_p20.py", "p20_pipeline": "scripts/p16_pipeline.py",
+         "p20_pool": "implementation/p20_pool.py", "p20_test": "scripts/test_p20.py",
          "transport_test": "scripts/test_transport.py",
          "resource_test": "scripts/test_resource_closure.py",
          "report_test": "scripts/test_report_p12.py",

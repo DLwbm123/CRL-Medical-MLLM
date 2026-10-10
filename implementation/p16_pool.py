@@ -12,7 +12,7 @@ from continual import Deadline, Engine, load_input
 from state import atomic_json
 
 
-def main():
+def main(engine_class=Engine):
     root = Path(os.environ["P0_ROOT"]); folder = root / "outputs" / os.environ["P2_CAMPAIGN"]
     raw = (folder / "manifest.json").read_bytes(); digest = hashlib.sha256(raw).hexdigest()
     if digest != (folder / "manifest.sha256").read_text().strip(): raise ValueError("Manifest changed")
@@ -29,7 +29,7 @@ def main():
     torch.set_num_threads(1); torch.use_deterministic_algorithms(True)
     deadline = Deadline(time.monotonic() + float(os.environ["P2_MAX_JOB_SECONDS"]))
     for signum in [signal.SIGTERM, signal.SIGINT]: signal.signal(signum, lambda *_: setattr(deadline, "requested", True))
-    engine = Engine(root, out, cfg, deadline)
+    engine = engine_class(root, out, cfg, deadline)
     try:
         if engine.training or engine.state is not None or any(p.requires_grad for p in engine.actor.parameters()):
             raise ValueError("Frozen pool unexpectedly has optimization state")
