@@ -61,11 +61,26 @@ def main():
         write_csv(output / "p10_main_results.csv", main_rows)
         write_csv(output / "p10_all_probes.csv", matrix["probe_rows"])
     write_csv(output / "p10_gpu_jobs.csv", jobs)
+    cases_path = folder / "scores/anonymous_teacher_cases.json"
+    if cases_path.exists():
+        write_csv(output / "p10_teacher_cases.csv", json.loads(cases_path.read_text()))
+    gate_table = "No sealed qualification result."
+    if gate:
+        check_rows = [{"check": key, "passed": value} for key, value in gate["checks"].items()]
+        write_csv(output / "p10_qualification_checks.csv", check_rows)
+        gate_table = "\n".join(["| Frozen check | Passed |", "| --- | --- |"] +
+                              [f"| {r['check']} | {r['passed']} |" for r in check_rows])
     table = "\n".join(["| Seed | Arm | Before /16 | After /16 | Same correct probes retained /3 |", "| --- | --- | --- | --- | --- |"] +
         [f"| {r['seed']} | {r['arm']} | {r['before_correct']} | {r['after_correct']} | {r['retained_initial_correct']} |" for r in main_rows]) if main_rows else "No complete training matrix was scored."
     text = ["# P10 completed frozen visual reward campaign", f"Final status: {final['status']}. Executed source: {final['code_commit']}.",
             "Qualification used all18 old candidate trajectories, but only16 unique already observed stream groups. Frozen7B self-reported evidence/consistency and two-order agreement are fallible proxies. No independent medical or domain-shift generalization is established.",
-            "Gate outcome: " + (json.dumps(gate, ensure_ascii=False) if gate else "NA; no sealed gate outcome."), table,
+            (f"Teacher accepted {gate['accepted']}/16 stream groups; {gate['correct_targets']} accepted targets were correct "
+             f"({100 * gate['correct_targets'] / gate['accepted']:.1f}% accepted precision). "
+             f"Correct candidates with negative advantage: majority {gate['majority']['correct_negative']['percent']:.4f}% versus teacher {gate['verified']['correct_negative']['percent']:.4f}%. "
+             f"Wrong candidates among positive rewards: majority {gate['majority']['wrong_positive']['percent']:.4f}% versus teacher {gate['verified']['wrong_positive']['percent']:.4f}%. "
+             f"Legacy probe teacher accepted {gate['teacher_probe_accepted']}/16; {gate['teacher_probe_correct']} accepted targets were correct."
+             if gate else "NA; no sealed gate outcome."), gate_table, table,
+            "This is a scientific reward-qualification rejection, not a runtime failure, when the qualifier exits0 and go is false. No actor update, actual-backbone acceptance or seed-arm training was launched after rejection; actor retention and training harms are therefore not applicable. The anonymous case table reports all32 teacher outcomes, including abstentions and parsing failures; it does not measure an actor before/after transition.",
             "All nine seed-arm outcomes and every anonymous probe correctness/parse harm are retained when the matrix closes. No checkpoint/seed/format selection substitutes for the original strict prequential primary metric.",
             "Stable-positive development: " + (str(matrix["stable_positive_development_result"]) if matrix else "NA; training not completed."),
             f"Whole GPU-worker lifetime: {used / 3600:.6f}h this campaign; {receipt['cumulative_seconds'] / 3600:.6f}h cumulative of72h; {receipt['remaining_seconds'] / 3600:.6f}h remaining. Old costs were not reset or counted twice.",

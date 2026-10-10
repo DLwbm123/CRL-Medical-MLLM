@@ -1,0 +1,99 @@
+{
+  "status": "reward_qualification_negative",
+  "source_commit": "82c01b42d4705b1902c5fc9fbeaa7a9628dffd7f",
+  "qualification": {
+    "go": false,
+    "checks": {
+      "coverage_at_least_half": true,
+      "at_least_four_correct_targets": false,
+      "accepted_precision_at_least_half": false,
+      "correct_negative_rate_lower": true,
+      "wrong_positive_rate_ten_pp_lower": false,
+      "correct_minority_rescued": true
+    },
+    "accepted": 8,
+    "correct_targets": 2,
+    "stream_n": 16,
+    "candidate_trajectory_count": 18,
+    "repeated_group_observations": 288,
+    "unique_group_count": 16,
+    "majority": {
+      "counts": {
+        "groups": 288,
+        "correct_parsed": 345,
+        "correct_negative": 197,
+        "positive_reward": 1219,
+        "wrong_positive": 1071,
+        "target_correct": 36,
+        "all_invalid": 0,
+        "zero_advantage": 4
+      },
+      "correct_negative": {
+        "correct": 197,
+        "total": 345,
+        "percent": 57.10144927536232
+      },
+      "wrong_positive": {
+        "correct": 1071,
+        "total": 1219,
+        "percent": 87.85890073831008
+      },
+      "target_accuracy": {
+        "correct": 36,
+        "total": 288,
+        "percent": 12.5
+      }
+    },
+    "verified": {
+      "counts": {
+        "groups": 288,
+        "correct_parsed": 345,
+        "correct_negative": 113,
+        "positive_reward": 444,
+        "wrong_positive": 373,
+        "abstained": 144,
+        "zero_advantage": 161,
+        "minority_rescued": 19,
+        "minority_available": 121
+      },
+      "correct_negative": {
+        "correct": 113,
+        "total": 345,
+        "percent": 32.7536231884058
+      },
+      "wrong_positive": {
+        "correct": 373,
+        "total": 444,
+        "percent": 84.009009009009
+      }
+    },
+    "independent_generalization_established": false,
+    "labels_used_only_after_teacher_closed": true,
+    "clinical_labels_enter_reward_targets": false,
+    "teacher_probe_accepted": 7,
+    "teacher_probe_correct": 2
+  },
+  "matrix": null,
+  "independent_generalization_established": false,
+  "compute": {
+    "original_authorized_seconds": 86400.0,
+    "new_authorized_seconds": 172800.0,
+    "total_authorized_seconds": 259200.0,
+    "prior_used_seconds": 66990.15299156541,
+    "p10_used_seconds": 373.767406988889,
+    "cumulative_seconds": 67363.9203985543,
+    "remaining_seconds": 191836.0796014457,
+    "budget_reset": false,
+    "whole_worker_lifetime_counted": true,
+    "jobs": [
+      {
+        "stage": "qualification-plan",
+        "job": "frozen-verifier",
+        "seconds": 373.767406988889,
+        "return_code": 0,
+        "timeout": false
+      }
+    ]
+  },
+  "failure_type": null
+}

@@ -1,0 +1,7 @@
+check,passed
+coverage_at_least_half,True
+at_least_four_correct_targets,False
+accepted_precision_at_least_half,False
+correct_negative_rate_lower,True
+wrong_positive_rate_ten_pp_lower,False
+correct_minority_rescued,True
