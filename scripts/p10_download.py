@@ -4,10 +4,9 @@ import hashlib
 import os
 import urllib.request
 from pathlib import Path
-from huggingface_hub import snapshot_download
 
 
-def main():
+def main(transfer=None):
     root = Path(os.environ["P10_SOURCE_ROOT"])
     folder = Path(os.environ["P0_ROOT"]) / "outputs" / os.environ["P2_CAMPAIGN"]
     raw = (folder / "manifest.json").read_bytes()
@@ -30,8 +29,12 @@ def main():
     if metadata["sha"] != revision:
         raise ValueError("Publisher revision differs")
     allowed = [x for x in metadata["siblings"] if x["rfilename"].endswith((".json", ".txt", ".safetensors"))]
-    snapshot_download(repo_id=repo, revision=revision, local_dir=destination,
-                      allow_patterns=[x["rfilename"] for x in allowed], max_workers=2)
+    if transfer is None:
+        from huggingface_hub import snapshot_download
+        snapshot_download(repo_id=repo, revision=revision, local_dir=destination,
+                          allow_patterns=[x["rfilename"] for x in allowed], max_workers=2)
+    else:
+        transfer(repo, revision, destination, allowed)
     files = []
     for item in allowed:
         size = (destination / item["rfilename"]).stat().st_size
