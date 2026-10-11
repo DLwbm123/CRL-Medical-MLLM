@@ -1,0 +1,56 @@
+{
+  "status": "failed",
+  "source_commit": "fb339a977bde1e7b1c8d82b6d56f456f8c2deb2a",
+  "failure_type": "RuntimeError",
+  "training_acceptance": {
+    "passed": false,
+    "labels_read": false,
+    "diagnostic_weights_discarded_before_main": true,
+    "arms": {},
+    "error_type": "ValueError"
+  },
+  "budget": {
+    "admitted": true,
+    "remaining_gpu_seconds": 381020.3944360777,
+    "round_remaining_seconds": 237554.764847,
+    "estimated_seconds": 194400.0,
+    "required_with_reserve": 233280.0,
+    "additional_seconds_required": 0.0,
+    "complete_seeds": [
+      99,
+      100,
+      101
+    ],
+    "complete_arms": [
+      "s",
+      "t",
+      "v"
+    ],
+    "budget_reset": false,
+    "new_task_training_cost_measured": false,
+    "basis": "max historical training proxy and full fixed stop caps; not frozen-generation speed"
+  },
+  "matrix": null,
+  "compute": {
+    "total_authorized_seconds": 518400.0,
+    "prior_used_seconds": 137379.60556392232,
+    "this_round_seconds": 52.92565835099958,
+    "cumulative_seconds": 137432.5312222733,
+    "remaining_seconds": 380967.4687777267,
+    "budget_reset": false,
+    "whole_worker_lifetime_counted": true,
+    "jobs": [
+      {
+        "stage": "acceptance",
+        "job": "actual-acceptance",
+        "seconds": 52.92565835099958,
+        "return_code": 1,
+        "timeout": null
+      }
+    ]
+  },
+  "stable_positive_development_result": null,
+  "independent_clinical_generalization_established": false,
+  "pipeline_started": true,
+  "original_FINAL_exists": true
+}

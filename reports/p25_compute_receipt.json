@@ -1,0 +1,18 @@
+{
+  "total_authorized_seconds": 518400.0,
+  "prior_used_seconds": 137379.60556392232,
+  "this_round_seconds": 52.92565835099958,
+  "cumulative_seconds": 137432.5312222733,
+  "remaining_seconds": 380967.4687777267,
+  "budget_reset": false,
+  "whole_worker_lifetime_counted": true,
+  "jobs": [
+    {
+      "stage": "acceptance",
+      "job": "actual-acceptance",
+      "seconds": 52.92565835099958,
+      "return_code": 1,
+      "timeout": null
+    }
+  ]
+}
