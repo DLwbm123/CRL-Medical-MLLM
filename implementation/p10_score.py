@@ -34,7 +34,7 @@ def verified_audit(rows, choices, labels, targets):
             "wrong_positive": fraction(counts["wrong_positive"], counts["positive_reward"])}
 
 
-def main():
+def main(label_reader=read_labels, initial_check=None):
     root = Path(os.environ["P0_ROOT"])
     folder = root / "outputs" / os.environ["P2_CAMPAIGN"]
     raw = (folder / "manifest.json").read_bytes(); digest = hashlib.sha256(raw).hexdigest()
@@ -112,7 +112,8 @@ def main():
             cfg = manifest["configurations"][arm][str(seed)]
             run = folder / "runs" / ("main-" + key)
             rows, result, probes = available_run(run, manifest, digest, cfg, acceptance)
-            if len(rows) != 16 or result["status"] != "completed" or set(probes) != {0, 16} or result["code_commit"] != os.environ["P2_CODE_COMMIT"]:
+            n = len(manifest["stream"])
+            if len(rows) != n or result["status"] != "completed" or set(probes) != {0, n} or result["code_commit"] != os.environ["P2_CODE_COMMIT"]:
                 raise ValueError("Incomplete matrix member")
             output_units(run, rows, choices)
             if arm == "v" and json.loads((run / "reference_signal_snapshot.json").read_text()) != signal:
@@ -128,10 +129,11 @@ def main():
     if any(probes[0]["predictions"] != initial for _, _, probes in loaded.values()):
         raise ValueError("Initial probe predictions differ between arms")
     atomic_json(folder / "scores/prediction_seal.json", {"manifest_sha256": digest, "coverage": {k: len(v[0]) for k, v in loaded.items()}, "labels_read_before_seal": False})
-    labels = read_labels(root, manifest)
+    labels = label_reader(root, manifest)
+    if initial_check: initial_check(folder, initial, labels)
     base_predictions = [{"id": r["id"], "answer": r["before"]["answer"]} for r in loaded["a"][0]]
     base = [is_correct(p["answer"], labels[p["id"]]) for p in base_predictions]
-    public = {"seeds": {}, "resources": {}, "frozen_correct": sum(base), "n": 16, "independent_generalization_established": False}
+    public = {"seeds": {}, "resources": {}, "frozen_correct": sum(base), "n": n, "independent_generalization_established": False}
     success = []
     probe_rows = []
     for seed in manifest["rollout_seeds"]:
@@ -144,7 +146,7 @@ def main():
             after = [{"id": r["id"], "answer": r["after"]["answer"]} for r in rows]
             metric["history_transition"] = prediction_transition_audit(base_predictions, before, labels)
             metric["current_transition"] = prediction_transition_audit(before, after, labels)
-            final = probes[16]["predictions"]
+            final = probes[n]["predictions"]
             metric["probe_transition"] = prediction_transition_audit(initial, final, labels)
             metric["format"] = summarize_formats(output_units(run, rows, choices), labels)
             metric["reward_audit"] = verified_audit(rows, choices, labels, targets) if arm == "v" else reward_audit(rows, choices, labels)

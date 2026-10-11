@@ -1,0 +1,52 @@
+{
+  "preparation_only": true,
+  "GPU_worker_started": false,
+  "actual_GPU_acceptance_passed": null,
+  "P21_reward_result": null,
+  "P21_snapshot_utc": "2026-10-11T02:39:53.492249+00:00",
+  "fixed_seeds": [
+    93,
+    94,
+    95
+  ],
+  "full_stream_cases": 64,
+  "original_probe_cases": 16,
+  "full_trajectory_count": 9,
+  "cpu_checks": {
+    "fixed_primary_and_24_gate_schema": true,
+    "predecessor_closure_and_delivery_barrier": true,
+    "full_budget_block_before_any_GPU": true,
+    "explicit_reward_source_rebinding": true,
+    "full64_offline_scoring_and_label_barrier": true,
+    "same_original_three_probe_anchors": true,
+    "complete_NA_report_9_matrix_576_cases_144_probes": true,
+    "real_tiny_CPU_optimizer_new_recovery_schema": true,
+    "tiny_fresh_process_10_vs_5_plus_5_exact": true,
+    "abstention_and_zero_advantage_whole_optimizer_skip": true,
+    "neutral_argv_and_CUDA_hidden": true
+  },
+  "budget_snapshot": {
+    "admitted": false,
+    "remaining_gpu_seconds": 149342.2133753177,
+    "round_remaining_seconds": 237600,
+    "estimated_seconds": 194400.0,
+    "required_with_reserve": 233280.0,
+    "additional_seconds_required": 83937.78662468231,
+    "complete_seeds": [
+      93,
+      94,
+      95
+    ],
+    "complete_arms": [
+      "s",
+      "t",
+      "v"
+    ],
+    "budget_reset": false,
+    "new_task_training_cost_measured": false,
+    "basis": "max historical training proxy and full fixed stop caps; not frozen-generation speed"
+  },
+  "historical_training_proxy_seconds": 165275.4457770791,
+  "new_task_training_cost_measured": false,
+  "independent_clinical_generalization_established": false
+}

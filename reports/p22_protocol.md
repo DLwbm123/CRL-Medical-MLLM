@@ -1,0 +1,41 @@
+# P22 conditional full RL training preparation
+
+This protocol prepares a complete experiment; no GPU acceptance or training has started. P21 remains immutable and its qualification has not yet been established. Preparation is authorized by the user's instruction to ready RL code and acceptance and to start promptly only after the fixed reward gate, actual training acceptance and full budget admission all pass.
+
+## Fixed scientific scope
+
+Use all64 already observed P21 SLAKE training inputs in their original order (calibration32 followed by verification32). Do not reselect or shrink them. The two blocks cease to be independent verification after reuse for adaptation. Retain the original16 MedXpert probe inputs in their original order and the same three previously correct anchors. The original P7 initial predictions bind those anchors, with correctness checked only during sealed offline scoring. This binary development task does not reverse the old MedXpert negative results or establish patient, examination or pretraining independence.
+
+Actor: Qwen2.5-VL-3B-Instruct revision66285546d2b821cf421d4f5eb2576359d3770cd3, BF16, original image processor, prompt, strict primary parser, SDPA, full vision/language parameters, one CPU thread, persistent FP32 AdamW masters/moments, original learning rate1e-6 and fixed-base KL0.01. TF32 is off as in P19–P21. Original eight rollouts,2048-token cap, one update per group, checkpoint/RNG/probe rules and native full-prefix loss are unchanged.
+
+New reserved seeds93/94/95. Order: fresh frozen baseline42, s93/t93/v93, s94/t94/v94, s95/t95/v95. s is original SPINE, majority reward, sampling0.7/0.95. t is matched TTRL with majority reward, sampling1/1 and whole-optimizer zero-advantage skip. v differs from t only in the fixed qualified q visual reward and its original abstention behavior. No sampled-majority fallback on teacher abstention. No per-seed selection, intermediate medical scoring, partial matrix, checkpoint selection, prompt search or relaxed thresholds.
+
+## Predecessor and immutable reward binding
+
+Only P21's predeclared q, Qwen2.5-VL-7B-Instruct revisioncc594898137f460bfe9f0759e9844b3ce807cfb5, can qualify. All24 original conditions must pass. A passing m control cannot replace a failed q. Require original P21 FINAL reward_qualified, complete2-teacher/6-pool closure and all sessions ended, continuous cost receipt, and verified public delivery with remote SHA and anonymous access. Require the exact sealed q source revision, source commit, original manifest digest and64 ordered targets. Rebind this immutable signal to the new manifest explicitly, preserving old provenance; do not regenerate, repair, alter or count its old GPU jobs again. Teacher targets never include clinical truth.
+
+## Actual training acceptance
+
+Full budget admission precedes even GPU acceptance. Acceptance runs on the actual actor/reference and first locked input at seed93, sequentially for s/t/v. The production uncached four-token probability guard remains0.1. Additionally compare a full raw-softmax response (up to the original2048 tokens) against the actual full-prefix training recomputation with the same0.1 guard. This is separate from P19's frozen incremental-cache check. The native training no-grad/gradient behavior check remains1e-5; SPINE masks, finite objectives and reference isolation remain enforced.
+
+Generate eight production responses per arm. Alternating synthetic diagnostic advantages force real backward and an optimizer step without using labels or pretending that the scientific reward supplied that advantage. Require finite nonzero vision/language gradients, actual changes in tracked BF16 actor weights, persistent FP32 masters/moments and unchanged fixed reference. For t, save after one step, execute the second uninterrupted step, reload the first checkpoint and repeat the second step on exactly the same fixed responses; FP32 masters and Adam moments must match exactly. This is actual same-process2 versus1+1 recovery. The unchanged tiny-model fresh-interpreter10 versus5+5 test runs separately on CPU; it is not claimed to be new actual-model fresh-process recovery. All diagnostic weights are private and discarded before fresh scientific initialization.
+
+Any failed numerical/gradient/reference/recovery check stops before scientific training and remains an engineering result/NA. No GPU acceptance has yet run. Passing acceptance does not establish reward correctness or medical improvement.
+
+## Complete cost and deadlines
+
+Authorization remains72 GPU-process hours (259200s), including every old round and failed GPU worker. Loading, CPU optimization, probes, saving and failed exits count as the complete lifetime; missing/null wall_seconds uses controller finish minus worker start conservatively. Archive/activity copies and reused P21 reward jobs cannot be counted twice. CPU-only preparation/testing is separate.
+
+Conservative historical training proxy:9×4×4590.984604918864s for64 rather than16 groups =165275.4457770791s. This is a proxy, not measured new-task training speed. Acceptance and fresh baseline each have7200s caps; each of9 trajectories has20000s cap. Full admission uses max(historical proxy+14400s, nine trajectory caps+14400s)=194400s, plus20%=233280s (**64.8 GPU-process hours**). Caps are bounded stop costs, not a completion guarantee. Do not use P21 read-only generation speed to infer RL training speed. Binding freezes a new independent GPU stop at preparation+66h and hard deadline+68h; no old or newly frozen deadline may move.
+
+At the fresh P21 status snapshot2026-10-11T02:39:53Z, continuous usage was109857.78662468231s and remaining149342.21337531772s (41.483948h), still decreasing while P21 runs. Full admission therefore fails already: deficit at least83937.78662468231s (**23.316052h**). P21's remaining computation increases that deficit. Stop before GPU acceptance unless a separately documented authorization or valid complete training-cost basis changes formal admission. This preparation does not reset or enlarge the budget. Even the historical training proxy alone plus20% exceeds current remaining allowance.
+
+Recheck complete remaining scientific scope+20% after acceptance, including its full actual lifetime. Require400GiB free on the actual data mount,100GiB available CPU memory and48000MiB GPU free; use only the authorized physicalGPU0/1, one GPU worker at a time. Keep every large file on the authorized data volume and every visible parent/child argv neutral. No shared-driver/system changes, extra GPU or paid resource.
+
+## Scoring and delivery
+
+All ten scientific workers must complete/seal and every owned session must end before offline label access. Only selected SLAKE train labels and the old authorized MedXpert probe labels are joined. No heldout/final-test labels, generation or scoring. Original strict greedy-before historical correctness is primary. For each seed, v must strictly exceed the fresh frozen base, same-seed s and t and retain all the same3 initially correct probes. All three must pass; changed-parser/after-only gains do not substitute. This remains small reused-development evidence, not independent clinical generalization.
+
+Publish code, configurations, full9-row matrix,576 planned case observations,144 individual probe outcomes, complete negative transition/reward/format aggregates, acceptance diagnostics and continuous GPU receipts. Engineering failure or budget block leaves scientific outcomes explicitly NA. Protect all old branches, FINALs, protocols and deadlines. Publish only anonymized aggregates, never medical IDs/text/options/labels/images, teacher targets/readout/token text, checkpoints/full logs/private paths or credentials. GitHub delivery requires effective proxy, final remote SHA and anonymous access verification.
+
+The existing hourly monitor checks P21 once per hour; after its complete public delivery it may bind this prepared follow-up once. It must not start any GPU work if the primary reward, actual acceptance or complete budget gate fails. Existing notification policy stays quiet on unchanged/nonactionable state and reports a new meaningful failure, completion or budget/data admission change.
