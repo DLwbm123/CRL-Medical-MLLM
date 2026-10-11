@@ -94,8 +94,8 @@ def main():
                 four = engine.probability_check(row)
                 full = full_response_check(engine, encoded)
                 responses = [engine.generate(encoded, True)[0] for _ in range(cfg["rollouts"])]
-                # Engineering-only advantages force real backward even when the qualified reward abstains.
-                advantages = torch.tensor([1., -1.] * 4)
+                # A fixed positive engineering signal avoids cancellation when sampled responses coincide.
+                advantages = torch.ones(cfg["rollouts"])
                 update = engine.update(encoded, responses, advantages, False); validate_update(update, cfg)
                 restored = recovery(engine, encoded, responses, advantages, out, digest) if arm == "t" else None
                 engine.reference_unchanged()
