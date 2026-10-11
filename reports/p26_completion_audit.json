@@ -1,0 +1,36 @@
+{
+  "checked_utc": "2026-10-11T15:39:57.682341+00:00",
+  "owned_processes_ended": true,
+  "original_FINAL_preserved": true,
+  "failure_stage": "legacy_main_admission_scope_validation",
+  "root_error_type": "RuntimeError",
+  "legacy_gate_requires_three_seeds": true,
+  "user_authorized_and_frozen_seeds": [
+    102
+  ],
+  "full_budget_admitted": true,
+  "actual_training_acceptance_passed": true,
+  "s_t_v_all_passed": true,
+  "actual_same_process_checkpoint_recovery_passed": true,
+  "original_probability_tolerance": 0.1,
+  "original_behavior_tolerance": 1e-05,
+  "all_replay_probability_errors_zero": true,
+  "paired_original_full_prefix_error": 0.187300443649292,
+  "scientific_training_started": false,
+  "baseline_worker_started": true,
+  "baseline_model_loaded": false,
+  "scientific_optimizer_updates": 0,
+  "diagnostic_optimizer_updates_separate": true,
+  "scientific_result": null,
+  "labels_read": false,
+  "matrix_rows_NA": 3,
+  "case_rows_NA": 192,
+  "probe_rows_NA": 48,
+  "gpu_process_seconds_used": 3873.494758401983,
+  "cumulative_gpu_process_seconds": 141306.0259806753,
+  "remaining_gpu_process_seconds": 377093.9740193247,
+  "budget_reset": false,
+  "authorized_physical_gpus": [
+    6
+  ]
+}
