@@ -8,7 +8,17 @@ from report_p10 import write_csv
 
 
 def export(folder, output):
-    final = json.loads((folder / "FINAL.json").read_text())
+    if (folder / "FINAL.json").exists():
+        final = json.loads((folder / "FINAL.json").read_text())
+    else:
+        startup = json.loads((folder / "startup_admission.json").read_text())
+        if startup["pipeline_started"] or startup["GPU_work_started"] or startup["FINAL_exists"]:
+            raise ValueError("An unclosed execution cannot become an admission-only report")
+        source = json.loads((folder / "source_receipt.json").read_text())
+        final = {"status": startup["startup_admission"], "code_commit": source["code_commit"],
+            "finished_utc": startup["checked_utc"], "gpu_process_seconds_used": 0.,
+            "cumulative_gpu_process_seconds": startup["continuous_gpu_seconds_used"],
+            "remaining_gpu_process_seconds": startup["remaining_gpu_seconds"]}
     if "finished_utc" not in final: raise ValueError("An ended campaign is required")
     jobs = []
     for stage in ["acceptance", "main"]:
@@ -50,13 +60,15 @@ def export(folder, output):
     public = {"status": final["status"], "source_commit": final["code_commit"], "failure_type": final.get("error_type"),
         "training_acceptance": acceptance, "budget": budget, "matrix": matrix, "compute": receipt,
         "stable_positive_development_result": matrix["stable_positive_development_result"] if matrix else None,
-        "independent_clinical_generalization_established": False}
+        "independent_clinical_generalization_established": False,
+        "pipeline_started": (folder / "PIPELINE_STARTED.json").exists(),
+        "original_FINAL_exists": (folder / "FINAL.json").exists()}
     output.mkdir(parents=True, exist_ok=True)
     for name, values in [("main_results", rows), ("all_training_cases", cases), ("all_probes", probes), ("gpu_jobs", jobs)]: write_csv(output / f"p24_{name}.csv", values)
     for name, value in [("results", public), ("compute_receipt", receipt)]: (output / f"p24_{name}.json").write_text(json.dumps(value, indent=2) + "\n")
     table = "\n".join(["| Seed | Arm | Strict before /64 | Strict after /64 | Original correct probes retained /3 |", "| --- | --- | --- | --- | --- |"] +
         [f"| {r['seed']} | {r['arm']} | {r['before_correct']} | {r['after_correct']} | {r['original_correct_probes_retained']} |" for r in rows])
-    (output / "p24_report.md").write_text("\n\n".join(["# P24 complete conditional RL development matrix", f"Status: {final['status']}. Executed source: {final['code_commit']}.",
+    (output / "p24_report.md").write_text("\n\n".join(["# P24 complete conditional RL development matrix", f"Status: {final['status']}. Source: {final['code_commit']}. Pipeline started: {public['pipeline_started']}; original FINAL exists: {public['original_FINAL_exists']}. An admission-only report does not create an experiment FINAL.",
         "All64 already observed P23 SLAKE binary training groups in their frozen order, original16 MedXpert retention probes, seeds99/100/101 and original SPINE(s), raw majority TTRL(t), fixed calibrated visual-reward TTRL(v). No final-test access, data reselection, changed parser or relaxed tolerances. The original native full-prefix training loss is retained; a cached frozen generation check is not training acceptance.",
         table, "All9 planned trajectories,576 planned case observations and144 individual probe outcomes are published, with missing scientific outcomes explicitly NA. Complete negative transitions, reward-direction and format diagnostics remain in the aggregate when the entire matrix seals. Engineering diagnostic advantages do not constitute scientific training rewards; those temporary weights are discarded.",
         f"This-round GPU full-worker lifetime {used/3600:.6f}h; continuous{receipt['cumulative_seconds']/3600:.6f}/144h; remaining{receipt['remaining_seconds']/3600:.6f}h. Acceptance/loading/CPU optimizer/saving/failure lifetimes count; P23 reused signal jobs are not counted again.",

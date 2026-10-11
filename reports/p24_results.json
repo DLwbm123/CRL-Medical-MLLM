@@ -1,0 +1,45 @@
+{
+  "status": "GPU0_free_memory_blocked",
+  "source_commit": "ebb03896dce56024a83105303b63c04f919ddca7",
+  "failure_type": null,
+  "training_acceptance": {
+    "passed": false,
+    "status": "not_started"
+  },
+  "budget": {
+    "admitted": true,
+    "remaining_gpu_seconds": 381020.3944360777,
+    "round_remaining_seconds": 237600,
+    "estimated_seconds": 194400.0,
+    "required_with_reserve": 233280.0,
+    "additional_seconds_required": 0.0,
+    "complete_seeds": [
+      99,
+      100,
+      101
+    ],
+    "complete_arms": [
+      "s",
+      "t",
+      "v"
+    ],
+    "budget_reset": false,
+    "new_task_training_cost_measured": false,
+    "basis": "max historical training proxy and full fixed stop caps; not frozen-generation speed"
+  },
+  "matrix": null,
+  "compute": {
+    "total_authorized_seconds": 518400.0,
+    "prior_used_seconds": 137379.6055639223,
+    "this_round_seconds": 0,
+    "cumulative_seconds": 137379.6055639223,
+    "remaining_seconds": 381020.39443607774,
+    "budget_reset": false,
+    "whole_worker_lifetime_counted": true,
+    "jobs": []
+  },
+  "stable_positive_development_result": null,
+  "independent_clinical_generalization_established": false,
+  "pipeline_started": false,
+  "original_FINAL_exists": false
+}

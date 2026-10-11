@@ -1,0 +1,19 @@
+{
+  "campaign": "p24-20261011T134011",
+  "status": "GPU0_free_memory_admission_blocked_before_pipeline",
+  "required_free_MiB": 48000,
+  "observed_GPU0_free_MiB": 41651,
+  "observed_GPU1_free_MiB": 57493,
+  "physical_devices_authorized": [
+    0,
+    1
+  ],
+  "GPU_seconds": 0.0,
+  "optimizer_updates": 0,
+  "scientific_result": null,
+  "pipeline_started": false,
+  "original_FINAL_exists": false,
+  "no_FINAL_created_or_overwritten": true,
+  "P24_deadlines_preserved": true,
+  "next_engineering_change": "separate isolated round fixed physical GPU1; unchanged seeds99/100/101, reward, data, controls, native acceptance and tolerances"
+}
