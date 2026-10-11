@@ -1,0 +1,101 @@
+{
+  "owned_processes_ended": true,
+  "all_eight_gpu_workers_exit_zero": true,
+  "teacher_readouts_sealed": 256,
+  "candidate_count_sealed": 3072,
+  "pool_case_count_sealed": 384,
+  "paired_reward_case_rows": 768,
+  "optimizer_updates": 0,
+  "labels_only_after_closure": true,
+  "weights_unchanged": true,
+  "original_FINAL_preserved": true,
+  "scientific_reward_qualified": false,
+  "probability_checks": [
+    {
+      "name": "pool-s90",
+      "cached": 0.0,
+      "uncached": 0.004623934626579285,
+      "same_tokens": true,
+      "training_loss_validated": false
+    },
+    {
+      "name": "pool-t90",
+      "cached": 0.0,
+      "uncached": 0.004623934626579285,
+      "same_tokens": true,
+      "training_loss_validated": false
+    },
+    {
+      "name": "pool-s91",
+      "cached": 0.0,
+      "uncached": 0.004623934626579285,
+      "same_tokens": true,
+      "training_loss_validated": false
+    },
+    {
+      "name": "pool-t91",
+      "cached": 0.0,
+      "uncached": 0.004623934626579285,
+      "same_tokens": true,
+      "training_loss_validated": false
+    },
+    {
+      "name": "pool-s92",
+      "cached": 0.0,
+      "uncached": 0.004623934626579285,
+      "same_tokens": true,
+      "training_loss_validated": false
+    },
+    {
+      "name": "pool-t92",
+      "cached": 0.0,
+      "uncached": 0.004623934626579285,
+      "same_tokens": true,
+      "training_loss_validated": false
+    }
+  ],
+  "cpu_resource_seconds": 1.4669340420005028,
+  "gpu_seconds": 23865.921439801983,
+  "label_free_teacher_diagnostics": {
+    "q": {
+      "calibration": {
+        "groups": 32,
+        "accepted": 7,
+        "parsed_readouts": 58,
+        "visual_uncertain_readouts": 19,
+        "clinical_uncertain_readouts": 37,
+        "order_disagreement_groups": 4,
+        "any_length_cap_groups": 0
+      },
+      "verification": {
+        "groups": 32,
+        "accepted": 10,
+        "parsed_readouts": 64,
+        "visual_uncertain_readouts": 16,
+        "clinical_uncertain_readouts": 42,
+        "order_disagreement_groups": 4,
+        "any_length_cap_groups": 0
+      }
+    },
+    "m": {
+      "calibration": {
+        "groups": 32,
+        "accepted": 13,
+        "parsed_readouts": 54,
+        "visual_uncertain_readouts": 9,
+        "clinical_uncertain_readouts": 16,
+        "order_disagreement_groups": 1,
+        "any_length_cap_groups": 0
+      },
+      "verification": {
+        "groups": 32,
+        "accepted": 7,
+        "parsed_readouts": 55,
+        "visual_uncertain_readouts": 13,
+        "clinical_uncertain_readouts": 18,
+        "order_disagreement_groups": 3,
+        "any_length_cap_groups": 0
+      }
+    }
+  }
+}

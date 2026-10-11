@@ -1,0 +1,76 @@
+{
+  "total_authorized_seconds": 259200.0,
+  "prior_used_seconds": 96825.18736666531,
+  "p21_m_used_seconds": 23865.921439801983,
+  "cumulative_seconds": 120691.1088064673,
+  "remaining_seconds": 138508.8911935327,
+  "budget_reset": false,
+  "whole_worker_lifetime_counted": true,
+  "gpu_jobs": [
+    {
+      "stage": "qualification",
+      "job": "teacher-q",
+      "seconds": 371.88675699200394,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "qualification",
+      "job": "teacher-m",
+      "seconds": 388.07814952899935,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-s90",
+      "seconds": 3809.9608289789976,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-t90",
+      "seconds": 3824.3267687199987,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-s91",
+      "seconds": 3778.550178796999,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-t91",
+      "seconds": 3839.757277206998,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-s92",
+      "seconds": 3869.375486505989,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-t92",
+      "seconds": 3983.9859930719977,
+      "return_code": 0,
+      "timeout": false
+    }
+  ],
+  "cpu_resource_jobs": [
+    {
+      "stage": "resources",
+      "job": "resource",
+      "seconds": 1.4669340420005028,
+      "return_code": 0,
+      "timeout": false
+    }
+  ]
+}

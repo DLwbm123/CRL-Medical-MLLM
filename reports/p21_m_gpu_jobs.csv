@@ -1,0 +1,9 @@
+stage,job,seconds,return_code,timeout
+qualification,teacher-q,371.88675699200394,0,False
+qualification,teacher-m,388.07814952899935,0,False
+main,pool-s90,3809.9608289789976,0,False
+main,pool-t90,3824.3267687199987,0,False
+main,pool-s91,3778.550178796999,0,False
+main,pool-t91,3839.757277206998,0,False
+main,pool-s92,3869.375486505989,0,False
+main,pool-t92,3983.9859930719977,0,False
