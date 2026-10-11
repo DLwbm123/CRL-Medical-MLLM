@@ -7,7 +7,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 from p10_pipeline import ROOT, FOLDER, stop, supervise, invoke
 from p4_pipeline import gpu_seconds
-from p24_contract import admission
+from p24_contract import admission, physical_gpu
 from state import atomic_json
 
 
@@ -20,6 +20,8 @@ def main():
     try:
         prep = json.loads((FOLDER / "preparation.json").read_text())
         gate = json.loads((FOLDER / "scores/qualification.json").read_text())
+        device = physical_gpu(json.loads((FOLDER / "manifest.json").read_text()).get("execution_physical_gpu", 0))
+        gpu_uuid = os.environ["P10_GPU" + str(device) + "_UUID"]
         if not prep["sealed"] or not gate["go"] or gate["primary_teacher"] != "v": raise ValueError("Qualified delivered binding is missing")
         def lock(accepted=False):
             remaining = (datetime.fromisoformat(budget["gpu_stop_utc"]) - datetime.now(timezone.utc)).total_seconds()
@@ -41,12 +43,12 @@ def main():
             probe.unlink()
             invoke("p24_test", "cpu-acceptance.log")
             atomic_json(FOLDER / "STATUS.json", {"stage": "actual_training_acceptance"})
-            supervise("acceptance", 0, os.environ["P10_GPU0_UUID"])
+            supervise("acceptance", device, gpu_uuid)
             if not json.loads((FOLDER / "acceptance.json").read_text())["passed"]: raise ValueError("Actual training acceptance failed")
             if not lock(True): final["status"] = "full_matrix_budget_admission_blocked_after_acceptance"
             else:
                 atomic_json(FOLDER / "STATUS.json", {"stage": "full_matrix"})
-                supervise("main", 0, os.environ["P10_GPU0_UUID"])
+                supervise("main", device, gpu_uuid)
                 invoke("p24_score", "main-score.log")
                 final.update(status="scored_awaiting_public_delivery", stable_positive_development_result=json.loads((FOLDER / "scores/public_summary.json").read_text())["stable_positive_development_result"])
     except Exception as exc:

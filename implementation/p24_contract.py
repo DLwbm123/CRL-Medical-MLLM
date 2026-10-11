@@ -13,6 +13,12 @@ CHECKS = {"coverage_at_least_half", "at_least_twelve_correct_targets", "accepted
           "correct_negative_rate_lower", "wrong_positive_rate_ten_pp_lower", "correct_minority_rescued"}
 
 
+def physical_gpu(value):
+    if type(value) is not int or value not in (0, 1):
+        raise ValueError("Only physical GPU0/1 are authorized")
+    return value
+
+
 def configurations(base):
     result = {arm: {} for arm in ["a"] + ARMS}
     for arm in result:

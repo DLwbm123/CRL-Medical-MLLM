@@ -7,7 +7,7 @@ from pathlib import Path
 from unittest.mock import patch
 from p23_reward import REPO, REVISION, SCHEME
 SOURCES = {"v": (REPO, REVISION), "c": (REPO, REVISION)}
-from p24_contract import admission, configurations, FULL_ESTIMATE, SEEDS, CHECKS
+from p24_contract import admission, configurations, FULL_ESTIMATE, SEEDS, CHECKS, physical_gpu
 from prepare_campaign import write_manifest
 from prepare_p24 import prepare
 from report_p24 import export
@@ -17,6 +17,11 @@ from state import atomic_json
 def main():
     environment = dict(os.environ); code_root = Path(os.environ["P0_ROOT"])
     try:
+        assert physical_gpu(0) == 0 and physical_gpu(1) == 1
+        for value in [2, -1, True, 1.0, "1"]:
+            try: physical_gpu(value)
+            except ValueError: pass
+            else: raise AssertionError("Unauthorized physical device admitted")
         assert FULL_ESTIMATE == 194400.
         assert admission(120691.1088064673 + 155520, 66*3600)["admitted"]
         assert admission(0, 66*3600)["admitted"]
@@ -69,7 +74,7 @@ def main():
             for stage, count in [("calibration", 1), ("qualification", 2), ("main", 6)]:
                 atomic_json(old / "controllers" / (stage+"-plan.json"), {"status": "all_planned_jobs_completed", "jobs": [{"return_code": 0} for _ in range(count)]})
             for name in ["calibration_owned_ended.json", "qualifier_owned_ended.json", "owned_cleanup_before_score.json"]: atomic_json(old / name, {"owned_main_processes_ended": True})
-            os.environ.update(P0_ROOT=str(root), P10_SOURCE_ROOT=str(source), P2_CAMPAIGN="fixture", P24_PREDECESSOR="p23-fixture", P2_CODE_COMMIT="new-source")
+            os.environ.update(P0_ROOT=str(root), P10_SOURCE_ROOT=str(source), P2_CAMPAIGN="fixture", P24_PREDECESSOR="p23-fixture", P2_CODE_COMMIT="new-source", P10_GPU1_UUID="synthetic-authorized-uuid", P24_PHYSICAL_GPU="1")
             failed_q = copy.deepcopy(gate); failed_q["teachers"]["v"]["blocks"]["verification_s"]["checks"]["correct_minority_rescued"] = False
             for bad_gate in [dict(gate, go=False), dict(gate, primary_teacher="c"), dict(gate, primary_selected_after_scoring=True), failed_q]:
                 atomic_json(old / "scores/qualification.json", bad_gate)
@@ -88,6 +93,7 @@ def main():
             locked = json.loads((folder / "manifest.json").read_text())
             assert (len(locked["stream"]), len(locked["probe"]), locked["rollout_seeds"]) == (64,16,SEEDS)
             assert locked["configurations"] == configurations(base)
+            assert locked["execution_physical_gpu"] == 1
             assert len(json.loads((folder/"reference/targets.json").read_text())["stream"]) == 64
             assert not json.loads((folder/"budget_admission.json").read_text())["admitted"]
             with patch("p10_pipeline.supervise", side_effect=AssertionError("Budget-blocked GPU started")), patch("p10_pipeline.invoke", side_effect=AssertionError("Budget-blocked worker started")):

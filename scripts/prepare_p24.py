@@ -7,7 +7,7 @@ import shutil
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from p23_reward import validate
-from p24_contract import SEEDS, ARMS, TOTAL, FULL_ESTIMATE, RESERVE, TRAIN_CAP, BASE_CAP, ACCEPT_CAP, admission, require_predecessor, configurations
+from p24_contract import SEEDS, ARMS, TOTAL, FULL_ESTIMATE, RESERVE, TRAIN_CAP, BASE_CAP, ACCEPT_CAP, admission, require_predecessor, configurations, physical_gpu
 from prepare_campaign import write_manifest
 from state import atomic_json
 from verified_reward import checked_targets
@@ -19,6 +19,7 @@ def read(path):
 
 def prepare():
     root = Path(os.environ["P0_ROOT"]); source = Path(os.environ["P10_SOURCE_ROOT"])
+    device = physical_gpu(int(os.environ.get("P24_PHYSICAL_GPU", "0")))
     name = os.environ["P24_PREDECESSOR"]
     if not name.startswith("p23-"): raise ValueError("Only the fixed P23 candidate can bind")
     previous = source / "workspaces" / name / "outputs" / name
@@ -53,7 +54,7 @@ def prepare():
             rel = f"inputs/{section}{i:03d}.json"; shutil.copyfile(input_path, folder / rel)
             target.append({**entry, "input": rel})
     manifest.update(kind="development", p10_version=1, p24_version=1, campaign_prefix="p24", stream=stream, probe=retained,
-        selected_n=64, rollout_seeds=SEEDS, probe_cursors=[0, 64], drift_cursors=[64], teacher=old["teachers"]["v"],
+        selected_n=64, rollout_seeds=SEEDS, probe_cursors=[0, 64], drift_cursors=[64], teacher=old["teachers"]["v"], execution_physical_gpu=device,
         configurations={arm: {} for arm in ["a"] + ARMS}, new_final_test_access=False,
         data_status="all64 already observed P23 SLAKE binary development groups, original16 MedXpert retention probes",
         reward_binding={"campaign": name, "source_commit": final["code_commit"], "manifest_sha256": old_digest,
