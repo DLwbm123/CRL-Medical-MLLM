@@ -1,0 +1,17 @@
+{
+  "cpu_checks_passed": true,
+  "return_code": 0,
+  "GPU_started": false,
+  "CUDA_hidden": true,
+  "campaign_bound": false,
+  "old_frozen_code_unchanged": true,
+  "authorized_physical_gpus": [
+    6,
+    7
+  ],
+  "gpu0_1_rejected": true,
+  "complete_budget_required_seconds": 233280.0,
+  "remaining_gpu_seconds": 380967.4687777267,
+  "native_training_validity": "BLOCKED_NATIVE_FULL_RESPONSE_GUARD",
+  "old_p25_final_commit": "8c189c1eaade0ca58aac07412ff3a6ab99b84ed4"
+}

@@ -20,7 +20,7 @@ def main():
     try:
         prep = json.loads((FOLDER / "preparation.json").read_text())
         gate = json.loads((FOLDER / "scores/qualification.json").read_text())
-        device = physical_gpu(json.loads((FOLDER / "manifest.json").read_text()).get("execution_physical_gpu", 0))
+        device = physical_gpu(json.loads((FOLDER / "manifest.json").read_text())["execution_physical_gpu"])
         gpu_uuid = os.environ["P10_GPU" + str(device) + "_UUID"]
         if not prep["sealed"] or not gate["go"] or gate["primary_teacher"] != "v": raise ValueError("Qualified delivered binding is missing")
         def lock(accepted=False):

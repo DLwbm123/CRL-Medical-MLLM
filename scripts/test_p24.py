@@ -17,8 +17,8 @@ from state import atomic_json
 def main():
     environment = dict(os.environ); code_root = Path(os.environ["P0_ROOT"])
     try:
-        assert physical_gpu(0) == 0 and physical_gpu(1) == 1
-        for value in [2, -1, True, 1.0, "1"]:
+        assert physical_gpu(6) == 6 and physical_gpu(7) == 7
+        for value in [0, 1, 2, -1, True, 6.0, "6"]:
             try: physical_gpu(value)
             except ValueError: pass
             else: raise AssertionError("Unauthorized physical device admitted")
@@ -74,7 +74,10 @@ def main():
             for stage, count in [("calibration", 1), ("qualification", 2), ("main", 6)]:
                 atomic_json(old / "controllers" / (stage+"-plan.json"), {"status": "all_planned_jobs_completed", "jobs": [{"return_code": 0} for _ in range(count)]})
             for name in ["calibration_owned_ended.json", "qualifier_owned_ended.json", "owned_cleanup_before_score.json"]: atomic_json(old / name, {"owned_main_processes_ended": True})
-            os.environ.update(P0_ROOT=str(root), P10_SOURCE_ROOT=str(source), P2_CAMPAIGN="fixture", P24_PREDECESSOR="p23-fixture", P2_CODE_COMMIT="new-source", P10_GPU1_UUID="synthetic-authorized-uuid", P24_PHYSICAL_GPU="1")
+            continuous = {"total_authorized_seconds": 518400., "prior_used_seconds": 400000., "this_round_seconds": 123.,
+                "cumulative_seconds": 400123., "remaining_seconds": 118277., "budget_reset": False, "whole_worker_lifetime_counted": True}
+            atomic_json(root / "metadata/continuous_compute_receipt.json", continuous)
+            os.environ.update(P0_ROOT=str(root), P10_SOURCE_ROOT=str(source), P2_CAMPAIGN="fixture", P24_PREDECESSOR="p23-fixture", P2_CODE_COMMIT="new-source", P10_GPU6_UUID="synthetic-authorized-uuid", P24_PHYSICAL_GPU="6")
             failed_q = copy.deepcopy(gate); failed_q["teachers"]["v"]["blocks"]["verification_s"]["checks"]["correct_minority_rescued"] = False
             for bad_gate in [dict(gate, go=False), dict(gate, primary_teacher="c"), dict(gate, primary_selected_after_scoring=True), failed_q]:
                 atomic_json(old / "scores/qualification.json", bad_gate)
@@ -89,11 +92,20 @@ def main():
                 except ValueError:pass
                 else:raise AssertionError("Unclosed or undelivered predecessor admitted")
                 assert not folder.exists();path.write_text(saved)
+            for invalid in [dict(continuous, cumulative_seconds=399999.), dict(continuous, remaining_seconds=1.), dict(continuous, remaining_seconds=float("nan")), dict(continuous, whole_worker_lifetime_counted=False)]:
+                atomic_json(root / "metadata/continuous_compute_receipt.json", invalid)
+                try: prepare()
+                except ValueError: pass
+                else: raise AssertionError("Invalid latest continuous budget admitted")
+                assert not folder.exists()
+            atomic_json(root / "metadata/continuous_compute_receipt.json", continuous)
             prepare()
             locked = json.loads((folder / "manifest.json").read_text())
             assert (len(locked["stream"]), len(locked["probe"]), locked["rollout_seeds"]) == (64,16,SEEDS)
             assert locked["configurations"] == configurations(base)
-            assert locked["execution_physical_gpu"] == 1
+            assert locked["execution_physical_gpu"] == 6
+            budget = json.loads((root / "metadata/campaign_budget.json").read_text())
+            assert budget["authorized_physical_gpus"] == [6, 7] and budget["prior_gpu_process_seconds"] == 400123.
             assert len(json.loads((folder/"reference/targets.json").read_text())["stream"]) == 64
             assert not json.loads((folder/"budget_admission.json").read_text())["admitted"]
             with patch("p10_pipeline.supervise", side_effect=AssertionError("Budget-blocked GPU started")), patch("p10_pipeline.invoke", side_effect=AssertionError("Budget-blocked worker started")):

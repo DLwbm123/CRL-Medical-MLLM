@@ -19,7 +19,7 @@ def read(path):
 
 def prepare():
     root = Path(os.environ["P0_ROOT"]); source = Path(os.environ["P10_SOURCE_ROOT"])
-    device = physical_gpu(int(os.environ.get("P24_PHYSICAL_GPU", "0")))
+    device = physical_gpu(int(os.environ["P24_PHYSICAL_GPU"]))
     name = os.environ["P24_PREDECESSOR"]
     if not name.startswith("p23-"): raise ValueError("Only the fixed P23 candidate can bind")
     previous = source / "workspaces" / name / "outputs" / name
@@ -28,6 +28,15 @@ def prepare():
     require_predecessor(final, gate, delivery,
         {s: read(previous / "controllers" / (s + "-plan.json")) for s in ["calibration", "qualification", "main"]},
         {"calibration": read(previous / "calibration_owned_ended.json"), "qualification": read(previous / "qualifier_owned_ended.json"), "main": read(previous / "owned_cleanup_before_score.json")})
+    continuous = read(root / "metadata/continuous_compute_receipt.json")
+    prior = continuous["cumulative_seconds"]
+    if (continuous.get("total_authorized_seconds") != TOTAL or continuous.get("budget_reset") is not False
+            or continuous.get("whole_worker_lifetime_counted") is not True
+            or prior < final["cumulative_gpu_process_seconds"]
+            or not abs(prior + continuous["remaining_seconds"] - TOTAL) <= 1e-5
+            or not abs(continuous["prior_used_seconds"] + continuous["this_round_seconds"] - prior) <= 1e-5):
+        raise ValueError("Latest continuous closed-worker budget receipt differs")
+    admission(continuous["prior_used_seconds"], 66 * 3600, continuous["this_round_seconds"])
     raw = (previous / "manifest.json").read_bytes(); old_digest = hashlib.sha256(raw).hexdigest()
     if old_digest != (previous / "manifest.sha256").read_text().strip(): raise ValueError("P23 manifest differs")
     old = json.loads(raw); validate(old)
@@ -70,11 +79,11 @@ def prepare():
     checked_targets(bound, manifest, digest)
     atomic_json(folder / "reference/targets.json", bound); atomic_json(folder / "scores/qualification.json", gate)
     now = datetime.now(timezone.utc)
-    budget = {"total_gpu_process_seconds": TOTAL, "prior_gpu_process_seconds": final["cumulative_gpu_process_seconds"],
-        "remaining_total_gpu_process_seconds_at_start": final["remaining_gpu_process_seconds"], "budget_reset": False,
+    budget = {"total_gpu_process_seconds": TOTAL, "prior_gpu_process_seconds": prior,
+        "remaining_total_gpu_process_seconds_at_start": continuous["remaining_seconds"], "budget_reset": False,
         "gpu_stop_utc": (now + timedelta(hours=66)).isoformat(), "hard_deadline_utc": (now + timedelta(hours=68)).isoformat(),
         "complete_scope_estimated_gpu_process_seconds": FULL_ESTIMATE, "reserve_fraction": RESERVE,
-        "main_seeds": SEEDS, "main_arms": ARMS, "authorized_physical_gpus": [0, 1], "new_task_training_cost_measured": False}
+        "main_seeds": SEEDS, "main_arms": ARMS, "authorized_physical_gpus": [6, 7], "new_task_training_cost_measured": False}
     atomic_json(root / "metadata/campaign_budget.json", budget)
     atomic_json(folder / "acceptance.json", {"passed": False, "status": "not_started"})
     atomic_json(folder / "acceptance-plan.json", {"minimum_free_mib": 48000, "jobs": [
