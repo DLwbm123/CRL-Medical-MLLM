@@ -1,0 +1,38 @@
+{
+  "status": "not_started_reward_and_budget_admission_blocked",
+  "preparation_only": true,
+  "prepared_source_commit": "b66e1dc1645ed064eed4f71be2a98f1bde612a54",
+  "predecessor_public_commit": "b5a593fba961c9f3efcc3546d6cf84e5865d97ae",
+  "primary_teacher": "q",
+  "primary_reward_qualified": false,
+  "primary_checks_passed": 9,
+  "primary_checks_planned": 24,
+  "matched_control_reward_qualified": false,
+  "control_cannot_replace_primary": true,
+  "full_scope_required_with_reserve_seconds": 233280,
+  "total_authorized_seconds": 259200,
+  "continuous_used_seconds": 120691.1088064673,
+  "remaining_seconds": 138508.8911935327,
+  "additional_seconds_for_budget_only": 94771.1088064673,
+  "additional_budget_authorized": false,
+  "GPU_acceptance_executed": false,
+  "GPU_acceptance_passed": null,
+  "scientific_training_started": false,
+  "this_preparation_GPU_process_seconds": 0,
+  "scientific_result": null,
+  "planned_seeds": [
+    93,
+    94,
+    95
+  ],
+  "planned_arms": [
+    "s",
+    "t",
+    "v"
+  ],
+  "planned_case_count": 576,
+  "planned_probe_count": 144,
+  "no_experiment_FINAL_created": true,
+  "budget_reset": false,
+  "independent_clinical_generalization_established": false
+}
