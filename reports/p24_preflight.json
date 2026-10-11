@@ -1,0 +1,40 @@
+{
+  "campaign": "p24-20261011T134011",
+  "predecessor_public_commit": "9977572a18b730d307dfb80af039b12890b0ff84",
+  "predecessor_reward_qualified": true,
+  "all_24_candidate_checks_passed": true,
+  "full_scope_admission": {
+    "admitted": true,
+    "remaining_gpu_seconds": 381020.3944360777,
+    "round_remaining_seconds": 237600,
+    "estimated_seconds": 194400.0,
+    "required_with_reserve": 233280.0,
+    "additional_seconds_required": 0.0,
+    "complete_seeds": [
+      99,
+      100,
+      101
+    ],
+    "complete_arms": [
+      "s",
+      "t",
+      "v"
+    ],
+    "budget_reset": false,
+    "new_task_training_cost_measured": false,
+    "basis": "max historical training proxy and full fixed stop caps; not frozen-generation speed"
+  },
+  "GPU_acceptance": "UNEXECUTED",
+  "training": "UNEXECUTED",
+  "seeds": [
+    99,
+    100,
+    101
+  ],
+  "stream_groups": 64,
+  "original_retention_probes": 16,
+  "trajectory_count": 9,
+  "original_correct_probe_anchors": 3,
+  "native_loss_unchanged": true,
+  "actual_fresh_process_recovery_not_claimed": true
+}
