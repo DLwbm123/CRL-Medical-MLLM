@@ -1,0 +1,49 @@
+{
+  "campaign": "p27-20261011T154615",
+  "single_engineering_change": "validate exact singleton main admission while preserving legacy three-seed guard",
+  "physical_gpu": 6,
+  "authorized_physical_gpus": [
+    6
+  ],
+  "seeds": [
+    102
+  ],
+  "training_trajectories": 3,
+  "full_scope_admission": {
+    "admitted": true,
+    "remaining_gpu_seconds": 377093.9740193247,
+    "round_remaining_seconds": 93600,
+    "estimated_seconds": 74400.0,
+    "required_with_reserve": 89280.0,
+    "additional_seconds_required": 0.0,
+    "complete_seeds": [
+      102
+    ],
+    "complete_arms": [
+      "s",
+      "t",
+      "v"
+    ],
+    "budget_reset": false,
+    "new_task_training_cost_measured": false,
+    "basis": "max historical training proxy and full fixed stop caps; not frozen-generation speed"
+  },
+  "gpu_stop_utc": "2026-10-12T17:47:26.520604+00:00",
+  "hard_deadline_utc": "2026-10-12T19:47:26.520604+00:00",
+  "actual_training_acceptance": "P26_REUSED_VERIFIED_UNCHANGED",
+  "scientific_training": "UNEXECUTED",
+  "cpu_checks_passed": true,
+  "real_main_entry_reaches_model_boundary": true,
+  "acceptance_reuse": {
+    "sealed": true,
+    "unchanged_training_execution": true,
+    "manifest_sha256": "043d682da20c89afe8e6388dbb194ec04613338c2ca365f94f7b9a22850251ea",
+    "executed_acceptance_source": "090539a9d15154526c36446d55e0da87f769224d",
+    "predecessor_delivery": "da48f6c89e8509ad73d9f8e95f3785837efbe08d",
+    "acceptance_reused_not_rerun": true,
+    "previous_GPU_cost_not_recounted": true,
+    "diagnostic_weights_reused": false,
+    "new_actual_fresh_process_recovery_claimed": false
+  },
+  "old_rounds_preserved": true
+}

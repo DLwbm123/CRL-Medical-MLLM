@@ -477,6 +477,23 @@ def recover_tail(out, cursor):
         active.rename(abandoned / active.name)
 
 
+def validate_main_budget_lock(manifest, qualification, lock):
+    if qualification.get("go") is not True:
+        raise RuntimeError("Frozen visual reward qualification must pass before any main run")
+    seeds = manifest["rollout_seeds"]
+    if manifest.get("p24_version") == 1:
+        from p24_contract import SEEDS
+        expected = SEEDS
+        if lock.get("admitted") is not True:
+            raise RuntimeError("Entire declared matrix budget was not admitted")
+    else:
+        expected = seeds
+        if len(set(seeds)) != 3:
+            raise RuntimeError("Legacy P10 requires its complete three-seed matrix")
+    if (seeds != expected or lock.get("complete_seeds") != expected or lock.get("complete_arms") != ["s", "t", "v"]):
+        raise RuntimeError("Full declared matrix compute admission is missing")
+
+
 def main():
     root = Path(os.environ["P0_ROOT"])
     folder = root / "outputs" / os.environ["P2_CAMPAIGN"]
@@ -496,11 +513,9 @@ def main():
             raise RuntimeError("Engineering acceptance has not passed")
         validate_development_configuration(cfg, acceptance, manifest)
     if manifest.get("p10_version") == 1:
-        if not json.loads((folder / "scores/qualification.json").read_text())["go"]:
-            raise RuntimeError("Frozen visual reward qualification must pass before any P10 main run")
-        lock = json.loads((folder / "main_budget_lock.json").read_text())
-        if lock["complete_seeds"] != manifest["rollout_seeds"] or len(set(lock["complete_seeds"])) != 3 or lock["complete_arms"] != ["s", "t", "v"]:
-            raise RuntimeError("Full P10 matrix compute admission is missing")
+        validate_main_budget_lock(manifest,
+            json.loads((folder / "scores/qualification.json").read_text()),
+            json.loads((folder / "main_budget_lock.json").read_text()))
     visible = os.environ.get("CUDA_VISIBLE_DEVICES")
     if visible not in {str(cfg["gpu_index"]), os.environ.get("P2_GPU_UUID")} or torch.cuda.device_count() != 1:
         raise RuntimeError("Only the configured authorized GPU may be visible")

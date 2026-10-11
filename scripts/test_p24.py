@@ -17,8 +17,8 @@ from state import atomic_json
 def main():
     environment = dict(os.environ); code_root = Path(os.environ["P0_ROOT"])
     try:
-        assert physical_gpu(6) == 6 and physical_gpu(7) == 7
-        for value in [0, 1, 2, -1, True, 6.0, "6"]:
+        assert physical_gpu(6) == 6
+        for value in [0, 1, 2, 7, -1, True, 6.0, "6"]:
             try: physical_gpu(value)
             except ValueError: pass
             else: raise AssertionError("Unauthorized physical device admitted")
@@ -105,7 +105,7 @@ def main():
             assert locked["configurations"] == configurations(base)
             assert locked["execution_physical_gpu"] == 6
             budget = json.loads((root / "metadata/campaign_budget.json").read_text())
-            assert budget["authorized_physical_gpus"] == [6, 7] and budget["prior_gpu_process_seconds"] == 500123.
+            assert budget["authorized_physical_gpus"] == [6] and budget["prior_gpu_process_seconds"] == 500123.
             assert len(json.loads((folder/"reference/targets.json").read_text())["stream"]) == 64
             assert not json.loads((folder/"budget_admission.json").read_text())["admitted"]
             with patch("p10_pipeline.supervise", side_effect=AssertionError("Budget-blocked GPU started")), patch("p10_pipeline.invoke", side_effect=AssertionError("Budget-blocked worker started")):

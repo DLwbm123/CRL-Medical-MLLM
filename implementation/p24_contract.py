@@ -15,8 +15,8 @@ CHECKS = {"coverage_at_least_half", "at_least_twelve_correct_targets", "accepted
 
 
 def physical_gpu(value):
-    if type(value) is not int or value not in (6, 7):
-        raise ValueError("Only physical GPU6/7 are authorized")
+    if type(value) is not int or value != 6:
+        raise ValueError("Only physical GPU6 is authorized")
     return value
 
 

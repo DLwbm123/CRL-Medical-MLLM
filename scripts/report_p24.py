@@ -63,6 +63,8 @@ def export(folder, output, prefix="p24"):
         "independent_clinical_generalization_established": False,
         "pipeline_started": (folder / "PIPELINE_STARTED.json").exists(),
         "original_FINAL_exists": (folder / "FINAL.json").exists()}
+    reuse = folder / "acceptance_reuse.json"
+    if reuse.exists(): public["acceptance_reuse"] = json.loads(reuse.read_text())
     output.mkdir(parents=True, exist_ok=True)
     for name, values in [("main_results", rows), ("all_training_cases", cases), ("all_probes", probes), ("gpu_jobs", jobs)]: write_csv(output / f"{prefix}_{name}.csv", values)
     for name, value in [("results", public), ("compute_receipt", receipt)]: (output / f"{prefix}_{name}.json").write_text(json.dumps(value, indent=2) + "\n")

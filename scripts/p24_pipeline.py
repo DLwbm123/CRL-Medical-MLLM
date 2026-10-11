@@ -41,9 +41,14 @@ def main():
             probe = FOLDER / ".storage_probe"; probe.write_text("ok")
             if probe.read_text() != "ok": raise ValueError("Data mount read/write probe failed")
             probe.unlink()
-            invoke("p26_test", "cpu-acceptance.log")
-            atomic_json(FOLDER / "STATUS.json", {"stage": "actual_training_acceptance"})
-            supervise("acceptance", device, gpu_uuid)
+            invoke("p27_test" if (FOLDER / "acceptance_reuse.json").exists() else "p26_test", "cpu-acceptance.log")
+            if (FOLDER / "acceptance_reuse.json").exists():
+                from prepare_p27 import require_reuse
+                require_reuse(FOLDER)
+                atomic_json(FOLDER / "STATUS.json", {"stage": "sealed_P26_actual_acceptance_reused"})
+            else:
+                atomic_json(FOLDER / "STATUS.json", {"stage": "actual_training_acceptance"})
+                supervise("acceptance", device, gpu_uuid)
             if not json.loads((FOLDER / "acceptance.json").read_text())["passed"]: raise ValueError("Actual training acceptance failed")
             if not lock(True): final["status"] = "full_matrix_budget_admission_blocked_after_acceptance"
             else:
