@@ -1,4 +1,4 @@
-"""Actual unchanged training loss, gradients, updates and checkpoint recovery."""
+"""Actual loss, replay probabilities, gradients, updates and checkpoint recovery."""
 import gc
 import hashlib
 import json
@@ -32,13 +32,27 @@ def full_response_check(engine, encoded):
         engine.deadline.check()
         response = generated.sequences[0, encoded["input_ids"].shape[-1]:]
         raw = torch.stack([score[0].float().log_softmax(-1)[token] for score, token in zip(generated.scores, response)])
-        logits = forward_response(engine.actor, encoded, response)
+        logits = engine.response_logits(engine.actor, encoded, response)
         recomputed, _, _ = token_statistics(logits, response, chunk_tokens=engine.cfg["statistics_chunk_tokens"])
-        error = float((raw - recomputed).abs().max())
-        if not math.isfinite(error) or error > engine.cfg["probability_check_bf16_atol"]:
-            raise ValueError("Full-response native training recomputation exceeds unchanged0.1 guard")
+        differences = (raw - recomputed).abs().tolist()
+        error = max(differences)
+        del logits, recomputed
+        engine.deadline.check()
+        control = forward_response(engine.actor, encoded, response)
+        control_logp, _, _ = token_statistics(control, response, chunk_tokens=engine.cfg["statistics_chunk_tokens"])
+        old_differences = (raw - control_logp).abs().tolist()
     return {"tokens": len(response), "max_logp_difference": error, "atol": engine.cfg["probability_check_bf16_atol"],
-            "full_response_tested": True, "cached_frozen_check_substituted": False}
+            "within_tolerance": math.isfinite(error) and error <= engine.cfg["probability_check_bf16_atol"],
+            "per_token_abs_difference": differences, "recompute_path": engine.cfg["response_recompute_path"],
+            "full_response_tested": True, "cached_frozen_check_substituted": False,
+            "same_generated_tokens_control": {"path": "original_full_prefix", "max_logp_difference": max(old_differences),
+                "per_token_abs_difference": old_differences, "atol": .1,
+                "within_tolerance": all(math.isfinite(x) and x <= .1 for x in old_differences)}}
+
+
+def require_probability(value):
+    if not value["within_tolerance"] or value["atol"] != .1 or not math.isfinite(value["max_logp_difference"]) or value["max_logp_difference"] > .1:
+        raise ValueError("Response recomputation exceeds unchanged0.1 guard")
 
 
 def recovery(engine, encoded, responses, advantages, folder, digest):
@@ -90,22 +104,38 @@ def main():
             engine = None
             try:
                 engine = Engine(root, out, cfg, deadline)
+                if cfg.get("response_recompute_path") != "differentiable_generation_replay":
+                    raise ValueError("Frozen training replay configuration differs")
                 row = load_input(folder, manifest["stream"][0]); encoded = engine.encode(row)
-                four = engine.probability_check(row)
+                evidence = {"passed": False, "stage": "four_token_probability"}
+                result["arms"][arm] = evidence
+                four = engine.probability_measurement(row)
+                evidence["four_token_probability"] = four
+                atomic_json(folder / "acceptance.json", result); require_probability(four)
                 full = full_response_check(engine, encoded)
+                evidence.update(stage="full_response_probability", full_response_probability=full)
+                atomic_json(folder / "acceptance.json", result); require_probability(full)
+                engine.event("acceptance_probabilities_passed", arm=arm, full_tokens=full["tokens"],
+                    replay_error=full["max_logp_difference"], original_control_error=full["same_generated_tokens_control"]["max_logp_difference"])
                 responses = [engine.generate(encoded, True)[0] for _ in range(cfg["rollouts"])]
                 # A fixed positive engineering signal avoids cancellation when sampled responses coincide.
                 advantages = torch.ones(cfg["rollouts"])
-                update = engine.update(encoded, responses, advantages, False); validate_update(update, cfg)
+                evidence["stage"] = "actual_backward_and_optimizer"
+                atomic_json(folder / "acceptance.json", result)
+                update = engine.update(encoded, responses, advantages, False)
+                evidence["actual_update"] = update
+                atomic_json(folder / "acceptance.json", result); validate_update(update, cfg)
                 restored = recovery(engine, encoded, responses, advantages, out, digest) if arm == "t" else None
                 engine.reference_unchanged()
-                result["arms"][arm] = {"passed": True, "four_token_probability": four, "full_response_probability": full,
+                result["arms"][arm] = {"passed": True, "stage": "complete", "four_token_probability": four, "full_response_probability": full,
                     "actual_update": update, "checkpoint_recovery": restored, "fixed_reference_unchanged": True,
                     "real_scientific_reward_used_for_engineering_step": False}
+                atomic_json(folder / "acceptance.json", result)
+                engine.event("acceptance_arm_passed", arm=arm)
             finally:
                 if engine: engine.close()
                 del engine; gc.collect(); torch.cuda.empty_cache()
-        result["passed"] = set(result["arms"]) == set(ARMS)
+        result["passed"] = set(result["arms"]) == set(ARMS) and all(v["passed"] for v in result["arms"].values())
     except Exception as exc:
         result["error_type"] = type(exc).__name__
         raise

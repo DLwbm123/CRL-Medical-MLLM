@@ -1,0 +1,43 @@
+{
+  "campaign": "p26-20261011T142055",
+  "predecessor_final_public_commit": "9977572a18b730d307dfb80af039b12890b0ff84",
+  "single_engineering_change": "gradient-preserving incremental generation replay shared by actor and fixed reference",
+  "user_changed_scope_to_one_seed": true,
+  "physical_gpu": 6,
+  "authorized_physical_gpus": [
+    6,
+    7
+  ],
+  "model_visible_gpu": 0,
+  "seeds": [
+    102
+  ],
+  "training_trajectories": 3,
+  "full_scope_admission": {
+    "admitted": true,
+    "remaining_gpu_seconds": 380967.4687777267,
+    "round_remaining_seconds": 93600,
+    "estimated_seconds": 74400.0,
+    "required_with_reserve": 89280.0,
+    "additional_seconds_required": 0.0,
+    "complete_seeds": [
+      102
+    ],
+    "complete_arms": [
+      "s",
+      "t",
+      "v"
+    ],
+    "budget_reset": false,
+    "new_task_training_cost_measured": false,
+    "basis": "max historical training proxy and full fixed stop caps; not frozen-generation speed"
+  },
+  "gpu_stop_utc": "2026-10-12T16:21:51.259866+00:00",
+  "hard_deadline_utc": "2026-10-12T18:21:51.259866+00:00",
+  "GPU_acceptance": "UNEXECUTED",
+  "scientific_training": "UNEXECUTED",
+  "cpu_checks_passed": true,
+  "gradient_through_prefill_cache_checked_on_CPU": true,
+  "unchanged_scientific_settings_except_authorized_seed_scope": true,
+  "old_rounds_preserved": true
+}

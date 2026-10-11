@@ -1,4 +1,4 @@
-"""Run the unchanged native loss after the new actual training acceptance."""
+"""Run the original loss using the accepted differentiable generation replay."""
 import json
 import os
 from pathlib import Path
@@ -11,5 +11,7 @@ if __name__ == "__main__":
     accepted = json.loads((folder / "acceptance.json").read_text())
     if manifest.get("p24_version") != 1 or not accepted["passed"] or set(accepted["arms"]) != {"s", "t", "v"} or any(v["passed"] is not True for v in accepted["arms"].values()):
         raise ValueError("New actual training acceptance is incomplete")
+    if any(cfg.get("response_recompute_path") != "differentiable_generation_replay" for group in manifest["configurations"].values() for cfg in group.values()):
+        raise ValueError("Scientific matrix changed the accepted replay path")
     torch.backends.cuda.matmul.allow_tf32 = False; torch.backends.cudnn.allow_tf32 = False
     main()

@@ -22,13 +22,13 @@ def main():
             try: physical_gpu(value)
             except ValueError: pass
             else: raise AssertionError("Unauthorized physical device admitted")
-        assert FULL_ESTIMATE == 194400.
-        assert admission(120691.1088064673 + 155520, 66*3600)["admitted"]
-        assert admission(0, 66*3600)["admitted"]
-        assert not admission(0, 233279)["admitted"]
-        assert not admission(400000, 66*3600, 7200, True)["admitted"]
+        assert FULL_ESTIMATE == 74400.
+        assert admission(120691.1088064673 + 155520, 26*3600)["admitted"]
+        assert admission(0, 26*3600)["admitted"]
+        assert not admission(0, 89279)["admitted"]
+        assert not admission(500000, 26*3600, 7200, True)["admitted"]
         for number in [float("nan"), -1., float("inf"), 518401.]:
-            try: admission(number, 66*3600)
+            try: admission(number, 26*3600)
             except ValueError: pass
             else: raise AssertionError("Invalid cost admitted")
         with tempfile.TemporaryDirectory() as temporary:
@@ -64,7 +64,7 @@ def main():
             records = [{"id":e["id"],"option_keys":["A","B"],"orders":orders,"target":target,"confidence":confidence,"same_canonical_choice":agree} for e in entries]
             atomic_json(old / "reference/v/targets.json", {"reward_scheme":SCHEME, "calibration":calibration, "stream": records[:32], "probe": records[32:], "teacher_revision": teachers["v"]["revision"], "code_commit": "old-source",
                 "manifest_sha256": digest, "labels_read": False, "weights_unchanged": True, "sealed": True})
-            final = {"status": "reward_qualified", "code_commit": "old-source", "cumulative_gpu_process_seconds": 400000., "remaining_gpu_process_seconds": 118400.,
+            final = {"status": "reward_qualified", "code_commit": "old-source", "cumulative_gpu_process_seconds": 500000., "remaining_gpu_process_seconds": 18400.,
                 "whole_gpu_worker_lifetimes_counted": True, "budget_reset": False}
             atomic_json(old / "FINAL.json", final)
             gate = {"go": True, "primary_teacher": "v", "primary_selected_after_scoring": False, "teachers": {"v": {"go": True,
@@ -74,8 +74,8 @@ def main():
             for stage, count in [("calibration", 1), ("qualification", 2), ("main", 6)]:
                 atomic_json(old / "controllers" / (stage+"-plan.json"), {"status": "all_planned_jobs_completed", "jobs": [{"return_code": 0} for _ in range(count)]})
             for name in ["calibration_owned_ended.json", "qualifier_owned_ended.json", "owned_cleanup_before_score.json"]: atomic_json(old / name, {"owned_main_processes_ended": True})
-            continuous = {"total_authorized_seconds": 518400., "prior_used_seconds": 400000., "this_round_seconds": 123.,
-                "cumulative_seconds": 400123., "remaining_seconds": 118277., "budget_reset": False, "whole_worker_lifetime_counted": True}
+            continuous = {"total_authorized_seconds": 518400., "prior_used_seconds": 500000., "this_round_seconds": 123.,
+                "cumulative_seconds": 500123., "remaining_seconds": 18277., "budget_reset": False, "whole_worker_lifetime_counted": True}
             atomic_json(root / "metadata/continuous_compute_receipt.json", continuous)
             os.environ.update(P0_ROOT=str(root), P10_SOURCE_ROOT=str(source), P2_CAMPAIGN="fixture", P24_PREDECESSOR="p23-fixture", P2_CODE_COMMIT="new-source", P10_GPU6_UUID="synthetic-authorized-uuid", P24_PHYSICAL_GPU="6")
             failed_q = copy.deepcopy(gate); failed_q["teachers"]["v"]["blocks"]["verification_s"]["checks"]["correct_minority_rescued"] = False
@@ -92,7 +92,7 @@ def main():
                 except ValueError:pass
                 else:raise AssertionError("Unclosed or undelivered predecessor admitted")
                 assert not folder.exists();path.write_text(saved)
-            for invalid in [dict(continuous, cumulative_seconds=399999.), dict(continuous, remaining_seconds=1.), dict(continuous, remaining_seconds=float("nan")), dict(continuous, whole_worker_lifetime_counted=False)]:
+            for invalid in [dict(continuous, cumulative_seconds=499999.), dict(continuous, remaining_seconds=1.), dict(continuous, remaining_seconds=float("nan")), dict(continuous, whole_worker_lifetime_counted=False)]:
                 atomic_json(root / "metadata/continuous_compute_receipt.json", invalid)
                 try: prepare()
                 except ValueError: pass
@@ -105,7 +105,7 @@ def main():
             assert locked["configurations"] == configurations(base)
             assert locked["execution_physical_gpu"] == 6
             budget = json.loads((root / "metadata/campaign_budget.json").read_text())
-            assert budget["authorized_physical_gpus"] == [6, 7] and budget["prior_gpu_process_seconds"] == 400123.
+            assert budget["authorized_physical_gpus"] == [6, 7] and budget["prior_gpu_process_seconds"] == 500123.
             assert len(json.loads((folder/"reference/targets.json").read_text())["stream"]) == 64
             assert not json.loads((folder/"budget_admission.json").read_text())["admitted"]
             with patch("p10_pipeline.supervise", side_effect=AssertionError("Budget-blocked GPU started")), patch("p10_pipeline.invoke", side_effect=AssertionError("Budget-blocked worker started")):
@@ -114,7 +114,7 @@ def main():
                     pipeline()
             final = json.loads((folder/"FINAL.json").read_text())
             assert final["status"] == "full_matrix_budget_admission_blocked" and final["gpu_process_seconds_used"] == 0
-            counts = export(folder, root/"public"); assert counts == {"matrix_rows":9,"case_rows":576,"probe_rows":144}
+            counts = export(folder, root/"public"); assert counts == {"matrix_rows":3,"case_rows":192,"probe_rows":48}
             for path in (root/"public").glob("*"):
                 text = path.read_text(); assert "Synthetic?" not in text and "SLAKE/train/" not in text and "/synthetic" not in text
             from p24_score import selected_labels, original_probes
@@ -152,12 +152,12 @@ def main():
                             rewards,_,vote=group_rewards(completions,{"A":"yes","B":"no"})
                             row.update(completions=completions,rewards=rewards.tolist(),vote=vote,response_lengths=[4]*8,hit_length_cap=[False]*8)
                         atomic_json(run/"cases"/f"i{i:06d}.json",row)
-            atomic_json(folder/"controllers/main-plan.json",{"status":"all_planned_jobs_completed","jobs":[{"return_code":0}]*10})
+            atomic_json(folder/"controllers/main-plan.json",{"status":"all_planned_jobs_completed","jobs":[{"return_code":0}]*4})
             atomic_json(folder/"owned_cleanup_before_score.json",{"owned_main_processes_ended":True})
             atomic_json(folder/"acceptance.json",{"passed":True})
             with patch("p10_score.resource_summary",return_value={}):score(selected_labels,original_probes)
             matrix=json.loads((folder/"scores/public_summary.json").read_text())
-            assert matrix["n"]==64 and matrix["frozen_correct"]==64 and len(matrix["probe_rows"])==144 and not matrix["stable_positive_development_result"]
+            assert matrix["n"]==64 and matrix["frozen_correct"]==64 and len(matrix["probe_rows"])==48 and not matrix["stable_positive_development_result"]
             # The new actual checkpoint path is also exercised with a small real CPU optimizer.
             import torch
             from types import SimpleNamespace

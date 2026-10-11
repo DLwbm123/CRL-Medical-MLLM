@@ -35,6 +35,7 @@ paths = {"prepare": "scripts/prepare_p10.py", "download": "scripts/p10_download.
          "p24_prepare": "scripts/prepare_p24.py", "p24_pipeline": "scripts/p24_pipeline.py",
          "p24_accept": "implementation/p24_accept.py", "p24_run": "implementation/p24_run.py",
          "p24_score": "implementation/p24_score.py", "p24_test": "scripts/test_p24.py",
+         "p26_test": "scripts/test_p26.py",
          "transport_test": "scripts/test_transport.py",
          "resource_test": "scripts/test_resource_closure.py",
          "report_test": "scripts/test_report_p12.py",

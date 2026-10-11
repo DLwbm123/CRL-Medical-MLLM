@@ -56,7 +56,7 @@ def export(folder, output, prefix="p24"):
                     "invalid_rollouts": 8 - row["vote"]["valid"] if row else "NA", "any_length_cap": any(row["hit_length_cap"]) if row else "NA"})
             probes.extend([p for p in matrix["probe_rows"] if p["seed"] == seed and p["arm"] == arm] if matrix else
                 [{"seed": seed, "arm": arm, "probe_index": i, "initial_correct": "NA", "final_correct": "NA", "initial_parsed": "NA", "final_parsed": "NA"} for i in range(16)])
-    if (len(rows), len(cases), len(probes)) != (9, 576, 144): raise ValueError("Public planned coverage differs")
+    if (len(rows), len(cases), len(probes)) != (3 * len(SEEDS), 192 * len(SEEDS), 48 * len(SEEDS)): raise ValueError("Public planned coverage differs")
     public = {"status": final["status"], "source_commit": final["code_commit"], "failure_type": final.get("error_type"),
         "training_acceptance": acceptance, "budget": budget, "matrix": matrix, "compute": receipt,
         "stable_positive_development_result": matrix["stable_positive_development_result"] if matrix else None,
@@ -69,11 +69,11 @@ def export(folder, output, prefix="p24"):
     table = "\n".join(["| Seed | Arm | Strict before /64 | Strict after /64 | Original correct probes retained /3 |", "| --- | --- | --- | --- | --- |"] +
         [f"| {r['seed']} | {r['arm']} | {r['before_correct']} | {r['after_correct']} | {r['original_correct_probes_retained']} |" for r in rows])
     (output / (prefix + "_report.md")).write_text("\n\n".join(["# " + prefix.upper() + " complete conditional RL development matrix", f"Status: {final['status']}. Source: {final['code_commit']}. Pipeline started: {public['pipeline_started']}; original FINAL exists: {public['original_FINAL_exists']}. An admission-only report does not create an experiment FINAL.",
-        "All64 already observed P23 SLAKE binary training groups in their frozen order, original16 MedXpert retention probes, seeds99/100/101 and original SPINE(s), raw majority TTRL(t), fixed calibrated visual-reward TTRL(v). No final-test access, data reselection, changed parser or relaxed tolerances. The original native full-prefix training loss is retained; a cached frozen generation check is not training acceptance.",
-        table, "All9 planned trajectories,576 planned case observations and144 individual probe outcomes are published, with missing scientific outcomes explicitly NA. Complete negative transitions, reward-direction and format diagnostics remain in the aggregate when the entire matrix seals. Engineering diagnostic advantages do not constitute scientific training rewards; those temporary weights are discarded.",
+        f"All64 already observed P23 SLAKE binary training groups in their frozen order, original16 MedXpert retention probes, seeds{SEEDS} and original SPINE(s), raw majority TTRL(t), fixed calibrated visual-reward TTRL(v). No final-test access, data reselection, changed parser or relaxed tolerances. The original objective uses differentiable generation replay shared by actor statistics, gradients and fixed reference; original full-prefix observations remain paired same-token controls. A cached frozen generation check is not training acceptance.",
+        table, f"All{3 * len(SEEDS)} planned trajectories,{192 * len(SEEDS)} planned case observations and{48 * len(SEEDS)} individual probe outcomes are published, with missing scientific outcomes explicitly NA. Complete negative transitions, reward-direction and format diagnostics remain in the aggregate when the entire matrix seals. Engineering diagnostic advantages do not constitute scientific training rewards; those temporary weights are discarded.",
         f"This-round GPU full-worker lifetime {used/3600:.6f}h; continuous{receipt['cumulative_seconds']/3600:.6f}/144h; remaining{receipt['remaining_seconds']/3600:.6f}h. Acceptance/loading/CPU optimizer/saving/failure lifetimes count; P23 reused signal jobs are not counted again.",
         "Reused small development results do not reverse the old MedXpert negative experiments or establish patient independence, pretraining separation or clinical generalization. Raw medical IDs/text/options/class labels/images, teacher targets/readouts/token text, checkpoints/full logs/private paths are excluded. Effective-proxy push, remote SHA and anonymous access verification remain required for actual delivery."]) + "\n")
-    return {"matrix_rows": 9, "case_rows": 576, "probe_rows": 144}
+    return {"matrix_rows": 3 * len(SEEDS), "case_rows": 192 * len(SEEDS), "probe_rows": 48 * len(SEEDS)}
 
 
 if __name__ == "__main__": print(json.dumps(export(Path(os.environ["P10_LOCAL_FOLDER"]), Path(__file__).resolve().parents[1] / "reports")))

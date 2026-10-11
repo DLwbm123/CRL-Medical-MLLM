@@ -14,12 +14,13 @@ from core import token_statistics
 from state import atomic_json, inference_without_state_change
 
 
-def cached_response(model, encoded, response):
+def cached_response(model, encoded, response, check=None):
     """Use the installed model's generation preparation and explicit cache positions."""
     prefix = encoded["input_ids"]; mask = encoded["attention_mask"]
     vision = {k: v for k, v in encoded.items() if k not in {"input_ids", "attention_mask"}}
     cache = None; logits = []
     for index, token in enumerate(response):
+        if check is not None: check()
         positions = torch.arange(prefix.shape[-1], device=prefix.device) if index == 0 else torch.tensor([prefix.shape[-1] - 1], device=prefix.device)
         inputs = model.prepare_inputs_for_generation(prefix, past_key_values=cache, attention_mask=mask,
             cache_position=positions, use_cache=True, **vision)

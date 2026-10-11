@@ -41,7 +41,7 @@ def main():
             probe = FOLDER / ".storage_probe"; probe.write_text("ok")
             if probe.read_text() != "ok": raise ValueError("Data mount read/write probe failed")
             probe.unlink()
-            invoke("p24_test", "cpu-acceptance.log")
+            invoke("p26_test", "cpu-acceptance.log")
             atomic_json(FOLDER / "STATUS.json", {"stage": "actual_training_acceptance"})
             supervise("acceptance", device, gpu_uuid)
             if not json.loads((FOLDER / "acceptance.json").read_text())["passed"]: raise ValueError("Actual training acceptance failed")

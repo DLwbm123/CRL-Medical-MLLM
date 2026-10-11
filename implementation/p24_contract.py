@@ -1,13 +1,14 @@
 """Fixed complete RL scope and fail-closed admission; no model or labels loaded."""
 import math
 
-SEEDS = [99, 100, 101]
+SEEDS = [102]
 ARMS = ["s", "t", "v"]
 TOTAL = 518400.
 TRAIN_CAP = 20000.
 BASE_CAP = ACCEPT_CAP = 7200.
-TRAIN_PROXY = 9 * 4 * 4590.984604918864
-FULL_ESTIMATE = max(TRAIN_PROXY + BASE_CAP + ACCEPT_CAP, 9 * TRAIN_CAP + BASE_CAP + ACCEPT_CAP)
+TRAJECTORIES = len(SEEDS) * len(ARMS)
+TRAIN_PROXY = TRAJECTORIES * 4 * 4590.984604918864
+FULL_ESTIMATE = max(TRAIN_PROXY + BASE_CAP + ACCEPT_CAP, TRAJECTORIES * TRAIN_CAP + BASE_CAP + ACCEPT_CAP)
 RESERVE = .2
 CHECKS = {"coverage_at_least_half", "at_least_twelve_correct_targets", "accepted_precision_at_least_three_quarters",
           "correct_negative_rate_lower", "wrong_positive_rate_ten_pp_lower", "correct_minority_rescued"}
@@ -24,6 +25,7 @@ def configurations(base):
     for arm in result:
         for seed in ([42] if arm == "a" else SEEDS):
             cfg = {**base, "seed": seed, "gpu_index": 0, "p10_arm": arm,
+                   "response_recompute_path": "differentiable_generation_replay",
                    "method": "Frozen greedy" if arm == "a" else "SPINE" if arm == "s" else "TTRL",
                    "reward_source": "frozen_visual" if arm == "v" else "majority"}
             if arm in ["t", "v"]: cfg.update(temperature=1., top_p=1., zero_advantage_policy="skip", strict_on_policy_consistency_claimed=False)

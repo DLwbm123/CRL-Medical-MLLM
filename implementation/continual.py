@@ -127,6 +127,8 @@ class Deadline(StoppingCriteria):
 class Engine:
     def __init__(self, root, out, cfg, deadline):
         self.root, self.out, self.cfg, self.deadline = root, out, cfg, deadline
+        if cfg.get("response_recompute_path", "full_prefix") not in {"full_prefix", "differentiable_generation_replay"}:
+            raise ValueError("Unknown frozen response recomputation path")
         self.reward_targets = None
         if cfg.get("reward_source") == "frozen_legal":
             folder = out.parent.parent
@@ -273,6 +275,12 @@ class Engine:
             raise RuntimeError(f"Unwarped generation/recompute log-prob mismatch: {result['max_logp_difference']}")
         return result
 
+    def response_logits(self, model, encoded, response):
+        if self.cfg.get("response_recompute_path") == "differentiable_generation_replay":
+            from generation_replay import response_logits
+            return response_logits(model, encoded, response, self.deadline.check)
+        return forward_response(model, encoded, response)
+
     def probability_measurement(self, row):
         """Record the unchanged check; diagnostic callers may retain failed measurements."""
         with inference_without_state_change(self.actor):
@@ -281,7 +289,7 @@ class Engine:
                                          return_dict_in_generate=True, output_scores=True, stopping_criteria=[self.deadline])
             response = output.sequences[0, encoded["input_ids"].shape[-1]:]
             generated_logp = torch.stack([score[0].float().log_softmax(-1)[token] for score, token in zip(output.scores, response)])
-            logits = forward_response(self.actor, encoded, response)
+            logits = self.response_logits(self.actor, encoded, response)
             recomputed_logp, _, _ = token_statistics(logits, response, chunk_tokens=self.cfg["statistics_chunk_tokens"])
             error = float((generated_logp - recomputed_logp).abs().max())
             if not math.isfinite(error): raise RuntimeError("Non-finite generation/recompute log-probability difference")
@@ -313,7 +321,7 @@ class Engine:
         self.actor.train()
         with self.phase("behavior_forward"), torch.no_grad():
             for response in responses:
-                logits = forward_response(self.actor, encoded, response)
+                logits = self.response_logits(self.actor, encoded, response)
                 logp, entropy, _ = token_statistics(logits, response, chunk_tokens=cfg["statistics_chunk_tokens"])
                 mask, lower, upper, threshold = select_and_band(entropy, cfg["histogram_bins"])
                 if self.method == "TTRL":
@@ -332,9 +340,9 @@ class Engine:
         for response_index, (response, item) in enumerate(zip(responses, cached)):
             self.deadline.check()
             with self.phase("reference_forward"), torch.no_grad():
-                reference_logits = forward_response(self.reference, encoded, response).detach().cpu()
+                reference_logits = self.response_logits(self.reference, encoded, response).detach().cpu()
             with self.phase("backward"):
-                logits = forward_response(self.actor, encoded, response)
+                logits = self.response_logits(self.actor, encoded, response)
                 logp, entropy, kl = token_statistics(logits, response, reference_logits, cfg["statistics_chunk_tokens"])
                 error = float((logp.detach() - item["old_logp"]).abs().max())
                 recompute_error = max(recompute_error, error)
@@ -372,8 +380,8 @@ class Engine:
             with self.phase("post_update_drift"), torch.no_grad():
                 self.actor.eval()
                 response = responses[0]
-                reference_logits = forward_response(self.reference, encoded, response)
-                logits = forward_response(self.actor, encoded, response)
+                reference_logits = self.response_logits(self.reference, encoded, response)
+                logits = self.response_logits(self.actor, encoded, response)
                 logp, _, kl = token_statistics(logits, response, reference_logits, cfg["statistics_chunk_tokens"])
                 difference = logp - cached[0]["old_logp"]
                 diagnostics["post_update_drift"] = {

@@ -100,8 +100,8 @@ def main(label_reader=read_labels, initial_check=None):
         print(json.dumps(public), flush=True)
         return
     ledger = json.loads((folder / "controllers/main-plan.json").read_text())
-    if ledger["status"] != "all_planned_jobs_completed" or len(ledger["jobs"]) != 10 or any(j["return_code"] != 0 for j in ledger["jobs"]):
-        raise ValueError("The entire three-seed, three-arm matrix must close")
+    if ledger["status"] != "all_planned_jobs_completed" or len(ledger["jobs"]) != 1 + 3 * len(manifest["rollout_seeds"]) or any(j["return_code"] != 0 for j in ledger["jobs"]):
+        raise ValueError("The entire preregistered seed-by-three-arm matrix must close")
     if not json.loads((folder / "owned_cleanup_before_score.json").read_text())["owned_main_processes_ended"]:
         raise ValueError("All main workers must end before scoring")
     acceptance = json.loads((folder / "acceptance.json").read_text())
