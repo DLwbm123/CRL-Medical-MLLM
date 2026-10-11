@@ -1,0 +1,10 @@
+stage,job,seconds,return_code,timeout
+calibration,retired-calibration,144.1106974340073,0,False
+qualification,teacher-v,128.90032624299056,0,False
+qualification,teacher-c,402.6334888230049,0,False
+main,pool-s96,2897.6663819370006,0,False
+main,pool-t96,2686.219717549,0,False
+main,pool-s97,3247.8818499469926,0,False
+main,pool-t97,3006.2983728270046,0,False
+main,pool-s98,1967.0810203599976,0,False
+main,pool-t98,2207.7049023349973,0,False

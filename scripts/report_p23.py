@@ -12,6 +12,11 @@ def export(folder, output):
         prefix = "p23_" + key
         counts[key] = reward_export(folder, output, prefix, (96, 97, 98), "scores/" + key, 518400., ("calibration",))
         results[key] = json.loads((output / (prefix + "_results.json")).read_text())
+        report = output / (prefix + "_report.md")
+        report.write_text(report.read_text().replace("Teacher self-reported visual support is a fallible proxy.",
+            "v uses fixed calibrated real/masked answer scores; c uses fallible self-reported visual support.").replace(
+            "No truth entered the reward signal; accuracy scoring requires the complete scope to seal and every worker to end.",
+            "Retired P21 training labels fit the frozen v calibration before fresh readouts. Fresh labels never entered either signal; fresh accuracy scoring requires complete worker closure."))
     calibration_path = folder / "calibration.json"
     calibration = json.loads(calibration_path.read_text()) if calibration_path.exists() else None
     public_calibration = {k: calibration[k] for k in ["admitted", "temperature", "threshold", "retired_groups", "accepted", "correct", "nll", "new_labels_used"] if k in calibration} if calibration else None

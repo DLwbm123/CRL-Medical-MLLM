@@ -1,0 +1,65 @@
+{
+  "owned_processes_ended": true,
+  "all_nine_gpu_workers_exit_zero": true,
+  "retired_calibration_groups_sealed": 64,
+  "fresh_visual_group_scores_sealed": 64,
+  "control_teacher_readouts_sealed": 128,
+  "candidate_count_sealed": 3072,
+  "pool_case_count_sealed": 384,
+  "paired_reward_case_rows": 768,
+  "optimizer_updates": 0,
+  "fresh_labels_only_after_closure": true,
+  "retired_calibration_sealed_before_fresh_scores": true,
+  "weights_unchanged": true,
+  "original_FINAL_preserved": true,
+  "scientific_reward_qualified": true,
+  "all_24_fixed_candidate_checks_passed": true,
+  "all_24_control_checks_retained": true,
+  "probability_checks": [
+    {
+      "name": "pool-s96",
+      "cached": 0.0,
+      "uncached": 0.01831352710723877,
+      "same_tokens": true,
+      "training_loss_validated": false
+    },
+    {
+      "name": "pool-t96",
+      "cached": 0.0,
+      "uncached": 0.01831352710723877,
+      "same_tokens": true,
+      "training_loss_validated": false
+    },
+    {
+      "name": "pool-s97",
+      "cached": 0.0,
+      "uncached": 0.052382707595825195,
+      "same_tokens": true,
+      "training_loss_validated": false
+    },
+    {
+      "name": "pool-t97",
+      "cached": 0.0,
+      "uncached": 0.052382707595825195,
+      "same_tokens": true,
+      "training_loss_validated": false
+    },
+    {
+      "name": "pool-s98",
+      "cached": 0.0,
+      "uncached": 0.08638143539428711,
+      "same_tokens": true,
+      "training_loss_validated": false
+    },
+    {
+      "name": "pool-t98",
+      "cached": 0.0,
+      "uncached": 0.08638143539428711,
+      "same_tokens": true,
+      "training_loss_validated": false
+    }
+  ],
+  "cpu_resource_seconds": 1.516614975000266,
+  "gpu_seconds": 16688.496757454996,
+  "stable_RL_improvement_established": false
+}

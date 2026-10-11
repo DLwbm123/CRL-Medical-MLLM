@@ -1,0 +1,83 @@
+{
+  "total_authorized_seconds": 518400.0,
+  "prior_used_seconds": 120691.1088064673,
+  "p23_v_used_seconds": 16688.496757454996,
+  "cumulative_seconds": 137379.6055639223,
+  "remaining_seconds": 381020.39443607774,
+  "budget_reset": false,
+  "whole_worker_lifetime_counted": true,
+  "gpu_jobs": [
+    {
+      "stage": "calibration",
+      "job": "retired-calibration",
+      "seconds": 144.1106974340073,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "qualification",
+      "job": "teacher-v",
+      "seconds": 128.90032624299056,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "qualification",
+      "job": "teacher-c",
+      "seconds": 402.6334888230049,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-s96",
+      "seconds": 2897.6663819370006,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-t96",
+      "seconds": 2686.219717549,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-s97",
+      "seconds": 3247.8818499469926,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-t97",
+      "seconds": 3006.2983728270046,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-s98",
+      "seconds": 1967.0810203599976,
+      "return_code": 0,
+      "timeout": false
+    },
+    {
+      "stage": "main",
+      "job": "pool-t98",
+      "seconds": 2207.7049023349973,
+      "return_code": 0,
+      "timeout": false
+    }
+  ],
+  "cpu_resource_jobs": [
+    {
+      "stage": "resources",
+      "job": "resource",
+      "seconds": 1.516614975000266,
+      "return_code": 0,
+      "timeout": false
+    }
+  ]
+}
