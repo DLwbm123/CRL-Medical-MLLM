@@ -1,0 +1,63 @@
+{
+  "reward_seeds": [
+    96,
+    97,
+    98
+  ],
+  "RL_reserved_seeds": [
+    99,
+    100,
+    101
+  ],
+  "total_authorized_gpu_seconds": 518400.0,
+  "prior_gpu_seconds": 120691.1088064673,
+  "remaining_before_new_GPU_seconds": 397708.8911935327,
+  "reward_required_with_20percent_seconds": 155520.0,
+  "complete_RL_required_with_20percent_seconds": 233280.0,
+  "combined_required_seconds": 388800.0,
+  "combined_admitted": true,
+  "extra_over_combined_reservations_seconds": 8908.89119353273,
+  "whole_scope_caps_are_not_speed_measurements": true,
+  "new_inputs": {
+    "groups": 64,
+    "blocks": [
+      32,
+      32
+    ],
+    "modalities": {
+      "MRI": 17,
+      "CT": 28,
+      "X-Ray": 19
+    },
+    "prior_references_excluded": 192,
+    "heldout_references_excluded": 328,
+    "correctness_used_for_selection": false,
+    "annotation_domain_predicate_not_label_blind": true,
+    "patient_disjointness_verified": false
+  },
+  "cpu_checks": [
+    {
+      "mode": "p23_test",
+      "code": 0
+    },
+    {
+      "mode": "p24_test",
+      "code": 0
+    },
+    {
+      "mode": "p22_test",
+      "code": 0
+    },
+    {
+      "mode": "p21_test",
+      "code": 0
+    },
+    {
+      "mode": "reward_test",
+      "code": 0
+    }
+  ],
+  "actual_reward_qualified": null,
+  "actual_native_training_acceptance": "UNEXECUTED",
+  "GPU_started": false
+}

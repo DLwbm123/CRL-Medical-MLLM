@@ -7,11 +7,11 @@ from report_p10 import write_csv
 from p16_score import CHECKS
 
 
-def export(folder, output, prefix="p16", seeds=(75, 76, 77), score_directory="scores"):
+def export(folder, output, prefix="p16", seeds=(75, 76, 77), score_directory="scores", total_seconds=259200., extra_stages=()):
     final = json.loads((folder / "FINAL.json").read_text())
     if "finished_utc" not in final: raise ValueError("Campaign has not ended")
     jobs, cpu = [], []
-    for stage in ["resources", "qualification", "main"]:
+    for stage in ["resources", *extra_stages, "qualification", "main"]:
         path = folder / "controllers" / (stage + "-plan.json")
         if not path.exists(): continue
         ledger = json.loads(path.read_text())
@@ -22,7 +22,7 @@ def export(folder, output, prefix="p16", seeds=(75, 76, 77), score_directory="sc
                 "return_code": job.get("return_code"), "timeout": job.get("timeout_or_stop", False)})
     used = sum(j["seconds"] for j in jobs)
     if abs(used - final["gpu_process_seconds_used"]) > 1e-5: raise ValueError("Unique complete GPU job accounting differs")
-    receipt = {"total_authorized_seconds": 259200., "prior_used_seconds": final["cumulative_gpu_process_seconds"] - used,
+    receipt = {"total_authorized_seconds": total_seconds, "prior_used_seconds": final["cumulative_gpu_process_seconds"] - used,
         prefix + "_used_seconds": used, "cumulative_seconds": final["cumulative_gpu_process_seconds"],
         "remaining_seconds": final["remaining_gpu_process_seconds"], "budget_reset": False,
         "whole_worker_lifetime_counted": True, "gpu_jobs": jobs, "cpu_resource_jobs": cpu}
@@ -73,7 +73,7 @@ def export(folder, output, prefix="p16", seeds=(75, 76, 77), score_directory="sc
         "This new binary development task differs from retired MedXpertQA and cannot reverse its negative results or establish independent clinical generalization. Teacher self-reported visual support is a fallible proxy.", table,
         "Reward qualified: " + (str(gate["go"]) if gate else "NA") + ". No optimizer/backward/training was performed; actor retention transitions are NA. This qualification does not establish stable RL improvement, causality or success on the original task.",
         "All64 teacher rows, six planned pool summaries,384 planned case observations and24 checks are retained, including negative/invalid/NA outcomes. Planned rows are not completed observations or384 independent images. No truth entered the reward signal; accuracy scoring requires the complete scope to seal and every worker to end.",
-        f"Complete GPU-worker lifetime: {used / 3600:.6f}h this round; {receipt['cumulative_seconds'] / 3600:.6f}/72h cumulative; {receipt['remaining_seconds'] / 3600:.6f}h remaining. CPU resource cost is separate; no budget reset or archive double counting.",
+        f"Complete GPU-worker lifetime: {used / 3600:.6f}h this round; {receipt['cumulative_seconds'] / 3600:.6f}/{total_seconds / 3600:g}h cumulative; {receipt['remaining_seconds'] / 3600:.6f}h remaining. CPU resource cost is separate; no budget reset or archive double counting.",
         "Private identifiers, medical text/options/labels/images, teacher targets/readout text, checkpoints/full logs and private paths are omitted. Future training requires a separately frozen complete protocol and budget admission. Public delivery requires effective-proxy push and final remote SHA/anonymous access verification."]
     if failure_audit:
         text.insert(2, f"Input contract failure: {failure_audit['nonbinary_label_count']}/{failure_audit['selected_groups']} selected official answers were outside the fixed yes/no domain. All seven GPU workers completed and sealed before this was discovered during offline scoring. The frozen protocol correctly stopped without dropping a question, coercing its label or changing the scorer. Reward accuracy, all24 qualification checks and scientific reward status remain NA; this is not evidence that the reward source passed or failed. The original failed FINAL is preserved.")

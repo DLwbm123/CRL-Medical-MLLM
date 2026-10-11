@@ -82,6 +82,11 @@ def main(reference="reference", score_directory="scores", teacher=None):
             decision = block_gate(majority, verified, correct, accepted)
             blocks[f"{section}_{arm}"] = {**decision, "unique_groups": 32, "repeated_group_observations": 96,
                 "accepted": accepted, "correct_targets": correct, "majority": majority, "verified": verified}
+            if manifest.get("p23_version") == 1:
+                matched = [r for r in rows if targets[r["id"]] is not None]
+                blocks[f"{section}_{arm}"]["same_accepted_subset"] = {
+                    "groups": len(matched), "majority": reward_audit(matched, choices, labels),
+                    "verified": verified_audit(matched, choices, labels, targets)}
     for name, rows in loaded.items():
         seed = manifest["configurations"][name]["seed"]; arm = name.split("-")[1][0]
         majority, verified = reward_audit(rows, choices, labels), verified_audit(rows, choices, labels, targets)
@@ -98,6 +103,12 @@ def main(reference="reference", score_directory="scores", teacher=None):
                 "minority_rescued": bool(v["counts"]["minority_rescued"]), "retention_harm": "NA_no_update"})
     for section, key in [("calibration", "stream"), ("verification", "probe")]:
         for i, row in enumerate(signal[key]):
+            if signal.get("reward_scheme") == "calibrated_visual_v1":
+                teacher_rows.append({"section": section, "anonymous_index": i, "accepted": row["target"] is not None,
+                    "accepted_target_correct": is_correct(row["target"], labels[row["id"]]),
+                    "same_canonical_choice": row["same_canonical_choice"], "minimum_confidence": row["confidence"],
+                    "conditional_answer_scores": True, "generation_token_cap": "NA_no_generation", "retention_harm": "NA_no_update"})
+                continue
             teacher_rows.append({"section": section, "anonymous_index": i, "accepted": row["target"] is not None,
                 "accepted_target_correct": is_correct(row["target"], labels[row["id"]]),
                 "first_order_parsed": row["judgments"][0] is not None, "reverse_order_parsed": row["judgments"][1] is not None,

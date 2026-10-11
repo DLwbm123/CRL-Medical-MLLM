@@ -67,6 +67,9 @@ def agreed_target(judgments):
 
 
 def checked_targets(signal, manifest, digest):
+    if signal.get("reward_scheme") == "calibrated_visual_v1":
+        from p23_reward import checked_signal
+        return checked_signal(signal, manifest, digest)
     if signal.get("labels_read") is not False or signal.get("weights_unchanged") is not True or signal.get("sealed") is not True or signal.get("manifest_sha256") != digest:
         raise ValueError("Frozen verifier provenance is incomplete or differs")
     if signal.get("teacher_revision") != manifest["teacher"]["revision"]:
