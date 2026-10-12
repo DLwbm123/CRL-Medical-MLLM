@@ -62,9 +62,9 @@ def prepare():
             if not input_path.is_relative_to((origin / "inputs").resolve()): raise ValueError("Input path escapes sealed source")
             rel = f"inputs/{section}{i:03d}.json"; shutil.copyfile(input_path, folder / rel)
             target.append({**entry, "input": rel})
-    manifest.update(kind="development", p10_version=1, p24_version=1, campaign_prefix="p28" if os.environ["P2_CAMPAIGN"].startswith("p28-") else "p27" if os.environ["P2_CAMPAIGN"].startswith("p27-") else "p26",
-        memory_acceptance_required=os.environ["P2_CAMPAIGN"].startswith("p28-"), stream=stream, probe=retained,
-        engineering_change="functional_token_checkpoint_cache_chunks" if os.environ["P2_CAMPAIGN"].startswith("p28-") else "single_seed_main_admission_contract_repair" if os.environ["P2_CAMPAIGN"].startswith("p27-") else "differentiable_generation_replay_shared_by_all_arms_and_reference",
+    manifest.update(kind="development", p10_version=1, p24_version=1, campaign_prefix="p29" if os.environ["P2_CAMPAIGN"].startswith("p29-") else "p28" if os.environ["P2_CAMPAIGN"].startswith(("p28-", "p29-")) else "p27" if os.environ["P2_CAMPAIGN"].startswith("p27-") else "p26",
+        memory_acceptance_required=os.environ["P2_CAMPAIGN"].startswith(("p28-", "p29-")), stream=stream, probe=retained,
+        engineering_change="functional_token_checkpoint_cache_chunks" if os.environ["P2_CAMPAIGN"].startswith(("p28-", "p29-")) else "single_seed_main_admission_contract_repair" if os.environ["P2_CAMPAIGN"].startswith("p27-") else "differentiable_generation_replay_shared_by_all_arms_and_reference",
         selected_n=64, rollout_seeds=SEEDS, probe_cursors=[0, 64], drift_cursors=[64], teacher=old["teachers"]["v"], execution_physical_gpu=device,
         configurations={arm: {} for arm in ["a"] + ARMS}, new_final_test_access=False,
         data_status="all64 already observed P23 SLAKE binary development groups, original16 MedXpert retention probes",
@@ -85,7 +85,7 @@ def prepare():
         "remaining_total_gpu_process_seconds_at_start": continuous["remaining_seconds"], "budget_reset": False,
         "gpu_stop_utc": (now + timedelta(hours=50)).isoformat(), "hard_deadline_utc": (now + timedelta(hours=52)).isoformat(),
         "complete_scope_estimated_gpu_process_seconds": FULL_ESTIMATE, "reserve_fraction": RESERVE,
-        "main_seeds": SEEDS, "main_arms": ARMS, "authorized_physical_gpus": [6], "new_task_training_cost_measured": False}
+        "main_seeds": SEEDS, "main_arms": ARMS, "authorized_physical_gpus": [device], "new_task_training_cost_measured": False}
     atomic_json(root / "metadata/campaign_budget.json", budget)
     atomic_json(folder / "acceptance.json", {"passed": False, "status": "not_started"})
     atomic_json(folder / "acceptance-plan.json", {"minimum_free_mib": 48000, "jobs": [

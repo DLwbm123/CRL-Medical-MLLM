@@ -1,0 +1,62 @@
+{
+  "campaign": "p29-20261012T072138",
+  "single_engineering_change": "new GPU2-only admission and independent frozen round; unchanged prepared token-cache implementation",
+  "physical_gpu": 2,
+  "authorized_physical_gpus": [
+    2
+  ],
+  "seeds": [
+    102
+  ],
+  "training_trajectories": 3,
+  "full_scope_admission": {
+    "admitted": true,
+    "remaining_gpu_seconds": 373821.6999407367,
+    "round_remaining_seconds": 180000,
+    "estimated_seconds": 141600.0,
+    "required_with_reserve": 169920.0,
+    "additional_seconds_required": 0.0,
+    "complete_seeds": [
+      102
+    ],
+    "complete_arms": [
+      "s",
+      "t",
+      "v"
+    ],
+    "budget_reset": false,
+    "new_task_training_cost_measured": false,
+    "basis": "max historical training proxy and full fixed stop caps; not frozen-generation speed"
+  },
+  "gpu_stop_utc": "2026-10-14T09:22:51.543235+00:00",
+  "hard_deadline_utc": "2026-10-14T11:22:51.543235+00:00",
+  "actual_training_acceptance": "UNEXECUTED_NEW_GRADIENT_PATH_REQUIRES_ACTUAL_MEMORY_ACCEPTANCE",
+  "scientific_training": "UNEXECUTED",
+  "cpu_checks_passed": true,
+  "real_main_entry_reaches_model_boundary": true,
+  "memory_challenge": {
+    "index": 5,
+    "input_tokens": 1423,
+    "response_lengths": [
+      58,
+      97,
+      74,
+      4,
+      221,
+      69,
+      228,
+      4
+    ],
+    "source_campaign": "p27-20261011T154615",
+    "executed_source": "02dc68f08a0e4fcd128f69d2222dba4d7f84b8c0",
+    "final_public_delivery": "2cecf9b3dbcad2bffc57d9030535c5979698a881",
+    "engineering_only": true,
+    "labels_read": false,
+    "old_probabilities_or_rewards_reused": false,
+    "no_new_data": true,
+    "largest_prefix_index": 37,
+    "largest_input_tokens": 1431,
+    "complete_prefix_scope_count": 64
+  },
+  "old_rounds_preserved": true
+}
