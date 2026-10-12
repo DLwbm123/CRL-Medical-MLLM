@@ -1,0 +1,10 @@
+{
+  "total_authorized_seconds": 518400.0,
+  "prior_used_seconds": 144578.3000592633,
+  "this_round_seconds": 0,
+  "cumulative_seconds": 144578.3000592633,
+  "remaining_seconds": 373821.6999407367,
+  "budget_reset": false,
+  "whole_worker_lifetime_counted": true,
+  "jobs": []
+}

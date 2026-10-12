@@ -1,0 +1,20 @@
+{
+  "checked_utc": "2026-10-12T02:53:27.681318+00:00",
+  "startup_admission": "GPU6_MEMORY_ADMISSION_BLOCKED",
+  "reason": "GPU6 free memory below frozen48000MiB gate",
+  "physical_gpu": 6,
+  "free_mib": 27186,
+  "total_mib": 73415,
+  "minimum_free_mib": 48000,
+  "pipeline_started": false,
+  "GPU_work_started": false,
+  "FINAL_exists": false,
+  "GPU_process_seconds_used": 0.0,
+  "continuous_gpu_seconds_used": 144578.3000592633,
+  "remaining_gpu_seconds": 373821.6999407367,
+  "remaining_round_seconds": 179410.206645,
+  "required_complete_cost_with_reserve_seconds": 169920.0,
+  "full_budget_still_admitted": true,
+  "source_commit": "39d74c8ea3112a5f6239c91fd0262f1f19d1b476",
+  "no_other_task_modified": true
+}

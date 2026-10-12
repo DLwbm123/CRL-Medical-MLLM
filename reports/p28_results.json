@@ -1,0 +1,67 @@
+{
+  "status": "GPU6_MEMORY_ADMISSION_BLOCKED",
+  "source_commit": "39d74c8ea3112a5f6239c91fd0262f1f19d1b476",
+  "failure_type": null,
+  "training_acceptance": {
+    "passed": false,
+    "status": "not_started"
+  },
+  "budget": {
+    "admitted": true,
+    "remaining_gpu_seconds": 373821.6999407367,
+    "round_remaining_seconds": 180000,
+    "estimated_seconds": 141600.0,
+    "required_with_reserve": 169920.0,
+    "additional_seconds_required": 0.0,
+    "complete_seeds": [
+      102
+    ],
+    "complete_arms": [
+      "s",
+      "t",
+      "v"
+    ],
+    "budget_reset": false,
+    "new_task_training_cost_measured": false,
+    "basis": "max historical training proxy and full fixed stop caps; not frozen-generation speed"
+  },
+  "matrix": null,
+  "compute": {
+    "total_authorized_seconds": 518400.0,
+    "prior_used_seconds": 144578.3000592633,
+    "this_round_seconds": 0,
+    "cumulative_seconds": 144578.3000592633,
+    "remaining_seconds": 373821.6999407367,
+    "budget_reset": false,
+    "whole_worker_lifetime_counted": true,
+    "jobs": []
+  },
+  "stable_positive_development_result": null,
+  "independent_clinical_generalization_established": false,
+  "pipeline_started": false,
+  "original_FINAL_exists": false,
+  "memory_challenge_source": {
+    "index": 5,
+    "input_tokens": 1423,
+    "response_lengths": [
+      58,
+      97,
+      74,
+      4,
+      221,
+      69,
+      228,
+      4
+    ],
+    "source_campaign": "p27-20261011T154615",
+    "executed_source": "02dc68f08a0e4fcd128f69d2222dba4d7f84b8c0",
+    "final_public_delivery": "2cecf9b3dbcad2bffc57d9030535c5979698a881",
+    "engineering_only": true,
+    "labels_read": false,
+    "old_probabilities_or_rewards_reused": false,
+    "no_new_data": true,
+    "largest_prefix_index": 37,
+    "largest_input_tokens": 1431,
+    "complete_prefix_scope_count": 64
+  }
+}
