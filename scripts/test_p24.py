@@ -22,13 +22,13 @@ def main():
             try: physical_gpu(value)
             except ValueError: pass
             else: raise AssertionError("Unauthorized physical device admitted")
-        assert FULL_ESTIMATE == 74400.
-        assert admission(120691.1088064673 + 155520, 26*3600)["admitted"]
-        assert admission(0, 26*3600)["admitted"]
-        assert not admission(0, 89279)["admitted"]
-        assert not admission(500000, 26*3600, 7200, True)["admitted"]
+        assert FULL_ESTIMATE == 141600.
+        assert admission(120691.1088064673 + 155520, 50*3600)["admitted"]
+        assert admission(0, 50*3600)["admitted"]
+        assert not admission(0, 169919)["admitted"]
+        assert not admission(500000, 50*3600, 7200, True)["admitted"]
         for number in [float("nan"), -1., float("inf"), 518401.]:
-            try: admission(number, 26*3600)
+            try: admission(number, 50*3600)
             except ValueError: pass
             else: raise AssertionError("Invalid cost admitted")
         with tempfile.TemporaryDirectory() as temporary:

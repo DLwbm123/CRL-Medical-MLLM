@@ -65,6 +65,8 @@ def export(folder, output, prefix="p24"):
         "original_FINAL_exists": (folder / "FINAL.json").exists()}
     reuse = folder / "acceptance_reuse.json"
     if reuse.exists(): public["acceptance_reuse"] = json.loads(reuse.read_text())
+    challenge = folder / "memory_challenge.json"
+    if challenge.exists(): public["memory_challenge_source"] = json.loads(challenge.read_text())
     output.mkdir(parents=True, exist_ok=True)
     for name, values in [("main_results", rows), ("all_training_cases", cases), ("all_probes", probes), ("gpu_jobs", jobs)]: write_csv(output / f"{prefix}_{name}.csv", values)
     for name, value in [("results", public), ("compute_receipt", receipt)]: (output / f"{prefix}_{name}.json").write_text(json.dumps(value, indent=2) + "\n")

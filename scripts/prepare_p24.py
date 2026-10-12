@@ -36,7 +36,7 @@ def prepare():
             or not abs(prior + continuous["remaining_seconds"] - TOTAL) <= 1e-5
             or not abs(continuous["prior_used_seconds"] + continuous["this_round_seconds"] - prior) <= 1e-5):
         raise ValueError("Latest continuous closed-worker budget receipt differs")
-    admission(continuous["prior_used_seconds"], 26 * 3600, continuous["this_round_seconds"])
+    admission(continuous["prior_used_seconds"], 50 * 3600, continuous["this_round_seconds"])
     raw = (previous / "manifest.json").read_bytes(); old_digest = hashlib.sha256(raw).hexdigest()
     if old_digest != (previous / "manifest.sha256").read_text().strip(): raise ValueError("P23 manifest differs")
     old = json.loads(raw); validate(old)
@@ -62,8 +62,9 @@ def prepare():
             if not input_path.is_relative_to((origin / "inputs").resolve()): raise ValueError("Input path escapes sealed source")
             rel = f"inputs/{section}{i:03d}.json"; shutil.copyfile(input_path, folder / rel)
             target.append({**entry, "input": rel})
-    manifest.update(kind="development", p10_version=1, p24_version=1, campaign_prefix="p27" if os.environ["P2_CAMPAIGN"].startswith("p27-") else "p26", stream=stream, probe=retained,
-        engineering_change="single_seed_main_admission_contract_repair" if os.environ["P2_CAMPAIGN"].startswith("p27-") else "differentiable_generation_replay_shared_by_all_arms_and_reference",
+    manifest.update(kind="development", p10_version=1, p24_version=1, campaign_prefix="p28" if os.environ["P2_CAMPAIGN"].startswith("p28-") else "p27" if os.environ["P2_CAMPAIGN"].startswith("p27-") else "p26",
+        memory_acceptance_required=os.environ["P2_CAMPAIGN"].startswith("p28-"), stream=stream, probe=retained,
+        engineering_change="functional_token_checkpoint_cache_chunks" if os.environ["P2_CAMPAIGN"].startswith("p28-") else "single_seed_main_admission_contract_repair" if os.environ["P2_CAMPAIGN"].startswith("p27-") else "differentiable_generation_replay_shared_by_all_arms_and_reference",
         selected_n=64, rollout_seeds=SEEDS, probe_cursors=[0, 64], drift_cursors=[64], teacher=old["teachers"]["v"], execution_physical_gpu=device,
         configurations={arm: {} for arm in ["a"] + ARMS}, new_final_test_access=False,
         data_status="all64 already observed P23 SLAKE binary development groups, original16 MedXpert retention probes",
@@ -82,7 +83,7 @@ def prepare():
     now = datetime.now(timezone.utc)
     budget = {"total_gpu_process_seconds": TOTAL, "prior_gpu_process_seconds": prior,
         "remaining_total_gpu_process_seconds_at_start": continuous["remaining_seconds"], "budget_reset": False,
-        "gpu_stop_utc": (now + timedelta(hours=26)).isoformat(), "hard_deadline_utc": (now + timedelta(hours=28)).isoformat(),
+        "gpu_stop_utc": (now + timedelta(hours=50)).isoformat(), "hard_deadline_utc": (now + timedelta(hours=52)).isoformat(),
         "complete_scope_estimated_gpu_process_seconds": FULL_ESTIMATE, "reserve_fraction": RESERVE,
         "main_seeds": SEEDS, "main_arms": ARMS, "authorized_physical_gpus": [6], "new_task_training_cost_measured": False}
     atomic_json(root / "metadata/campaign_budget.json", budget)
@@ -92,7 +93,7 @@ def prepare():
     jobs = [{"label": "main-a", "environment": {"P2_MODE": "p24_run", "P2_RUN": "main-a", "P2_CONFIG": "configs/p24_a42.json", "P2_PROBABILITY_CHECK": "1"}, "max_seconds": BASE_CAP, "expected_cursor": 64}]
     jobs += [{"label": f"main-{arm}{seed}", "environment": {"P2_MODE": "p24_run", "P2_RUN": f"main-{arm}{seed}", "P2_CONFIG": f"configs/p24_{arm}{seed}.json", "P2_PROBABILITY_CHECK": "1"}, "max_seconds": TRAIN_CAP, "expected_cursor": 64} for seed in SEEDS for arm in ARMS]
     atomic_json(folder / "main-plan.json", {"requires_acceptance": True, "minimum_free_mib": 48000, "jobs": jobs})
-    decision = admission(budget["prior_gpu_process_seconds"], 26 * 3600)
+    decision = admission(budget["prior_gpu_process_seconds"], 50 * 3600)
     atomic_json(folder / "budget_admission.json", decision)
     atomic_json(folder / "preparation.json", {"sealed": True, "stream": 64, "probe": 16, "seed_count": len(SEEDS), "trajectory_count": len(SEEDS) * len(ARMS),
         "clinical_labels_read": False, "new_final_test_access": False, "reward_source_rebound_explicitly": True, "predecessor_public_commit": delivery["code_commit"], "budget": decision})

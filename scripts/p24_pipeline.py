@@ -41,7 +41,7 @@ def main():
             probe = FOLDER / ".storage_probe"; probe.write_text("ok")
             if probe.read_text() != "ok": raise ValueError("Data mount read/write probe failed")
             probe.unlink()
-            invoke("p27_test" if (FOLDER / "acceptance_reuse.json").exists() else "p26_test", "cpu-acceptance.log")
+            invoke("p28_test" if (FOLDER / "memory_challenge.json").exists() else "p27_test" if (FOLDER / "acceptance_reuse.json").exists() else "p26_test", "cpu-acceptance.log")
             if (FOLDER / "acceptance_reuse.json").exists():
                 from prepare_p27 import require_reuse
                 require_reuse(FOLDER)

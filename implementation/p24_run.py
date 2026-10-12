@@ -13,5 +13,7 @@ if __name__ == "__main__":
         raise ValueError("New actual training acceptance is incomplete")
     if any(cfg.get("response_recompute_path") != "differentiable_generation_replay" for group in manifest["configurations"].values() for cfg in group.values()):
         raise ValueError("Scientific matrix changed the accepted replay path")
+    if manifest.get("memory_acceptance_required") and any(v.get("memory_challenge", {}).get("passed") is not True or v["memory_challenge"].get("largest_prefix", {}).get("passed") is not True for v in accepted["arms"].values()):
+        raise ValueError("Larger-prefix actual memory acceptance is incomplete")
     torch.backends.cuda.matmul.allow_tf32 = False; torch.backends.cudnn.allow_tf32 = False
     main()

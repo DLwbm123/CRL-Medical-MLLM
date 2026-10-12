@@ -126,10 +126,52 @@ def main():
                 evidence["actual_update"] = update
                 atomic_json(folder / "acceptance.json", result); validate_update(update, cfg)
                 restored = recovery(engine, encoded, responses, advantages, out, digest) if arm == "t" else None
+                challenged = None
+                if manifest.get("memory_acceptance_required"):
+                    saved = json.loads((folder / "reference/memory_challenge.json").read_text())
+                    challenged = {"passed": False, "stage": "four_token_probability", "anonymous_index": 5,
+                        "engineering_only": True, "old_behavior_probabilities_or_rewards_used": False}
+                    evidence["checkpoint_recovery"] = restored
+                    evidence["memory_challenge"] = challenged
+                    atomic_json(folder / "acceptance.json", result)
+                    row = load_input(folder, manifest["stream"][5]); encoded = engine.encode(row)
+                    if saved["index"] != 5 or encoded["input_ids"].shape[-1] != saved["input_tokens"] or saved["input_tokens"] != 1423:
+                        raise ValueError("Original larger-prefix memory challenge changed")
+                    torch.cuda.reset_peak_memory_stats()
+                    challenged["four_token_probability"] = engine.probability_measurement(row)
+                    atomic_json(folder / "acceptance.json", result); require_probability(challenged["four_token_probability"])
+                    challenged.update(stage="full_response_probability", full_response_probability=full_response_check(engine, encoded))
+                    atomic_json(folder / "acceptance.json", result); require_probability(challenged["full_response_probability"])
+                    responses = [torch.tensor(t, dtype=torch.long, device=encoded["input_ids"].device) for t in saved["response_token_ids"]]
+                    if len(responses) != 8 or [len(t) for t in responses] != saved["response_lengths"]:
+                        raise ValueError("Complete memory challenge rollout tensors differ")
+                    challenged.update(stage="actual_backward_and_optimizer", input_tokens=1423, response_lengths=saved["response_lengths"])
+                    atomic_json(folder / "acceptance.json", result)
+                    challenged["actual_update"] = engine.update(encoded, responses, torch.ones(8), False)
+                    challenged.update(peak_allocated_bytes=torch.cuda.max_memory_allocated(), peak_reserved_bytes=torch.cuda.max_memory_reserved())
+                    atomic_json(folder / "acceptance.json", result); validate_update(challenged["actual_update"], cfg)
+                    largest = {"passed":False,"anonymous_index":37,"stage":"four_token_probability"}
+                    challenged["largest_prefix"] = largest
+                    atomic_json(folder / "acceptance.json", result)
+                    row = load_input(folder, manifest["stream"][37]); encoded = engine.encode(row)
+                    if encoded["input_ids"].shape[-1] != 1431:
+                        raise ValueError("Largest fixed prefix changed")
+                    largest["four_token_probability"] = engine.probability_measurement(row)
+                    atomic_json(folder / "acceptance.json", result); require_probability(largest["four_token_probability"])
+                    largest.update(stage="full_response_probability",full_response_probability=full_response_check(engine,encoded))
+                    atomic_json(folder / "acceptance.json", result); require_probability(largest["full_response_probability"])
+                    responses=[engine.generate(encoded,True)[0] for _ in range(8)]
+                    largest.update(stage="actual_backward_and_optimizer",input_tokens=1431,response_lengths=[len(t) for t in responses])
+                    atomic_json(folder / "acceptance.json", result)
+                    largest["actual_update"] = engine.update(encoded,responses,torch.ones(8),False)
+                    largest.update(peak_allocated_bytes=torch.cuda.max_memory_allocated(),peak_reserved_bytes=torch.cuda.max_memory_reserved())
+                    atomic_json(folder / "acceptance.json", result); validate_update(largest["actual_update"],cfg)
+                    largest.update(passed=True,stage="complete")
+                    challenged.update(passed=True, stage="complete")
                 engine.reference_unchanged()
                 result["arms"][arm] = {"passed": True, "stage": "complete", "four_token_probability": four, "full_response_probability": full,
                     "actual_update": update, "checkpoint_recovery": restored, "fixed_reference_unchanged": True,
-                    "real_scientific_reward_used_for_engineering_step": False}
+                    "real_scientific_reward_used_for_engineering_step": False, "memory_challenge": challenged}
                 atomic_json(folder / "acceptance.json", result)
                 engine.event("acceptance_arm_passed", arm=arm)
             finally:
@@ -138,6 +180,9 @@ def main():
         result["passed"] = set(result["arms"]) == set(ARMS) and all(v["passed"] for v in result["arms"].values())
     except Exception as exc:
         result["error_type"] = type(exc).__name__
+        if torch.cuda.is_initialized():
+            result["failure_peak_allocated_bytes"] = torch.cuda.max_memory_allocated()
+            result["failure_peak_reserved_bytes"] = torch.cuda.max_memory_reserved()
         raise
     finally:
         atomic_json(folder / "acceptance.json", result)
