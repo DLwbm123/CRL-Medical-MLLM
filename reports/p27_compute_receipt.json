@@ -1,0 +1,25 @@
+{
+  "total_authorized_seconds": 518400.0,
+  "prior_used_seconds": 141306.0259806753,
+  "this_round_seconds": 3272.274078587987,
+  "cumulative_seconds": 144578.3000592633,
+  "remaining_seconds": 373821.6999407367,
+  "budget_reset": false,
+  "whole_worker_lifetime_counted": true,
+  "jobs": [
+    {
+      "stage": "main",
+      "job": "main-a",
+      "seconds": 850.194245213992,
+      "return_code": 0,
+      "timeout": null
+    },
+    {
+      "stage": "main",
+      "job": "main-s102",
+      "seconds": 2422.079833373995,
+      "return_code": 1,
+      "timeout": null
+    }
+  ]
+}
