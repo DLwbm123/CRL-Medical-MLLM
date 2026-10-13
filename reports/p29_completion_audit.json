@@ -1,0 +1,30 @@
+{
+  "checked_utc": "2026-10-13T08:05:45.820258+00:00",
+  "all_owned_sessions_ended": true,
+  "all_five_GPU_workers_exit0": true,
+  "complete_four_main_workers_sealed": true,
+  "original_FINAL_preserved": true,
+  "physical_gpu": 2,
+  "counts": {
+    "main-a": {
+      "cases": 64,
+      "optimizer_updates": 0
+    },
+    "main-s102": {
+      "cases": 64,
+      "optimizer_updates": 64
+    },
+    "main-t102": {
+      "cases": 64,
+      "optimizer_updates": 53
+    },
+    "main-v102": {
+      "cases": 64,
+      "optimizer_updates": 35
+    }
+  },
+  "full_gpu_worker_seconds": 88331.31231579301,
+  "labels_joined_only_after_complete_matrix": true,
+  "single_seed_only": true,
+  "independent_clinical_generalization_established": false
+}

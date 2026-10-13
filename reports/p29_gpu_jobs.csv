@@ -1,0 +1,6 @@
+stage,job,seconds,return_code,timeout
+acceptance,actual-acceptance,6675.9972963200125,0,
+main,main-a,500.96187287100474,0,
+main,main-s102,36697.41248703099,0,
+main,main-t102,25642.117879801022,0,
+main,main-v102,18814.82277976998,0,
