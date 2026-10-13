@@ -18,6 +18,8 @@ from state import atomic_json, inference_without_state_change, save_checkpoint, 
 
 def validate_update(value, cfg):
     norms = value["gradient_norms"]
+    if cfg.get("policy_token_selection") == "high_entropy" and (value.get("policy_selection_consistent") is not True or not 0 < value.get("policy_selected_tokens", 0) <= value["response_tokens"]):
+        raise ValueError("Actual policy entropy mask acceptance failed")
     if any(not math.isfinite(norms[k]) or norms[k] <= 0 for k in ["vision", "language"]) or not math.isfinite(value["max_behavior_recompute_error"]) or value["max_behavior_recompute_error"] > cfg["behavior_recompute_atol"] or not value["masters_persisted"] or not value["moments_persisted"]:
         raise ValueError("Actual finite vision/language gradients or native behavior guard failed")
     if any(v["changed_elements"] <= 0 for v in value["tracked_actor_updates"].values()):
@@ -58,13 +60,13 @@ def require_probability(value):
 def recovery(engine, encoded, responses, advantages, folder, digest):
     payload = {**engine.state.pack(), "cursor": 1, "processed_ids": ["diagnostic-step"], "configuration": engine.cfg,
         "code_commit": os.environ["P2_CODE_COMMIT"], "model_revision": engine.cfg["model_revision"], "manifest_sha256": digest,
-        "method": engine.method, "run_id": "accept-t", "rng": rng_state()}
+        "method": engine.method, "run_id": engine.out.name, "rng": rng_state()}
     checkpoint = folder / "checkpoints"
     save_checkpoint(checkpoint, payload); del payload
     second = engine.update(encoded, responses, advantages, False); validate_update(second, engine.cfg)
     expected = {**engine.state.pack(), "cursor": 2, "processed_ids": ["diagnostic-step", "diagnostic-step2"], "configuration": engine.cfg,
         "code_commit": os.environ["P2_CODE_COMMIT"], "model_revision": engine.cfg["model_revision"], "manifest_sha256": digest,
-        "method": engine.method, "run_id": "accept-t", "rng": rng_state()}
+        "method": engine.method, "run_id": engine.out.name, "rng": rng_state()}
     save_checkpoint(checkpoint, expected); del expected
     latest = json.loads((checkpoint / "latest.json").read_text())
     first = torch.load(checkpoint / "c000001-u000001/state.pt", map_location="cpu", weights_only=False, mmap=True)
@@ -125,7 +127,7 @@ def main():
                 update = engine.update(encoded, responses, advantages, False)
                 evidence["actual_update"] = update
                 atomic_json(folder / "acceptance.json", result); validate_update(update, cfg)
-                restored = recovery(engine, encoded, responses, advantages, out, digest) if arm == "t" else None
+                restored = recovery(engine, encoded, responses, advantages, out, digest) if arm in ["t", "h"] else None
                 challenged = None
                 if manifest.get("memory_acceptance_required"):
                     saved = json.loads((folder / "reference/memory_challenge.json").read_text())

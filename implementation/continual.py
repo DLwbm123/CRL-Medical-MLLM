@@ -324,9 +324,10 @@ class Engine:
                 logits = self.response_logits(self.actor, encoded, response)
                 logp, entropy, _ = token_statistics(logits, response, chunk_tokens=cfg["statistics_chunk_tokens"])
                 mask, lower, upper, threshold = select_and_band(entropy, cfg["histogram_bins"])
+                policy_mask = mask if cfg.get("policy_token_selection") == "high_entropy" else None
                 if self.method == "TTRL":
                     mask = torch.ones_like(mask)
-                cached.append({"old_logp": logp.detach(), "selection": mask, "lower": lower, "upper": upper,
+                cached.append({"old_logp": logp.detach(), "selection": mask, "policy_selection": policy_mask, "lower": lower, "upper": upper,
                                "threshold": float(threshold), "mean_entropy": float(entropy.mean())})
                 del logits
         total_tokens = sum(len(response) for response in responses)
@@ -349,14 +350,15 @@ class Engine:
                 if error > cfg["behavior_recompute_atol"]:
                     raise RuntimeError("Behavior policy changed before its optimizer update")
                 mask, _, _, _ = select_and_band(entropy, cfg["histogram_bins"])
-                if self.method == "SPINE" and not torch.equal(mask, item["selection"]):
+                if ((self.method == "SPINE" and not torch.equal(mask, item["selection"]))
+                        or (item["policy_selection"] is not None and not torch.equal(mask, item["policy_selection"]))):
                     raise RuntimeError("Token selection differs between statistics and gradient passes")
                 ratio = (logp.detach() - item["old_logp"]).exp()
                 sampled_ratio_sum += float(ratio.sum())
                 clip_count += int(((ratio - 1).abs() > cfg["clip_epsilon"]).sum())
                 kl_sum += float(kl.detach().sum())
                 loss, components = objective(logp, item["old_logp"], entropy, kl, advantages[response_index].to(logp.device),
-                                             item["selection"], item["lower"], item["upper"], total_tokens, selected_tokens, cfg)
+                                             item["selection"], item["lower"], item["upper"], total_tokens, selected_tokens, cfg, item["policy_selection"])
                 if not torch.isfinite(loss):
                     raise RuntimeError("Nonfinite objective")
                 loss.backward()
@@ -374,6 +376,8 @@ class Engine:
             "selected_ratio": selected_tokens / total_tokens, "ratio_mean_before_step": sampled_ratio_sum / total_tokens,
             "clip_fraction_before_step": clip_count / total_tokens, "exact_full_vocabulary_kl_mean_before_step": kl_sum / total_tokens,
             "max_behavior_recompute_error": recompute_error, "tracked_actor_updates": tracked_updates,
+            "policy_selected_tokens": sum(int(item["policy_selection"].sum()) if item["policy_selection"] is not None else int(item["selection"].sum()) for item in cached),
+            "policy_selection_consistent": True,
             "selection": [{key: item[key] for key in ["threshold", "mean_entropy"]} for item in cached],
         }
         if drift:
@@ -482,15 +486,16 @@ def validate_main_budget_lock(manifest, qualification, lock):
         raise RuntimeError("Frozen visual reward qualification must pass before any main run")
     seeds = manifest["rollout_seeds"]
     if manifest.get("p24_version") == 1:
-        from p24_contract import SEEDS
+        from p24_contract import SEEDS, ARMS
         expected = SEEDS
         if lock.get("admitted") is not True:
             raise RuntimeError("Entire declared matrix budget was not admitted")
     else:
+        ARMS = ["s", "t", "v"]
         expected = seeds
         if len(set(seeds)) != 3:
             raise RuntimeError("Legacy P10 requires its complete three-seed matrix")
-    if (seeds != expected or lock.get("complete_seeds") != expected or lock.get("complete_arms") != ["s", "t", "v"]):
+    if (seeds != expected or lock.get("complete_seeds") != expected or lock.get("complete_arms") != ARMS):
         raise RuntimeError("Full declared matrix compute admission is missing")
 
 

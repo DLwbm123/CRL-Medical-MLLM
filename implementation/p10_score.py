@@ -99,14 +99,15 @@ def main(label_reader=read_labels, initial_check=None):
         atomic_json(folder / "scores/anonymous_teacher_cases.json", teacher_rows)
         print(json.dumps(public), flush=True)
         return
+    arms = ["s", "t", "v", "h"] if manifest.get("p30_version") == 1 else ["s", "t", "v"]
     ledger = json.loads((folder / "controllers/main-plan.json").read_text())
-    if ledger["status"] != "all_planned_jobs_completed" or len(ledger["jobs"]) != 1 + 3 * len(manifest["rollout_seeds"]) or any(j["return_code"] != 0 for j in ledger["jobs"]):
+    if ledger["status"] != "all_planned_jobs_completed" or len(ledger["jobs"]) != 1 + len(arms) * len(manifest["rollout_seeds"]) or any(j["return_code"] != 0 for j in ledger["jobs"]):
         raise ValueError("The entire preregistered seed-by-three-arm matrix must close")
     if not json.loads((folder / "owned_cleanup_before_score.json").read_text())["owned_main_processes_ended"]:
         raise ValueError("All main workers must end before scoring")
     acceptance = json.loads((folder / "acceptance.json").read_text())
     loaded = {}
-    for arm in ["a", "s", "t", "v"]:
+    for arm in ["a"] + arms:
         for seed in ([42] if arm == "a" else manifest["rollout_seeds"]):
             key = "a" if arm == "a" else f"{arm}{seed}"
             cfg = manifest["configurations"][arm][str(seed)]
@@ -116,11 +117,11 @@ def main(label_reader=read_labels, initial_check=None):
             if len(rows) != n or result["status"] != "completed" or set(probes) != {0, n} or result["code_commit"] != os.environ["P2_CODE_COMMIT"]:
                 raise ValueError("Incomplete matrix member")
             output_units(run, rows, choices)
-            if arm == "v" and json.loads((run / "reference_signal_snapshot.json").read_text()) != signal:
+            if arm in ["v", "h"] and json.loads((run / "reference_signal_snapshot.json").read_text()) != signal:
                 raise ValueError("Frozen reward changed between seeds")
             for row in rows:
                 if arm != "a":
-                    rewards, _, _ = (verified_group_rewards(row["completions"], choices[row["id"]], targets[row["id"]]) if arm == "v"
+                    rewards, _, _ = (verified_group_rewards(row["completions"], choices[row["id"]], targets[row["id"]]) if arm in ["v", "h"]
                                      else group_rewards(row["completions"], choices[row["id"]]))
                     if row["rewards"] != (None if rewards is None else rewards.tolist()):
                         raise ValueError("Saved rewards differ from the frozen source")
@@ -138,7 +139,7 @@ def main(label_reader=read_labels, initial_check=None):
     probe_rows = []
     for seed in manifest["rollout_seeds"]:
         per_seed = {}
-        for arm in ["s", "t", "v"]:
+        for arm in arms:
             key = f"{arm}{seed}"; rows, result, probes = loaded[key]
             run = folder / "runs" / ("main-" + key)
             metric, _ = score_cases(rows, labels, base)
@@ -149,18 +150,19 @@ def main(label_reader=read_labels, initial_check=None):
             final = probes[n]["predictions"]
             metric["probe_transition"] = prediction_transition_audit(initial, final, labels)
             metric["format"] = summarize_formats(output_units(run, rows, choices), labels)
-            metric["reward_audit"] = verified_audit(rows, choices, labels, targets) if arm == "v" else reward_audit(rows, choices, labels)
+            metric["reward_audit"] = verified_audit(rows, choices, labels, targets) if arm in ["v", "h"] else reward_audit(rows, choices, labels)
             per_seed[arm] = metric
             public["resources"][key] = resource_summary(run, rows, result)
             for index, (old, new) in enumerate(zip(initial, final)):
                 probe_rows.append({"seed": seed, "arm": arm, "probe_index": index,
                     "initial_correct": is_correct(old["answer"], labels[old["id"]]), "final_correct": is_correct(new["answer"], labels[new["id"]]),
                     "initial_parsed": old["answer"] is not None, "final_parsed": new["answer"] is not None})
-        per_seed["success"] = (per_seed["v"]["greedy_before"]["correct"] > max(sum(base), per_seed["s"]["greedy_before"]["correct"], per_seed["t"]["greedy_before"]["correct"])
-                               and per_seed["v"]["probe_transition"]["correct_to_correct"] == 3)
+        candidate = "h" if manifest.get("p30_version") == 1 else "v"
+        per_seed["success"] = (per_seed[candidate]["greedy_before"]["correct"] > max([sum(base)] + [per_seed[a]["greedy_before"]["correct"] for a in arms if a != candidate])
+                               and per_seed[candidate]["probe_transition"]["correct_to_correct"] == 3)
         public["seeds"][str(seed)] = per_seed
         success.append(per_seed["success"])
-    public.update(stable_positive_development_result=len(success) == 3 and all(success), probe_rows=probe_rows,
+    public.update(single_seed_predeclared_success=all(success), stable_positive_development_result=len(success) == 3 and all(success), probe_rows=probe_rows,
                   qualification=json.loads((folder / "scores/qualification.json").read_text()))
     atomic_json(folder / "scores/public_summary.json", public)
     print(json.dumps({"matrix_closed": True, "stable_positive_development_result": public["stable_positive_development_result"]}), flush=True)

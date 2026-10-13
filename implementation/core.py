@@ -122,11 +122,12 @@ def token_statistics(logits, token_ids, reference_logits=None, chunk_tokens=128)
     return tuple(torch.cat([part[i] for part in parts]) for i in range(3))
 
 
-def objective(logp, old_logp, entropy, kl, advantage, selection, lower, upper, total_tokens, total_selected, cfg):
+def objective(logp, old_logp, entropy, kl, advantage, selection, lower, upper, total_tokens, total_selected, cfg, policy_selection=None):
     ratio = (logp - old_logp).exp()
     surrogate = torch.minimum(ratio * advantage, ratio.clamp(1 - cfg["clip_epsilon"], 1 + cfg["clip_epsilon"]) * advantage)
     mask = selection.to(entropy.dtype)
-    policy_loss = -(surrogate * mask).sum() / total_tokens
+    policy_mask = mask if policy_selection is None else policy_selection.to(entropy.dtype)
+    policy_loss = -(surrogate * policy_mask).sum() / total_tokens
     band = ((lower - entropy).relu() * cfg["beta_lower"] + (entropy - upper).relu() * cfg["beta_upper"])
     band_loss = (band * mask).sum() / total_tokens if cfg["method"] == "SPINE" else entropy.sum() * 0
     kl_loss = cfg["kl_coefficient"] * (kl * mask).sum() / total_selected

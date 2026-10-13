@@ -1,0 +1,42 @@
+{
+  "campaign": "p30-20261013T082443",
+  "physical_gpu": 2,
+  "seeds": [
+    103
+  ],
+  "arms": [
+    "s",
+    "t",
+    "v",
+    "h"
+  ],
+  "single_factor": "high_entropy_policy_mask_only_KL_full_response",
+  "CPU_checks_passed": true,
+  "actual_acceptance": "UNEXECUTED",
+  "full_budget": {
+    "admitted": true,
+    "remaining_gpu_seconds": 285490.3876249437,
+    "round_remaining_seconds": 237600,
+    "estimated_seconds": 186400.0,
+    "required_with_reserve": 223680.0,
+    "additional_seconds_required": 0.0,
+    "complete_seeds": [
+      103
+    ],
+    "complete_arms": [
+      "s",
+      "t",
+      "v",
+      "h"
+    ],
+    "budget_reset": false,
+    "new_task_training_cost_measured": false,
+    "basis": "max historical training proxy and full fixed stop caps; not frozen-generation speed"
+  },
+  "gpu_stop_utc": "2026-10-16T02:25:29.727341+00:00",
+  "hard_deadline_utc": "2026-10-16T04:25:29.727341+00:00",
+  "planned_training_cases": 256,
+  "planned_probe_rows": 64,
+  "planned_actual_challenges": 12,
+  "no_GPU_started": true
+}

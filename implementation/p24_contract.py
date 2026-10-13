@@ -1,12 +1,12 @@
 """Fixed complete RL scope and fail-closed admission; no model or labels loaded."""
 import math
 
-SEEDS = [102]
-ARMS = ["s", "t", "v"]
+SEEDS = [103]
+ARMS = ["s", "t", "v", "h"]
 TOTAL = 518400.
 TRAIN_CAP = 40000.
 BASE_CAP = 7200.
-ACCEPT_CAP = 14400.
+ACCEPT_CAP = 19200.
 TRAJECTORIES = len(SEEDS) * len(ARMS)
 TRAIN_PROXY = TRAJECTORIES * 4 * 4590.984604918864
 FULL_ESTIMATE = max(TRAIN_PROXY + BASE_CAP + ACCEPT_CAP, TRAJECTORIES * TRAIN_CAP + BASE_CAP + ACCEPT_CAP)
@@ -28,8 +28,9 @@ def configurations(base):
             cfg = {**base, "seed": seed, "gpu_index": 0, "p10_arm": arm,
                    "response_recompute_path": "differentiable_generation_replay",
                    "method": "Frozen greedy" if arm == "a" else "SPINE" if arm == "s" else "TTRL",
-                   "reward_source": "frozen_visual" if arm == "v" else "majority"}
-            if arm in ["t", "v"]: cfg.update(temperature=1., top_p=1., zero_advantage_policy="skip", strict_on_policy_consistency_claimed=False)
+                   "reward_source": "frozen_visual" if arm in ["v", "h"] else "majority"}
+            if arm in ["t", "v", "h"]: cfg.update(temperature=1., top_p=1., zero_advantage_policy="skip", strict_on_policy_consistency_claimed=False)
+            if arm == "h": cfg["policy_token_selection"] = "high_entropy"
             result[arm][str(seed)] = cfg
     return result
 
