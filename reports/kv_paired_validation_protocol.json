@@ -1,0 +1,51 @@
+{
+  "scope": "engineering_paired_acceptance_only",
+  "baseline_source": "10847487db98bbea9c16ddaa319ebabb056fdbec",
+  "candidate_block_tokens": 8,
+  "variants": [
+    "original",
+    "candidate"
+  ],
+  "arms": [
+    "s",
+    "t",
+    "v",
+    "h"
+  ],
+  "challenge_indices": [
+    0,
+    5,
+    37
+  ],
+  "challenges_each": 12,
+  "total_challenges": 24,
+  "diagnostic_sampling_seed": 103,
+  "new_scientific_seed": false,
+  "loss_and_full_gradient_unchanged": true,
+  "original_probability_atol": 0.1,
+  "original_stats_gradient_atol": 1e-05,
+  "paired_full_gradient_atol": 1e-05,
+  "candidate_recovery_uses_own_state": true,
+  "same_process_recovery_arms": [
+    "t",
+    "h"
+  ],
+  "maximum_worker_seconds_each": 19200,
+  "required_with_reserve_seconds": 46080,
+  "prior_final_gpu_seconds": 321673.59790469724,
+  "remaining_gpu_seconds": 196726.40209530276,
+  "gpu_stop_utc": "2026-10-15T02:08:36.082296+00:00",
+  "hard_deadline_utc": "2026-10-15T04:08:36.082296+00:00",
+  "gpu": 2,
+  "full_parameter_BF16_FP32_Adam": true,
+  "TF32": false,
+  "rollouts": 8,
+  "max_new_tokens": 2048,
+  "scientific_training_authorized": false,
+  "on_failure": "stop_and_deliver_no_retry",
+  "on_success": "deliver_paired_result_and_stop_GPU",
+  "new_teacher_data_labels_or_scores": false,
+  "full_worker_cost_includes_pair_artifact_IO": true,
+  "minimum_data_free_gib": 1000,
+  "CPU_checks_are_not_hardware_acceptance": true
+}

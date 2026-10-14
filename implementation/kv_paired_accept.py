@@ -132,6 +132,18 @@ class PairedEngine(Engine):
 
 
 def main():
+    if os.environ['KV_IMPLEMENTATION'] == 'candidate':
+        root = Path(os.environ['P0_ROOT'])
+        campaign = os.environ['P2_CAMPAIGN']
+        if not campaign.endswith('-candidate'):
+            raise ValueError('Candidate campaign role differs')
+        original = root / 'outputs' / (campaign[:-len('-candidate')] + '-original')
+        result = json.loads((original / 'acceptance.json').read_text())
+        if not result['passed'] or set(result['arms']) != {'s', 't', 'v', 'h'}:
+            raise ValueError('Complete original acceptance must precede candidate')
+        for value in result['arms'].values():
+            if not value['passed'] or not value['memory_challenge']['passed'] or not value['memory_challenge']['largest_prefix']['passed']:
+                raise ValueError('Original challenge coverage is incomplete')
     p24_accept.Engine = PairedEngine
     p24_accept.main()
 

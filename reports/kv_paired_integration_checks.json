@@ -1,0 +1,30 @@
+{
+  "CPU_only": true,
+  "GPU_started": false,
+  "checks": [
+    {
+      "mode": "cpu_test",
+      "exit_code": 0,
+      "stdout": "paired gradient coverage/schema/finite/tolerance checks passed; CPU only\npaired encode/update/full-gradient/Adam-state integration passed; CPU only\n",
+      "stderr": ""
+    },
+    {
+      "mode": "block_test",
+      "exit_code": 0,
+      "stdout": "{\"CPU_only\": true, \"block_tokens\": 8, \"lengths\": [1, 7, 8, 9, 17, 33], \"max_absolute_gradient_error\": 0.0, \"all_four_objectives_preserved\": true, \"late_vision_gradient\": true, \"linear_retained_KV\": true, \"modes_and_deadlines\": true, \"history_rebuild_calls_for_17_tokens\": {\"original\": 17, \"candidate\": 3}, \"CPU_same_process_Adam_recovery_exact\": true, \"hardware_acceptance\": false, \"GPU_speedup_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "mode": "regression_test",
+      "exit_code": 0,
+      "stdout": "{\"late_token_vision_gradient_preserved\": true, \"checkpoint_gradient_exact\": true, \"stats_and_grad_equal\": true, \"modes_and_deadline_checked\": true, \"original_point_one_guard\": true, \"cloned_linear_KV_storage\": true}\n{\"policy_gradient_mask_exact\": true, \"KL_full_response_unchanged\": true, \"four_arm_barrier\": true, \"original_point_one_and_behavior_guards_preserved\": true}\n",
+      "stderr": ""
+    }
+  ],
+  "checked_utc": "2026-10-14T12:09:59.971449+00:00",
+  "full_plan_jobs": [
+    "original",
+    "candidate"
+  ],
+  "scientific_training_mode_present": false
+}

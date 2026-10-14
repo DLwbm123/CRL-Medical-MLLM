@@ -25,3 +25,57 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+def integration():
+    import os
+    import tempfile
+    from pathlib import Path
+    from unittest.mock import patch
+    from types import SimpleNamespace
+    from continual import Engine
+    from state import PersistentAdam
+    from kv_paired_accept import PairedEngine
+    cfg = {'learning_rate':1e-4,'adam_betas':[.9,.999],'adam_epsilon':1e-8,
+           'weight_decay':0.,'max_grad_norm':1.,'p10_arm':'t'}
+    def init(engine, root, out, configuration, deadline):
+        engine.out=out; engine.cfg=configuration; engine.deadline=deadline
+        engine.actor=torch.nn.Linear(2,1); engine.state=PersistentAdam(engine.actor,cfg)
+        engine.timings={};engine.loads=[]
+        original=engine.state.load
+        def load(value):
+            engine.loads.append(value['optimizer_updates']);original(value)
+        engine.state.load=load
+    def encode(engine,row):return {'x':torch.ones(1,2)}
+    def update(engine,encoded,responses,advantages,drift):
+        engine.state.zero_grad();engine.actor(encoded['x']).sum().backward();return engine.state.step()
+    def close(engine):pass
+    with tempfile.TemporaryDirectory() as directory:
+        pairs=Path(directory);deadline=SimpleNamespace(check=lambda:None)
+        with patch.object(Engine,'__init__',init),patch.object(Engine,'encode',encode),patch.object(Engine,'update',update),patch.object(Engine,'close',close),patch.dict(os.environ,KV_PAIR_FOLDER=directory):
+            originals=[]
+            for side in ['original','candidate']:
+                os.environ['KV_IMPLEMENTATION']=side
+                out=pairs/side;out.mkdir();engine=PairedEngine(pairs,out,cfg,deadline)
+                for i in range(3):
+                    x=engine.encode({'id':str(i)});engine.encode({'id':str(i)})
+                    for j in range(2):
+                        before=len(engine.loads)
+                        engine.update(x,[torch.tensor([1,2])],torch.ones(1),False)
+                        assert len(engine.loads)==before,'Update hook replaced recovery state'
+                assert engine.challenge==2 and engine.update_index==6
+                if side=='original':originals=[p.clone() for p in engine.actor.parameters()]
+                else:
+                    assert engine.loads==[0,2,4]
+                    assert all(torch.equal(a,b) for a,b in zip(originals,engine.actor.parameters()))
+                    assert all(r['full_gradient_max_abs_difference']==0 for r in engine.pair_metrics)
+                    try:engine.update(x,[torch.tensor([9])],torch.ones(1),False)
+                    except (FileNotFoundError,ValueError):pass
+                    else:raise AssertionError('Unpaired extra update accepted')
+            try:engine.encode({'id':'unexpected'})
+            except ValueError:pass
+            else:raise AssertionError('Extra challenge accepted')
+    print('paired encode/update/full-gradient/Adam-state integration passed; CPU only')
+
+if __name__ == '__main__':
+    integration()
