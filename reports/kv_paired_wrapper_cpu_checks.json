@@ -1,0 +1,7 @@
+{
+  "CPU_only": true,
+  "GPU_started": false,
+  "exit_code": 0,
+  "stdout": "paired gradient coverage/schema/finite/tolerance checks passed; CPU only\n",
+  "stderr": ""
+}

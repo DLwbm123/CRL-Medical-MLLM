@@ -58,3 +58,11 @@ Continuous balance at the snapshot is 224,079.797791 s / 62.2444 h. P30 still re
 Even before reserving any remaining P30 work, the combined validation/training requirement exceeds the snapshot balance by 22,640.202209 s / 6.2889 h. Actual P30 savings may improve the balance, but cannot alone make this unchanged conservative combined budget fit. New measured cost evidence or additional explicit budget would be needed for training admission. Do not reset the 144-hour ledger or move P30 deadlines.
 
 No new GPU work is admitted, scheduled or started. The validation caps bound stopping, not guaranteed completion. CPU tests establish limited implementation evidence only; hardware memory safety, numerical gates and end-to-end acceleration remain pending.
+
+## Paired acceptance adapter preparation (2026-10-14)
+
+P30 ended with original v SIGKILL after57 cases/33 updates and h not started; its full planned NA delivery is complete. Its final remaining continuous budget is196726.40209530276s. The authorized engineering-only paired budget is38400s plus20%=46080s, leaving150646.40209530276s after reservation. Independent source/manifest/clock and resource admission still precede any GPU work. No next scientific training is authorized.
+
+A separate adapter reuses the unchanged actual12-challenge suite per implementation. The original captures private initial masters/Adam/RNG per challenge and full gradients per optimizer call. The fixed8-token candidate restores paired challenge initial states, requires identical sampled response tensors and engineering advantages, compares every parameter gradient at1e-5, and retains its own t/h recovery branch states. These comparison artifacts and CPU I/O count in whole-worker caps; they are not a speed discount. Phase times and GPU peaks are saved independently from artifact I/O.
+
+CPU trust-boundary checks reject missing gradient coverage, schema/dtype changes, nonfinite values and excess discrepancy. They passed in a CUDA-hidden process, along with local compilation. The adapter has not run actual3B/GPU acceptance; full execution-plan, wrapper integration and frozen resource/clock admission remain pending. All weights/token tensors remain private.
