@@ -1,0 +1,31 @@
+{
+  "checked_utc": "2026-10-14T13:26:48.393296+00:00",
+  "reason": "direct_user_stop",
+  "all_owned_sessions_ended": true,
+  "original_FINAL_exists": false,
+  "original_FINAL_preserved": true,
+  "external_audit_only": true,
+  "GPU_worker_seconds": 4304.397012,
+  "cost_is_conservative_upper_bound": true,
+  "prior_final_gpu_seconds": 321673.59790469724,
+  "cumulative_gpu_seconds": 325977.9949166972,
+  "remaining_gpu_seconds": 192422.00508330276,
+  "budget_reset": false,
+  "jobs": [
+    {
+      "label": "original",
+      "return_code": null,
+      "seconds": 4304.397012,
+      "conservative_upper_bound": true
+    }
+  ],
+  "scientific_training_started": false,
+  "candidate_started": false,
+  "status": "USER_STOPPED_EXTERNAL_AUDIT",
+  "executed_source_commit": "aafb7184cbd0af0001bb40d6dc2751a22339cce7",
+  "full_planned_challenge_rows": 24,
+  "full_paired_acceptance_completed": false,
+  "acceleration_established": false,
+  "labels_read": false,
+  "no_new_experiment_or_retry_authorized": true
+}
