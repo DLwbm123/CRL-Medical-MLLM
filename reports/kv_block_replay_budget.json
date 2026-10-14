@@ -1,0 +1,35 @@
+{
+  "status": "PREPARATION_ONLY_NOT_ADMITTED_OR_SCHEDULED",
+  "active_P30_unchanged": true,
+  "new_GPU_authorized": false,
+  "new_GPU_started": false,
+  "new_scientific_seed_reserved": false,
+  "block_tokens": 8,
+  "baseline_source": "10847487db98bbea9c16ddaa319ebabb056fdbec",
+  "ledger_snapshot_utc": "2026-10-14T01:31:20.842263+00:00",
+  "continuous_total_GPU_seconds": 518400,
+  "continuous_remaining_GPU_seconds": 224079.79779147377,
+  "current_P30_remaining_stopcost_seconds": 99508.018037,
+  "current_P30_remaining_with_20percent_reserve_seconds": 119409.6216444,
+  "available_after_P30_reservation_seconds": 104670.17614707377,
+  "paired_validation": {
+    "original_full_acceptance_stop_seconds": 19200,
+    "candidate_full_acceptance_stop_seconds": 19200,
+    "total_stop_seconds": 38400,
+    "required_with_20percent_reserve_seconds": 46080
+  },
+  "hypothetical_full_training": {
+    "baseline_stop_seconds": 7200,
+    "arms": 4,
+    "per_arm_stop_seconds": 40000,
+    "case_rows": 256,
+    "probe_rows": 64,
+    "total_stop_seconds": 167200,
+    "required_with_20percent_reserve_seconds": 200640
+  },
+  "validation_plus_training_with_reserve_seconds": 246720,
+  "projected_shortfall_after_P30_reservation_seconds": 142049.82385292623,
+  "speed_discount": 0,
+  "hardware_acceptance": false,
+  "validation_caps_are_not_completion_guarantees": true
+}
