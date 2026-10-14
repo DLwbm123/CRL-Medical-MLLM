@@ -1,0 +1,46 @@
+{
+  "total_authorized_seconds": 518400.0,
+  "prior_used_seconds": 232909.6123750563,
+  "this_round_seconds": 88763.98552964092,
+  "cumulative_seconds": 321673.59790469724,
+  "remaining_seconds": 196726.40209530276,
+  "budget_reset": false,
+  "whole_worker_lifetime_counted": true,
+  "jobs": [
+    {
+      "stage": "acceptance",
+      "job": "actual-acceptance",
+      "seconds": 10887.475810395961,
+      "return_code": 0,
+      "timeout": null
+    },
+    {
+      "stage": "main",
+      "job": "main-a",
+      "seconds": 489.0001254489762,
+      "return_code": 0,
+      "timeout": null
+    },
+    {
+      "stage": "main",
+      "job": "main-s103",
+      "seconds": 29542.13193462498,
+      "return_code": 0,
+      "timeout": null
+    },
+    {
+      "stage": "main",
+      "job": "main-t103",
+      "seconds": 31314.71273931401,
+      "return_code": 0,
+      "timeout": null
+    },
+    {
+      "stage": "main",
+      "job": "main-v103",
+      "seconds": 16530.664919856994,
+      "return_code": -9,
+      "timeout": null
+    }
+  ]
+}
