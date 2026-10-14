@@ -1,0 +1,7 @@
+{
+  "mode": "final_cpu_integration",
+  "exit_code": 0,
+  "stdout": "paired gradient coverage/schema/finite/tolerance checks passed; CPU only\npaired encode/update/full-gradient/Adam-state integration passed; CPU only\ncandidate rejects incomplete original acceptance before model load; CPU only\n",
+  "stderr": "",
+  "GPU_started": false
+}

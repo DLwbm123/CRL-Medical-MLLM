@@ -79,3 +79,24 @@ def integration():
 
 if __name__ == '__main__':
     integration()
+
+
+def candidate_barrier():
+    import json,os,tempfile
+    from pathlib import Path
+    from unittest.mock import patch
+    import kv_paired_accept as module
+    with tempfile.TemporaryDirectory() as directory:
+        f=Path(directory)/'outputs/pair-original';f.mkdir(parents=True)
+        p=f/'acceptance.json'
+        with patch.dict(os.environ,P0_ROOT=directory,P2_CAMPAIGN='pair-candidate',KV_IMPLEMENTATION='candidate'),patch.object(module.p24_accept,'main') as actual,patch.object(module.p24_accept,'Engine'):
+            p.write_text(json.dumps({'passed':False,'arms':{}}))
+            try:module.main()
+            except ValueError:pass
+            else:raise AssertionError('Incomplete original admitted candidate')
+            actual.assert_not_called()
+            p.write_text(json.dumps({'passed':True,'arms':{a:{'passed':True,'memory_challenge':{'passed':True,'largest_prefix':{'passed':True}}} for a in ['s','t','v','h']}}))
+            module.main();actual.assert_called_once()
+    print('candidate rejects incomplete original acceptance before model load; CPU only')
+
+if __name__=='__main__':candidate_barrier()
